@@ -9,8 +9,8 @@ namespace SRML.SR.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> code = new List<CodeInstruction>(instructions);
-            for (int i = 0; i < code.Count; i++)
+            var code = new List<CodeInstruction>(instructions);
+            for (var i = 0; i < code.Count; i++)
             {
                 if (code[i].opcode == OpCodes.Ldarg_2 && code[i + 1].opcode == OpCodes.Ldc_I4_5)
                 {

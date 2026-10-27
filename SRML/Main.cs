@@ -53,11 +53,11 @@ namespace SRML
 
             // Sentry SDK reports errors to Monomi. we don't want to flood them with BS mod errors
             // vital to be done before Anything
-            SentrySdk sentrySdk = UnityEngine.Object.FindObjectOfType<SentrySdk>();
+            var sentrySdk = UnityEngine.Object.FindObjectOfType<SentrySdk>();
             if (sentrySdk != null)
             {
                 sentrySdk.Dsn = string.Empty;
-                FieldInfo field = sentrySdk.GetType().GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
+                var field = sentrySdk.GetType().GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
                 if (field != null) field.SetValue(null, null);
                 sentrySdk.StopAllCoroutines();
                 Application.logMessageReceived -= sentrySdk.OnLogMessageReceived;
@@ -84,22 +84,22 @@ namespace SRML
             uiBundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Main), "srml"));
 
             ErrorGUI.errorUI = uiBundle.LoadAsset<GameObject>("SRMLErrorUI");
-            ErrorGUI ui = ErrorGUI.errorUI.GetComponent<ErrorGUI>();
+            var ui = ErrorGUI.errorUI.GetComponent<ErrorGUI>();
 
             ErrorGUI.initErrorUI = uiBundle.LoadAsset<GameObject>("InitializationErrorUI");
-            ErrorGUI ui2 = ErrorGUI.initErrorUI.GetComponent<ErrorGUI>();
+            var ui2 = ErrorGUI.initErrorUI.GetComponent<ErrorGUI>();
 
             // assetbundles don't serialize TMP_Text alignment for some reason
-            foreach (TMP_Text text in ui.GetComponentsInChildren<TMP_Text>(true))
+            foreach (var text in ui.GetComponentsInChildren<TMP_Text>(true))
                 text.alignment = TextAlignmentOptions.Midline;
-            foreach (TMP_Text text in ui2.GetComponentsInChildren<TMP_Text>(true))
+            foreach (var text in ui2.GetComponentsInChildren<TMP_Text>(true))
                 text.alignment = TextAlignmentOptions.Midline;
-            foreach (TMP_Text text in ui.errorInfo.GetComponentsInChildren<TMP_Text>(true))
+            foreach (var text in ui.errorInfo.GetComponentsInChildren<TMP_Text>(true))
                 text.alignment = TextAlignmentOptions.MidlineLeft;
-            foreach (TMP_Text text in ui2.errorInfo.GetComponentsInChildren<TMP_Text>(true))
+            foreach (var text in ui2.errorInfo.GetComponentsInChildren<TMP_Text>(true))
                 text.alignment = TextAlignmentOptions.MidlineLeft;
 
-            foreach (Component c in ui2.GetComponentsInChildren(typeof(Component)))
+            foreach (var c in ui2.GetComponentsInChildren(typeof(Component)))
             {
                 if (c.GetType().Name.Contains("Styler"))
                     UnityEngine.Object.DestroyImmediate(c);
@@ -119,7 +119,7 @@ namespace SRML
                 postfix: new HarmonyMethod(typeof(Main).GetMethod("PostLoad", BindingFlags.NonPublic | BindingFlags.Static)));
 
             // this patch ensures that steam doesn't try to add modded achievements, because it wouldn't like that
-            Type sm = typeof(GameContext).Assembly.GetType("SteamManager", false, true);
+            var sm = typeof(GameContext).Assembly.GetType("SteamManager", false, true);
             if (sm != null)
             {
                 HarmonyPatcher.Instance.Patch(sm.GetMethod("AddAchievement"),
@@ -130,8 +130,8 @@ namespace SRML
 
             HarmonyOverrideHandler.PatchAll(); // I Don't know what this is; as far as I can tell, it's a system that was never finished and does Nothing
 
-            IEnumerable<SRMod> erroring = SRModLoader.Mods.Values.Where(x => x.ModInfo.EncounteredError);
-            foreach (SRMod mod in erroring)
+            var erroring = SRModLoader.Mods.Values.Where(x => x.ModInfo.EncounteredError);
+            foreach (var mod in erroring)
                 Debug.LogError(mod.exception);
 
             moveForwardAfterInit = erroring.Count() <= 0;

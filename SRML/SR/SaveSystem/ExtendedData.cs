@@ -95,7 +95,7 @@ namespace SRML.SR.SaveSystem
 
         internal static void CullMissingModsFromData(CompoundDataPiece piece)
         {
-            List<DataPiece> toRemove = new List<DataPiece>();
+            var toRemove = new List<DataPiece>();
             foreach (var v in piece.DataList)
             {
                 if (SRModLoader.GetMod(v.key) == null) toRemove.Add(v);

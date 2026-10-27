@@ -16,7 +16,7 @@ namespace SRML.SR.SaveSystem.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            bool flag = false;
+            var flag = false;
             foreach (var v in instr)
             {
                 if (v.opcode == OpCodes.Callvirt && v.operand is MethodInfo info && info.Name == "Remove")

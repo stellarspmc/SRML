@@ -9,7 +9,7 @@ namespace SRML.Utils
 
         public static Assembly GetRelevantAssembly()
         {
-            StackTrace trace = new StackTrace();
+            var trace = new StackTrace();
 
             var frames = trace.GetFrames();
             try // TODO: Clean this up, choose a better solution (check for non mod or srml dlls)

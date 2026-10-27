@@ -20,12 +20,12 @@ namespace SRML.Console
 			if (!File.Exists(bindFile))
 				return;
 
-			foreach (string line in File.ReadAllLines(bindFile))
+			foreach (var line in File.ReadAllLines(bindFile))
 			{
 				if (!line.Contains(":"))
 					continue;
 
-				string[] split = line.Split(':');
+				var split = line.Split(':');
 				Console.RegisterButton("user." + split[0], new ConsoleButton("U: " + split[1], split[2]));
 			}
 		}
@@ -68,8 +68,8 @@ namespace SRML.Console
 		/// </summary>
 		public static void RemoveAll()
 		{
-			string[] lines = File.ReadAllLines(bindFile);
-			foreach (string line in lines)
+			var lines = File.ReadAllLines(bindFile);
+			foreach (var line in lines)
 			{
 				if (!line.Contains(":"))
 					continue;
@@ -83,9 +83,9 @@ namespace SRML.Console
 		/// </summary>
 		public static List<string> GetAllBinds()
 		{
-			List<string> result = new List<string>();
+			var result = new List<string>();
 
-			foreach (string line in File.ReadAllLines(bindFile))
+			foreach (var line in File.ReadAllLines(bindFile))
 			{
 				if (!line.Contains(":"))
 					continue;

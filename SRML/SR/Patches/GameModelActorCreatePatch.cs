@@ -8,7 +8,7 @@ namespace SRML.SR.Patches
 {
     [HarmonyPatch(typeof(GameModel))]
     [HarmonyPatch("CreateActorModel")]
-    public class GameModelActorCreatePatch
+    public static class GameModelActorCreatePatch
     {
         public static bool Prefix(out ActorModel __result, GameModel __instance, long actorId, Identifiable.Id ident, RegionRegistry.RegionSetId regionSetId,
             GameObject gameObj)

@@ -34,7 +34,7 @@ namespace SRML.SR.SaveSystem.Patches
             switch (catcher.type)
             {
                 case SiloCatcher.Type.SILO_DEFAULT:
-                    bool result = catcher.storageSilo.GetRelevantAmmo().MaybeAddToSpecificSlot(id, collider.GetComponent<Identifiable>(), catcher.slotIdx, 1, false);
+                    var result = catcher.storageSilo.GetRelevantAmmo().MaybeAddToSpecificSlot(id, collider.GetComponent<Identifiable>(), catcher.slotIdx, 1, false);
                     catcher.storageSilo.OnAdded();
                     return result;
                 case SiloCatcher.Type.REFINERY:

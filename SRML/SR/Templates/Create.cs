@@ -13,7 +13,7 @@ namespace SRML.SR.Templates
 
         public void AddComponent(GameObject obj)
         {
-            T comp = obj.AddComponent<T>();
+            var comp = obj.AddComponent<T>();
             action?.Invoke(comp);
         }
     }

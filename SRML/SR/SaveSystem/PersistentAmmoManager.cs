@@ -84,7 +84,7 @@ namespace SRML.SR.SaveSystem
 
         internal static void SyncAll()
         {
-            List<AmmoIdentifier> invalidIdentifiers = new List<AmmoIdentifier>();
+            var invalidIdentifiers = new List<AmmoIdentifier>();
             foreach(var v in PersistentAmmoData)
             {
                 try

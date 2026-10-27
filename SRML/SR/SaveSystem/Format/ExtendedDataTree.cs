@@ -17,8 +17,8 @@ namespace SRML.SR.SaveSystem.Format
 
         public override void ReadData(BinaryReader reader)
         {
-            bool isOld = ModdedSaveData.LATEST_READ_VERSION<4;
-            int number =  reader.ReadInt32();
+            var isOld = ModdedSaveData.LATEST_READ_VERSION<4;
+            var number =  reader.ReadInt32();
             if (number >= 3) isOld = false;
 
             if (number >= 3) number -= 3;

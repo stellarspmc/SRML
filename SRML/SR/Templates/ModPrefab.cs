@@ -68,7 +68,7 @@ namespace SRML.SR.Templates
         /// <param name="actions">Actions to add to the pile</param>
         public T AddPrefabFunction(params System.Action<GameObjectTemplate>[] actions)
         {
-            foreach (System.Action<GameObjectTemplate> action in actions)
+            foreach (var action in actions)
                 PrefabFunction += action;
 
             return (T)this;

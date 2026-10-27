@@ -82,8 +82,8 @@ namespace SRML.SR.UI
                 dependencies = $"Dependencies: ";
                 if (info.Dependencies.Count > 0)
                 {
-                    int i = 0;
-                    foreach (KeyValuePair<string, SRModInfo.ModVersion> dep in info.Dependencies)
+                    var i = 0;
+                    foreach (var dep in info.Dependencies)
                     {
                         dependencies += $"{dep.Key} {dep.Value}";
                         if ((i + 1) != info.Dependencies.Count) dependencies += ", ";

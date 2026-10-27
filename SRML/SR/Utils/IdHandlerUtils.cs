@@ -28,7 +28,7 @@ namespace SRML.SR.Utils
         {
             SRCallbacks.PreSaveGameLoaded += s =>
             {
-                foreach (IdHandler handler in UnityEngine.Object.FindObjectsOfType<IdHandler>())
+                foreach (var handler in UnityEngine.Object.FindObjectsOfType<IdHandler>())
                 {
                     if (!idHandlerPrefabs.ContainsKey(handler.GetType()))
                     {

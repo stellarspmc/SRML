@@ -19,7 +19,7 @@ namespace SRML.Console.Commands
 				return false;
 			}
 
-			DateTime now = DateTime.Now;
+			var now = DateTime.Now;
 
 			try
 			{

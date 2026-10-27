@@ -35,11 +35,11 @@ namespace SRML.Console.Commands
                 return false;
             }
 
-            int count = 0;
+            var count = 0;
 
             if (args.Length != 2 || !Int32.TryParse(args[1], out count)) count = 1;
 
-            for(int i = 0; i < count; i++)
+            for(var i = 0; i < count; i++)
             {
 
                 

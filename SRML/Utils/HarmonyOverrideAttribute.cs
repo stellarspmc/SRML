@@ -5,35 +5,23 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace SRML.Utils
-{
-    
-    public class HarmonyOverrideAttribute : Attribute
-    {
+namespace SRML.Utils {
+    public class HarmonyOverrideAttribute : Attribute {}
 
-    }
-
-    internal static class HarmonyOverrideHandler
-    {
+    internal static class HarmonyOverrideHandler {
         public static Dictionary<MethodBase, List<MethodBase>> methodsToPatch = new Dictionary<MethodBase, List<MethodBase>>();
 
-        public static bool CheckMethod()
-        {
-            // eventually put stacktrace checking here
-            return true;
-        }
-        public static IEnumerable<CodeInstruction> Transpiler(MethodBase __originalMethod,IEnumerable<CodeInstruction> instr, ILGenerator gen)
-        {
+        public static bool CheckMethod() => true; // eventually put stacktrace checking here
+
+        public static IEnumerable<CodeInstruction> Transpiler(MethodBase __originalMethod,IEnumerable<CodeInstruction> instr, ILGenerator gen) {
             if (methodsToPatch.TryGetValue(__originalMethod, out var methods)) {
-                Label lab1 = gen.DefineLabel();
+                var lab1 = gen.DefineLabel();
                 yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(HarmonyOverrideHandler), "CheckMethod"));
                 yield return new CodeInstruction(OpCodes.Brfalse, lab1);
 
                 Label labLoop = default;
 
-                foreach(var v in methods)
-                {
-
+                foreach(var v in methods) {
                     var code = new CodeInstruction(OpCodes.Ldarg_0);
                     if (labLoop != default) code.labels.Add(labLoop);
                     labLoop = gen.DefineLabel();
@@ -42,11 +30,8 @@ namespace SRML.Utils
                     yield return new CodeInstruction(OpCodes.Isinst, v.ReflectedType);
                     yield return new CodeInstruction(OpCodes.Brfalse, v==methods.Last()?lab1:labLoop);
                     yield return new CodeInstruction(OpCodes.Ldarg_0);
-                    int i = 1;
-                    foreach(var p in v.GetParameters())
-                    {
-                        yield return new CodeInstruction(OpCodes.Ldarg, i++);
-                    }
+                    var i = 1;
+                    foreach(var p in v.GetParameters()) yield return new CodeInstruction(OpCodes.Ldarg, i++);
                     yield return new CodeInstruction(v.IsVirtual ? OpCodes.Callvirt : OpCodes.Call, v);
                     yield return new CodeInstruction(OpCodes.Ret);
                 }

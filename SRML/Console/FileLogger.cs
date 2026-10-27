@@ -67,7 +67,7 @@ namespace SRML
 
         internal static void LogEntry(LogType logType, string message, string name)
         {
-            using (StreamWriter writer = File.AppendText(srmlLogFile))
+            using (var writer = File.AppendText(srmlLogFile))
                 writer.WriteLine($"[{DateTime.Now.ToString("HH:mm:ss")}] [{name}] [{TypeToText(logType)}] {Regex.Replace(message, @"<material[^>]*>|<\/material>|<size[^>]*>|<\/size>|<quad[^>]*>|<b>|<\/b>|<color=[^>]*>|<\/color>|<i>|<\/i>", "")}");
         }
     }

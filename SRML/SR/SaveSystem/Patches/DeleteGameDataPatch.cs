@@ -9,7 +9,7 @@ namespace SRML.SR.SaveSystem.Patches
     {
         public static void Postfix(FileStorageProvider __instance, string name)
         {
-            string fullMod = SaveHandler.GetModdedPath(__instance, name);
+            var fullMod = SaveHandler.GetModdedPath(__instance, name);
             if (File.Exists(fullMod))
             {
                 File.Delete(fullMod);

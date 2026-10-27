@@ -12,9 +12,9 @@ namespace SRML.SR.SaveSystem.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            List<CodeInstruction> code = new List<CodeInstruction>(instructions);
-            int insertionIndex = -1;
-            for (int i = 0; i < code.Count; i++)
+            var code = new List<CodeInstruction>(instructions);
+            var insertionIndex = -1;
+            for (var i = 0; i < code.Count; i++)
             {
                 if (code[i].opcode == OpCodes.Ldloc_1 && code[i - 1].opcode == OpCodes.Pop)
                 {
@@ -23,8 +23,8 @@ namespace SRML.SR.SaveSystem.Patches
                 }
             }
 
-            MethodInfo getGet = AccessTools.Property(typeof(Component), nameof(Component.gameObject)).GetGetMethod();
-            List<CodeInstruction> newInstructions = new List<CodeInstruction>();
+            var getGet = AccessTools.Property(typeof(Component), nameof(Component.gameObject)).GetGetMethod();
+            var newInstructions = new List<CodeInstruction>();
             newInstructions.Add(new CodeInstruction(OpCodes.Ldarg_0));
             newInstructions.Add(new CodeInstruction(OpCodes.Call, getGet));
             newInstructions.Add(new CodeInstruction(OpCodes.Ldloc_1));
@@ -36,7 +36,7 @@ namespace SRML.SR.SaveSystem.Patches
         public static void CopyComponentsToTransformed(GameObject original, GameObject transformed)
         {
             if (original.GetComponent<ExtendedData.TransformableParticipant>() == null) return;
-            foreach (ExtendedData.TransformableParticipant part in original.GetComponents<ExtendedData.TransformableParticipant>())
+            foreach (var part in original.GetComponents<ExtendedData.TransformableParticipant>())
             {
                 if (part.CopyCondition())
                 {

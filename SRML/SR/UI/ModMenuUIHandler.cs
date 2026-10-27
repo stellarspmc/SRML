@@ -16,7 +16,7 @@ namespace SRML.SR.UI
                 
             }).transform.SetSiblingIndex(5);
 
-            GameObject watermark = GameObject.Find("TitleUI/Watermark");
+            var watermark = GameObject.Find("TitleUI/Watermark");
             watermark.GetComponent<TMPro.TMP_Text>().alignment = TMPro.TextAlignmentOptions.Midline;
             watermark.GetComponent<TMPro.TMP_Text>().text += $"\nSRML v {Main.VERSION_STRING}";
             ((RectTransform)watermark.transform).anchoredPosition = new Vector2(0f, 12f);

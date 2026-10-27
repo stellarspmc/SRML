@@ -67,10 +67,10 @@ namespace SRML.SR.Templates.Identifiables
         public override FashionAttachTemplate Create()
         {
             // Create model
-            GameObjectTemplate model = new GameObjectTemplate("model_fp").SetTransform(modelTrans);
+            var model = new GameObjectTemplate("model_fp").SetTransform(modelTrans);
 
-            int num = 1;
-            foreach (LayerInfo layer in layers)
+            var num = 1;
+            foreach (var layer in layers)
             {
                 model.AddChild(new GameObjectTemplate("layer" + num,
                     new Create<MeshFilter>(filter => filter.sharedMesh = layer.mesh),

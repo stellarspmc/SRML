@@ -11,7 +11,7 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(MainMenuUI __instance)
         {
-            IEnumerable<SRMod> erroring = SRModLoader.Mods.Values.Where(x => x.ModInfo.EncounteredError && x.ModInfo.LoadState != SRModInfo.State.INITIALIZATION_ERROR);
+            var erroring = SRModLoader.Mods.Values.Where(x => x.ModInfo.EncounteredError && x.ModInfo.LoadState != SRModInfo.State.INITIALIZATION_ERROR);
             
             if (erroring.Count() > 0)
                 ErrorGUI.TryCreateExtendedError(__instance, ErrorGUI.errorUI, erroring);

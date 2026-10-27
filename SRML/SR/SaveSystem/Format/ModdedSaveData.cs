@@ -48,9 +48,9 @@ namespace SRML.SR.SaveSystem.Format
         {
             ammoDataEntries.Clear();
 
-            int count = reader.ReadInt32();
+            var count = reader.ReadInt32();
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var newEntry = new IdentifiableAmmoData();
                 newEntry.Read(reader);
@@ -60,9 +60,9 @@ namespace SRML.SR.SaveSystem.Format
             
             segments.Clear();
             count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                long start = reader.BaseStream.Position;
+                var start = reader.BaseStream.Position;
                 var mod = new ModDataSegment();
                 try
                 {
@@ -84,7 +84,7 @@ namespace SRML.SR.SaveSystem.Format
                 {
                     partialData.Clear();
                     count = reader.ReadInt32();
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                     {
                         var id = DataIdentifier.Read(reader);
                         var dataType = DataIdentifier.IdentifierTypeToData[id.Type];

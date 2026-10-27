@@ -12,11 +12,11 @@ namespace SRML.SR.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            List<CodeInstruction> allInstructions = new List<CodeInstruction>(instr);
-            CodeInstruction latestBinding = instr.Last(x => x.opcode == OpCodes.Call && ((MethodInfo)x.operand).Name == "CreateKeyBindingLine");
-            int index = instr.IndexOfItem(latestBinding) + 1;
+            var allInstructions = new List<CodeInstruction>(instr);
+            var latestBinding = instr.Last(x => x.opcode == OpCodes.Call && ((MethodInfo)x.operand).Name == "CreateKeyBindingLine");
+            var index = instr.IndexOfItem(latestBinding) + 1;
 
-            List<CodeInstruction> newInstructions = new List<CodeInstruction>()
+            var newInstructions = new List<CodeInstruction>()
             {
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(OptionsUISetupInputPatch), "Alternate"))

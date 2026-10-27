@@ -10,9 +10,9 @@ public static class TypeExtensions
     {
         if (e.Message.Contains(MIDDLE))
         {
-            string j = e.Message.Substring(15).Replace("'", "");
-            string p = j.Substring(0, j.Length - 1);
-            int i = p.IndexOf(MIDDLE);
+            var j = e.Message.Substring(15).Replace("'", "");
+            var p = j.Substring(0, j.Length - 1);
+            var i = p.IndexOf(MIDDLE);
             UnityEngine.Debug.LogWarning($"Cannot set {what} because the value ({p.Substring(0, i)}) cannot be converted to the {what} type ({p.Substring(i + MIDDLE.Length)}).");
         }
     }
@@ -27,7 +27,7 @@ public static class TypeExtensions
     {
         try
         {
-            MethodInfo method = type.GetStaticMethod(name, list.Select(o => o.GetType()).ToArray());
+            var method = type.GetStaticMethod(name, list.Select(o => o.GetType()).ToArray());
 
             if (method == null) return null;
 
@@ -52,7 +52,7 @@ public static class TypeExtensions
     {
         try
         {
-            MethodInfo method = type.GetStaticMethod(name, list.Select(o => o.GetType()).ToArray());
+            var method = type.GetStaticMethod(name, list.Select(o => o.GetType()).ToArray());
 
             if (method == null) return default;
 
@@ -76,7 +76,7 @@ public static class TypeExtensions
     {
         try
         {
-            FieldInfo field = type.GetStaticField(name);
+            var field = type.GetStaticField(name);
 
             if (field == null) return;
 
@@ -103,7 +103,7 @@ public static class TypeExtensions
     {
         try
         {
-            FieldInfo field = type.GetStaticField(name);
+            var field = type.GetStaticField(name);
 
             if (field == null) return;
 
@@ -128,7 +128,7 @@ public static class TypeExtensions
     {
         try
         {
-            FieldInfo field = type.GetStaticField(name);
+            var field = type.GetStaticField(name);
 
             if (field == null) return default;
 
@@ -152,7 +152,7 @@ public static class TypeExtensions
     {
         try
         {
-            FieldInfo field = type.GetStaticField(name);
+            var field = type.GetStaticField(name);
 
             if (field == null) return default;
 
@@ -176,7 +176,7 @@ public static class TypeExtensions
     {
         try
         {
-            PropertyInfo field = type.GetStaticProperty(name);
+            var field = type.GetStaticProperty(name);
 
             if (field == null) return;
 
@@ -206,7 +206,7 @@ public static class TypeExtensions
     {
         try
         {
-            PropertyInfo field = type.GetStaticProperty(name);
+            var field = type.GetStaticProperty(name);
 
             if (field == null) return;
 
@@ -234,7 +234,7 @@ public static class TypeExtensions
     {
         try
         {
-            PropertyInfo field = type.GetStaticProperty(name);
+            var field = type.GetStaticProperty(name);
 
             if (field == null) return default;
 
@@ -258,7 +258,7 @@ public static class TypeExtensions
     {
         try
         {
-            PropertyInfo field = type.GetStaticProperty(name);
+            var field = type.GetStaticProperty(name);
 
             if (field == null) return default;
 
@@ -278,7 +278,7 @@ public static class TypeExtensions
             throw new ArgumentNullException(nameof(types));
         if (parameters.Length != types.Length)
             return false;
-        for (int index = 0; index < types.Length; ++index)
+        for (var index = 0; index < types.Length; ++index)
         {
             if (types[index] == (Type)null)
                 throw new ArgumentNullException(nameof(types));

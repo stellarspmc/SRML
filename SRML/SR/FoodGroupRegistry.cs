@@ -40,7 +40,7 @@ namespace SRML.SR
         /// <param name="idRange">The <see cref="Identifiable.Id"/>s to be added.</param>
         public static void RegisterIdRange(this SlimeEat.FoodGroup foodGroup, ICollection<Identifiable.Id> idRange)
         {
-            foreach (Identifiable.Id id in idRange)
+            foreach (var id in idRange)
                 foodGroup.RegisterId(id);
         }
 
@@ -51,7 +51,7 @@ namespace SRML.SR
         /// <param name="idRange">The <see cref="Identifiable.Id"/>s to be added.</param>
         public static void RegisterIdRange(this SlimeEat.FoodGroup foodGroup, Identifiable.Id[] idRange)
         {
-            foreach (Identifiable.Id id in idRange)
+            foreach (var id in idRange)
                 foodGroup.RegisterId(id);
         }
 
@@ -61,7 +61,7 @@ namespace SRML.SR
         /// <param name="idRange">The <see cref="Identifiable.Id"/>s to be added.</param>
         public static void RegisterIdRangeToFoodGroup(this ICollection<Identifiable.Id> idRange)
         {
-            foreach (Identifiable.Id id in idRange) 
+            foreach (var id in idRange) 
                 id.RegisterToFoodGroup();
         }
 
@@ -71,7 +71,7 @@ namespace SRML.SR
         /// <param name="idRange">The <see cref="Identifiable.Id"/>s to be added.</param>
         public static void RegisterIdRangeToFoodGroup(this Identifiable.Id[] idRange)
         {
-            foreach (Identifiable.Id id in idRange) 
+            foreach (var id in idRange) 
                 id.RegisterToFoodGroup();
         }
 
@@ -103,9 +103,9 @@ namespace SRML.SR
         /// <param name="id">The <see cref="Identifiable.Id"/> to be added.</param>
         public static void RegisterToFoodGroup(this Identifiable.Id id)
         {
-            List<SlimeEat.FoodGroup> validGroups = foodGroupRules.Where(x => x.Key.Invoke(id)).Select(x => x.Value).ToList();
+            var validGroups = foodGroupRules.Where(x => x.Key.Invoke(id)).Select(x => x.Value).ToList();
 
-            foreach (SlimeEat.FoodGroup foodGroup in validGroups)
+            foreach (var foodGroup in validGroups)
                 RegisterToFoodGroup(id, foodGroup);
         }
 

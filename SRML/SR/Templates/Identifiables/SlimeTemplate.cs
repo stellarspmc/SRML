@@ -201,7 +201,7 @@ namespace SRML.SR.Templates.Identifiables
             RegisterDefinition();
 
             // Create conditional components
-            Create<SlimeFeral> slimeFeral = new Create<SlimeFeral>(feral =>
+            var slimeFeral = new Create<SlimeFeral>(feral =>
             {
                 feral.auraPrefab = EffectObjects.fxFeralAura;
                 feral.dynamicToFeral = false;
@@ -398,7 +398,7 @@ namespace SRML.SR.Templates.Identifiables
         protected void SetValuesAfterBuild(GameObject obj)
         {
             // Adds the bones
-            GameObject bones = boneStructure?.CreatePrefabCopy() ?? BaseObjects.originBones["SlimeBones"].CreatePrefabCopy();
+            var bones = boneStructure?.CreatePrefabCopy() ?? BaseObjects.originBones["SlimeBones"].CreatePrefabCopy();
             bones.transform.parent = obj.transform;
             bones.transform.localPosition = new Vector3(0, -0.5f, 0);
             bones.transform.localScale = Vector3.one;
@@ -406,7 +406,7 @@ namespace SRML.SR.Templates.Identifiables
             bones.name = "Appearance";
 
             // Configures the appearance applicator
-            SlimeAppearanceApplicator app = obj.GetComponent<SlimeAppearanceApplicator>();
+            var app = obj.GetComponent<SlimeAppearanceApplicator>();
             app.RootAppearanceObject = obj.FindChild("Appearance");
             app.LODGroup = app.RootAppearanceObject.GetComponent<LODGroup>();
             app.Bones = BoneMappingUtils.GetMaps(bones).ToArray();
@@ -435,11 +435,11 @@ namespace SRML.SR.Templates.Identifiables
             if (isGordo)
                 return null;
 
-            List<Identifiable.Id> largoIDs = new List<Identifiable.Id>();
+            var largoIDs = new List<Identifiable.Id>();
 
             definition.CanLargofy = true;
 
-            foreach (Identifiable.Id id in GameContext.Instance.LookupDirector.GetSlimeIDs(ID))
+            foreach (var id in GameContext.Instance.LookupDirector.GetSlimeIDs(ID))
                 largoIDs.Add(CraftLargo(canBeTarr, ID, id, extraLargoBehaviour));
 
             largoIDs.RemoveAll(id => id == Identifiable.Id.NONE);
@@ -452,18 +452,18 @@ namespace SRML.SR.Templates.Identifiables
             if (GameContext.Instance.LookupDirector.LargoExists(slimeA, slimeB))
                 return Identifiable.Id.NONE;
 
-            string prefabName = mainObject.Name + slimeB.ToString().Replace("_SLIME", "").ToUpperInvariant()[0] + slimeB.ToString().Replace("_SLIME", "").ToLowerInvariant().Substring(1);
-            string name = slimeA.ToString().Replace("_SLIME", "") + slimeB.ToString().Replace("_SLIME", "") + "_LARGO";
-            Identifiable.Id largoID = IdentifiableRegistry.CreateIdentifiableId(EnumPatcher.GetFirstFreeValue(typeof(Identifiable.Id)), name);
+            var prefabName = mainObject.Name + slimeB.ToString().Replace("_SLIME", "").ToUpperInvariant()[0] + slimeB.ToString().Replace("_SLIME", "").ToLowerInvariant().Substring(1);
+            var name = slimeA.ToString().Replace("_SLIME", "") + slimeB.ToString().Replace("_SLIME", "") + "_LARGO";
+            var largoID = IdentifiableRegistry.CreateIdentifiableId(EnumPatcher.GetFirstFreeValue(typeof(Identifiable.Id)), name);
 
-            SlimeDefinitions defs = GameContext.Instance.SlimeDefinitions;
+            var defs = GameContext.Instance.SlimeDefinitions;
 
-            SlimeDefinition other = defs.GetSlimeByIdentifiableId(slimeB);
+            var other = defs.GetSlimeByIdentifiableId(slimeB);
 
             if (!other.CanLargofy)
                 return Identifiable.Id.NONE;
 
-            SlimeDefinition largoDef = defs.GetLargoByBaseSlimes(definition, other);
+            var largoDef = defs.GetLargoByBaseSlimes(definition, other);
             largoDef.IdentifiableId = largoID;
 
             if (!canBeTarr)
@@ -474,8 +474,8 @@ namespace SRML.SR.Templates.Identifiables
 
             extraLargoBehaviour?.Invoke(largoDef);
 
-            SlimeTemplate largoTemplate = new SlimeTemplate(prefabName, largoDef).SetFeralState(canBeFeral).SetGlitchState(canBeAGlitch)
-                .SetVacSize(Vacuumable.Size.LARGE).SetTranslation(definition.Name + " " + other.Name + " Largo").Create();
+            var largoTemplate = new SlimeTemplate(prefabName, largoDef).SetFeralState(canBeFeral).SetGlitchState(canBeAGlitch)
+                                                                       .SetVacSize(Vacuumable.Size.LARGE).SetTranslation(definition.Name + " " + other.Name + " Largo").Create();
 
             LookupRegistry.RegisterIdentifiablePrefab(largoTemplate.ToPrefab());
 
@@ -494,7 +494,7 @@ namespace SRML.SR.Templates.Identifiables
             if (isGordo)
                 return null;
 
-            SlimeDefinition gordoDef = ScriptableObject.CreateInstance<SlimeDefinition>();
+            var gordoDef = ScriptableObject.CreateInstance<SlimeDefinition>();
             gordoDef.AppearancesDefault = definition.AppearancesDefault;
             gordoDef.AppearancesDynamic = definition.AppearancesDynamic;
             gordoDef.BaseModule = definition.BaseModule;
@@ -509,11 +509,11 @@ namespace SRML.SR.Templates.Identifiables
             gordoDef.Sounds = definition.Sounds;
             gordoDef.Name = "roamGordo." + definition.Name;
 
-            FearProfile prof = ScriptableObject.CreateInstance<FearProfile>();
+            var prof = ScriptableObject.CreateInstance<FearProfile>();
             prof.threats = new List<FearProfile.ThreatEntry>();
             prof.GetType().GetMethod("OnEnable", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(prof, new object[0]);
 
-            SlimeTemplate gordo = new SlimeTemplate("gordo" + mainObject.Name.Replace("slime", ""), gordoDef).SetVacSize(Vacuumable.Size.GIANT)
+            var gordo = new SlimeTemplate("gordo" + mainObject.Name.Replace("slime", ""), gordoDef).SetVacSize(Vacuumable.Size.GIANT)
                 .SetHealth(60).SetFeralState(false).SetGlitchState(false).SetFearProfile(prof).SetTranslation(definition.Name + " Gordo");
 
             gordo.isGordo = true;
@@ -536,7 +536,7 @@ namespace SRML.SR.Templates.Identifiables
         /// </summary>
         protected virtual void BuildModule()
         {
-            GameObjectTemplate module = new GameObjectTemplate("module" + mainObject.Name);
+            var module = new GameObjectTemplate("module" + mainObject.Name);
             module.AddComponents(extras.ToArray());
             module.AddComponents(
                 new Create<SlimeEat>(eat =>

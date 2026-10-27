@@ -127,7 +127,7 @@ namespace SRML.SR.SaveSystem
                 segment.playerData.Pull(game.player, mod);
             }
 
-            PediaDataBuffer buf = new PediaDataBuffer(game.pedia);
+            var buf = new PediaDataBuffer(game.pedia);
             foreach (var mod in ModPediaData.FindAllModsWithData(buf))
             {
                 var segment = data.GetSegmentForMod(mod);

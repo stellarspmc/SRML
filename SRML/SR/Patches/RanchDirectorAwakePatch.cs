@@ -7,7 +7,7 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(RanchDirector __instance)
         {
-            foreach (RanchDirector.PaletteEntry entry in ChromaRegistry.customPalettes)
+            foreach (var entry in ChromaRegistry.customPalettes)
                 __instance.RegisterPalette(entry);
         }
     }

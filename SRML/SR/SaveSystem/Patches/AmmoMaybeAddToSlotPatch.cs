@@ -15,7 +15,7 @@ namespace SRML.SR.SaveSystem.Patches
             if (AmmoIdentifier.TryGetIdentifier(__instance, out var identifier))
             {
                 var count = -1;
-                for (int i = 0; i < __instance.Slots.Length; i++)
+                for (var i = 0; i < __instance.Slots.Length; i++)
                 {
                     if (__instance.Slots[i]?.id == id)
                     {
@@ -60,7 +60,7 @@ namespace SRML.SR.SaveSystem.Patches
                 {
                     var ammo = PersistentAmmoManager.GetPersistentAmmoForAmmo(__instance.ammoModel);
                     if (ammo == null) return;
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                         ammo.DataModel.slots[slotIdx]
                             .PushTop(ExtendedData.ReadDataFromGameObject(identifiable.gameObject));
                     ammo.Sync();
@@ -69,7 +69,7 @@ namespace SRML.SR.SaveSystem.Patches
                 {
                     if (!PersistentAmmoManager.HasPersistentAmmo(identifier)) return;
                     var ammo = PersistentAmmoManager.PersistentAmmoData[identifier];
-                    for (int i = 0; i < count; i++)
+                    for (var i = 0; i < count; i++)
                         ammo.DataModel.slots[slotIdx].PushTop(null);
                     ammo.Sync();
                 }

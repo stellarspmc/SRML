@@ -202,7 +202,7 @@ namespace SRML
             => patches.TryGetValue(enumType, out patch);
 
         internal static bool AlreadyHasName(Type enumType, string name)
-            => TryGetRawPatch(enumType, out EnumPatch patch) && patch.HasName(name);
+            => TryGetRawPatch(enumType, out var patch) && patch.HasName(name);
 
         internal class EnumPatch
         {
@@ -225,11 +225,11 @@ namespace SRML
 
             public List<KeyValuePair<ulong, string>> GetPairs()
             {
-                List<KeyValuePair<ulong, string>> pairs = new List<KeyValuePair<ulong, string>>();
+                var pairs = new List<KeyValuePair<ulong, string>>();
 
-                foreach (KeyValuePair<ulong, HashSet<string>> pair in values)
+                foreach (var pair in values)
                 {
-                    foreach (string value in pair.Value)
+                    foreach (var value in pair.Value)
                         pairs.Add(new KeyValuePair<ulong, string>(pair.Key, value));
                 }
 

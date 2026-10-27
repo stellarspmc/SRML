@@ -30,7 +30,7 @@ namespace SRML
             load_before = loadBefore ?? new string[0],
             parsedDependencies = dependencies?.Select(x =>
             {
-                string[] pieces = x.Split(':');
+                var pieces = x.Split(':');
 
                 if (pieces.Length != 2)
                     throw new ArgumentException($"Malformed dependency for {id ?? "<unknown mod>"}: {x}");

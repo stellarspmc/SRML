@@ -15,7 +15,7 @@ namespace SRML.Utils.Enum
 
             foreach (var type in module.GetTypes())
             {
-                EnumHolderAttribute enumHolder = type.GetCustomAttribute<EnumHolderAttribute>();
+                var enumHolder = type.GetCustomAttribute<EnumHolderAttribute>();
 
                 if (enumHolder == null)
                     continue;

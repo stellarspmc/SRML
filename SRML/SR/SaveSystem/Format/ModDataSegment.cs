@@ -38,8 +38,8 @@ namespace SRML.SR.SaveSystem.Format
             var saveInfo = SaveRegistry.GetSaveInfo(mod);
 
             identifiableData.Clear();
-            int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            var count = reader.ReadInt32();
+            for (var i = 0; i < count; i++)
             {
                 var e = new IdentifiedData();
                 e.Read(reader,saveInfo);
@@ -48,7 +48,7 @@ namespace SRML.SR.SaveSystem.Format
 
             extendedData.Clear();
             count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var e = new ExtendedDataTree();
                 e.Read(reader);
@@ -62,8 +62,8 @@ namespace SRML.SR.SaveSystem.Format
                 BinaryUtils.ReadDictionary(reader,customAmmo,x=>AmmoIdentifier.Read(x), x =>
                 {
                     var list = new List<VanillaAmmoData>();
-                    int ammoCount = x.ReadInt32();
-                    for (int i = 0; i < ammoCount; i++)
+                    var ammoCount = x.ReadInt32();
+                    for (var i = 0; i < ammoCount; i++)
                     {
                         if (x.ReadBoolean())
                         {

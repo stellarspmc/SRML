@@ -16,7 +16,7 @@ namespace SRML.SR
                 {
                     if (s == DLCPackage.Id.SECRET_STYLE)
                     {
-                        foreach (SecretStyle ss in secretStyles.Keys)
+                        foreach (var ss in secretStyles.Keys)
                             ss.SlimeDefinition.RegisterDynamicAppearance(ss.ExoticAppearance);
                     }
                 });
@@ -38,8 +38,8 @@ namespace SRML.SR
         /// <param name="exoticAppearance">Secret style to register</param>
         public static void RegisterSecretStyle(SlimeDefinition definition, SlimeAppearance exoticAppearance)
         {
-            SecretStyle ss = new SecretStyle(definition, exoticAppearance);
-            SRMod mod = SRMod.GetCurrentMod();
+            var ss = new SecretStyle(definition, exoticAppearance);
+            var mod = SRMod.GetCurrentMod();
             if (secretStyles.ContainsKey(ss))
                 throw new Exception($"{definition.IdentifiableId} already has a secret style registered by {secretStyles[ss].ModInfo.Id}");
             secretStyles[ss] = mod;
@@ -74,7 +74,7 @@ namespace SRML.SR
 
             public override string ToString()
             {
-                StringBuilder stringBuilder = new StringBuilder();
+                var stringBuilder = new StringBuilder();
                 stringBuilder.Append('[');
                 if (SlimeDefinition != null)
                     stringBuilder.Append(SlimeDefinition.ToString());

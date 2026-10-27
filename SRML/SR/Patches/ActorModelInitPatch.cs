@@ -10,8 +10,8 @@ namespace SRML.SR.Patches
     {
         public static bool Prefix(ActorModel __instance, GameObject gameObj)
         {
-            ActorModel.Participant[] componentsInChildren = gameObj.GetComponentsInChildren<ActorModel.Participant>(true);
-            for (int i = 0; i < componentsInChildren.Length; i++)
+            var componentsInChildren = gameObj.GetComponentsInChildren<ActorModel.Participant>(true);
+            for (var i = 0; i < componentsInChildren.Length; i++)
             {
                 try
                 {

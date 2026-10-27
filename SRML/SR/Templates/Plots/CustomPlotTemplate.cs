@@ -86,7 +86,7 @@ namespace SRML.SR.Templates.Plots
             );
 
             // Add Attachments
-            foreach (IModPrefab attach in attachments)
+            foreach (var attach in attachments)
             {
                 if (attach is IPlotUpgradeTemplate upgrade)
                 {

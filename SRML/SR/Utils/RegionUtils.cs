@@ -10,7 +10,7 @@ namespace SRML.SR.Utils
         public static List<Region> GetRegionsFromPosition(Vector3 pos, SceneContext s)
         {
 
-            List<Region> regions = new List<Region>();
+            var regions = new List<Region>();
 
             foreach (var region in s.RegionRegistry.regionsTrees)
             {

@@ -64,9 +64,9 @@ namespace SRML.SR.Utils
 
         public static List<SlimeAppearanceApplicator.BoneMapping> GetMaps(GameObject obj)
         {
-            List<SlimeAppearanceApplicator.BoneMapping> maps = new List<SlimeAppearanceApplicator.BoneMapping>();
+            var maps = new List<SlimeAppearanceApplicator.BoneMapping>();
 
-            foreach (SlimeBone bone in bones.Keys)
+            foreach (var bone in bones.Keys)
             {
                 maps.Add(new SlimeAppearanceApplicator.BoneMapping()
                 {

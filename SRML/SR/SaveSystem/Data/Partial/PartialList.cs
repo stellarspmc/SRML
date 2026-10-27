@@ -27,7 +27,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
         public override void Pull(IList<T> data)
         {
             hoistedValues.Clear();
-            for (int i = 0; i < data.Count; i++)
+            for (var i = 0; i < data.Count; i++)
             {
                 if (hoistCondition(data[i]))
                 {

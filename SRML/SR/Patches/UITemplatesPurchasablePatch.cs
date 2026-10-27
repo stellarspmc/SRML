@@ -11,7 +11,7 @@ namespace SRML.SR.Patches
     {
         public static void Prefix(ref PurchaseUI.Purchasable[] purchasables, PurchaseUI.OnClose onClose)
         {
-            StackTrace trace = new StackTrace(1);
+            var trace = new StackTrace(1);
             Type type = null;
             foreach(var v in trace.GetFrames())
             {
@@ -23,7 +23,7 @@ namespace SRML.SR.Patches
                 }
             }
             if (type == null) return;
-            BaseUI ui = onClose.Target as BaseUI;
+            var ui = onClose.Target as BaseUI;
 
             purchasables = PurchasableUIRegistry.customPurchasables.Where(x => x.Key(type, ui)).Select(x => x.Value(ui)).ToArray().AddRangeToArray(purchasables);
 

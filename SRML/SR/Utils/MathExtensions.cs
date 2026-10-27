@@ -34,7 +34,7 @@ public static class MathExtensions
 
     public static bool Approx(this float v1, float v2)
     {
-        float num = v1 - v2;
+        var num = v1 - v2;
         return (double)num >= -1.0000000116861E-07 && (double)num <= 1.0000000116861E-07;
     }
 
@@ -59,22 +59,22 @@ public static class MathExtensions
 
     public static float Min(this float v0, float v1, float v2, float v3)
     {
-        float num1 = (double)v0 < (double)v1 ? v0 : v1;
-        float num2 = (double)v2 < (double)v3 ? v2 : v3;
+        var num1 = (double)v0 < (double)v1 ? v0 : v1;
+        var num2 = (double)v2 < (double)v3 ? v2 : v3;
         return (double)num1 >= (double)num2 ? num2 : num1;
     }
 
     public static float Max(this float v0, float v1, float v2, float v3)
     {
-        float num1 = (double)v0 > (double)v1 ? v0 : v1;
-        float num2 = (double)v2 > (double)v3 ? v2 : v3;
+        var num1 = (double)v0 > (double)v1 ? v0 : v1;
+        var num2 = (double)v2 > (double)v3 ? v2 : v3;
         return (double)num1 <= (double)num2 ? num2 : num1;
     }
 
     internal static float ValueFromSides(this float negativeSide, float positiveSide)
     {
-        float v1 = negativeSide.Abs();
-        float v2 = positiveSide.Abs();
+        var v1 = negativeSide.Abs();
+        var v2 = positiveSide.Abs();
         if (v1.Approx(v2))
             return 0.0f;
         return (double)v1 > (double)v2 ? -v1 : v2;
@@ -155,7 +155,7 @@ public static class MathExtensions
     /// </summary>
     public static void Swap<T>(ref T a, ref T b)
     {
-        T x = a;
+        var x = a;
         a = b;
         b = x;
     }
@@ -214,7 +214,7 @@ public static class MathExtensions
 
         if (num < min || num > max) return num;
 
-        float mid = (max - min) / 2;
+        var mid = (max - min) / 2;
 
         if (num > min) return num + mid < max ? min : max;
         return num - mid > min ? max : min;
@@ -240,8 +240,8 @@ public static class MathExtensions
             pointB = x;
         }
 
-        float middle = (pointB - pointA) / 2;
-        float withOffset = num.NotInRange(pointA, pointB) + middle;
+        var middle = (pointB - pointA) / 2;
+        var withOffset = num.NotInRange(pointA, pointB) + middle;
         return (withOffset >= pointB) ? pointB : pointA;
     }
 }

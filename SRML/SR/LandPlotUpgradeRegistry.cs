@@ -18,12 +18,12 @@ namespace SRML.SR
             ModdedIDRegistry.RegisterIDRegistry(moddedUpgrades);
             PurchasableUIRegistry.RegisterManipulator((LandPlotUI ui, ref PurchaseUI.Purchasable[] purchasables) =>
             {
-                List<PurchaseUI.Purchasable> list = purchasables.ToList();
-                PurchaseUI.Purchasable purchasable1 = list.FirstOrDefault(match => match.nameKey == DemolishKey);
+                var list = purchasables.ToList();
+                var purchasable1 = list.FirstOrDefault(match => match.nameKey == DemolishKey);
                 if (purchasable1 == null)
                     return;
                 list.Remove(purchasable1);
-                PurchaseUI.Purchasable purchasable2 = list.FirstOrDefault(match => match.nameKey == ClearCropKey);
+                var purchasable2 = list.FirstOrDefault(match => match.nameKey == ClearCropKey);
                 if (purchasable2 != null)
                 {
                     list.Remove(purchasable2);

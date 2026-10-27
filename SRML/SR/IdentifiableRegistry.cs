@@ -83,7 +83,6 @@ namespace SRML.SR
         /// Remove all instances of an <see cref="Identifiable.Id"/> from every class in <see cref="Identifiable"/>
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="rule"></param>
         public static void Uncategorize(this Identifiable.Id id)
         {
             Identifiable.ALLERGY_FREE_CLASS.Remove(id);
@@ -127,9 +126,9 @@ namespace SRML.SR
 
         internal static void CategorizeAllIds()
         {
-            foreach (Identifiable.Id id in moddedIdentifiables.Keys)
+            foreach (var id in moddedIdentifiables.Keys)
             {
-                if (rules.TryGetValue(id, out IdentifiableCategorization.Rule rule))
+                if (rules.TryGetValue(id, out var rule))
                     CategorizeId(id, rule);
                 else if (!IdentifiableCategorization.doNotAutoCategorize.Contains(id))
                     CategorizeId(id);
@@ -159,7 +158,7 @@ namespace SRML.SR
         /// <param name="id"></param>
         public static void CategorizeId(Identifiable.Id id)
         {
-            string name = Enum.GetName(typeof(Identifiable.Id), id);
+            var name = Enum.GetName(typeof(Identifiable.Id), id);
 
             if (categorizationSuffixRules.TryGetValue(x => name.EndsWith(x.Key), out var suffixRule))
             {
@@ -181,7 +180,7 @@ namespace SRML.SR
         /// <param name="category"></param>
         public static void CategorizeId(Identifiable.Id id, IdentifiableCategorization.Rule category)
         {
-            string name = Enum.GetName(typeof(Identifiable.Id), id);
+            var name = Enum.GetName(typeof(Identifiable.Id), id);
             if (name.Contains("TANGLE"))
             {
                 Identifiable.ALLERGY_FREE_CLASS.Add(id);

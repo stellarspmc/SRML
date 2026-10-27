@@ -26,7 +26,7 @@ namespace SRML.SR
                     rewardBanner = banner
                 };
             }
-            foreach (RewardEntry entry in rewards) AddToRank(level, entry);
+            foreach (var entry in rewards) AddToRank(level, entry);
         }
 
         /// <summary>

@@ -242,7 +242,7 @@ namespace SRML.SR.Templates.Plantables
             ).AddAfterChildren(GrabJoints);
 
             // Add spawn joints
-            for (int i = 0; i < 20; i++)
+            for (var i = 0; i < 20; i++)
             {
                 mainObject.AddChild(new GameObjectTemplate($"SpawnJoint{(i + 1).ToString("00")}",
                     new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
@@ -263,12 +263,12 @@ namespace SRML.SR.Templates.Plantables
             }
 
             // Add beds
-            GameObjectTemplate sprout = new GameObjectTemplate("Sprout",
+            var sprout = new GameObjectTemplate("Sprout",
                 new Create<MeshFilter>(filter => filter.sharedMesh = this.sprout ?? GardenObjects.modelSproutMeshs[sproutID] ?? GardenObjects.modelSproutMeshs[SpawnResource.Id.CARROT_PATCH]),
                 new Create<MeshRenderer>(render => render.sharedMaterials = sproutMaterials == null ? GardenObjects.modelSproutMaterials[sproutID] ?? GardenObjects.modelSproutMaterials[SpawnResource.Id.CARROT_PATCH] : sproutMaterials)
             );
 
-            GameObjectTemplate dirt = new GameObjectTemplate("Dirt",
+            var dirt = new GameObjectTemplate("Dirt",
                 new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.dirtMesh),
                 new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.dirtMaterials)
             ).AddChild(new GameObjectTemplate("rocks_long",
@@ -276,9 +276,9 @@ namespace SRML.SR.Templates.Plantables
                 new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.rockMaterials)
             )).SetTransform(Vector3.zero, Vector3.up * 90f, new Vector3(0.5f, 0.4f, 0.5f));
 
-            GameObjectTemplate baseBeds = new GameObjectTemplate("BaseBeds");
+            var baseBeds = new GameObjectTemplate("BaseBeds");
 
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 (isDeluxe ? baseBeds : mainObject).AddChild(new GameObjectTemplate("Bed",
                     new Create<LODGroup>(group =>
@@ -311,7 +311,7 @@ namespace SRML.SR.Templates.Plantables
                 mainObject.AddChild(baseBeds);
 
                 // Add spawn joints
-                for (int i = 20; i < 34; i++)
+                for (var i = 20; i < 34; i++)
                 {
                     mainObject.AddChild(new GameObjectTemplate($"SpawnJoint{(i + 1).ToString("00")}",
                         new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
@@ -332,7 +332,7 @@ namespace SRML.SR.Templates.Plantables
                 }
 
                 // Add beds
-                GameObjectTemplate dirtDeluxe = new GameObjectTemplate("Dirt",
+                var dirtDeluxe = new GameObjectTemplate("Dirt",
                     new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.deluxeDirtMesh),
                     new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.deluxeDirtMaterials)
                 ).AddChild(new GameObjectTemplate("rocks_long",
@@ -340,7 +340,7 @@ namespace SRML.SR.Templates.Plantables
                     new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.deluxeRockMaterials)
                 )).SetTransform(Vector3.zero, Vector3.up * 90f, new Vector3(0.5f, 0.3f, 0.5f));
 
-                for (int i = 4; i < 6; i++)
+                for (var i = 4; i < 6; i++)
                 {
                     mainObject.AddChild(new GameObjectTemplate("Bed",
                         new Create<LODGroup>(group =>

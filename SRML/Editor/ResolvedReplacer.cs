@@ -11,7 +11,7 @@ namespace SRML.Editor
 
         public static ResolvedReplacer Resolve(IFieldReplacer replacer)
         {
-            ResolvedReplacer rep = new ResolvedReplacer();
+            var rep = new ResolvedReplacer();
             rep.InstanceInfo = ResolvedInstance.Resolve(replacer.InstanceInfo);
             if (replacer.FieldReplacements == null) throw new Exception("No replacements found!");
             foreach (var v in replacer.FieldReplacements)

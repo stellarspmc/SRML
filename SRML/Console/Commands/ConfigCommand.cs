@@ -15,9 +15,9 @@ namespace SRML.Console.Commands
         {
             var srmlConfig = args[0] == "SRML";
             var mod = SRModLoader.GetMod(args[0]);
-            var config = srmlConfig ? Main.config : mod.Configs.First(x => x.FileName.ToLowerInvariant() == args[1].ToLowerInvariant());
-            var section = config.Sections.First(x => x.Name.ToLowerInvariant() == args[srmlConfig ? 1 : 2].ToLowerInvariant());
-            var element = section.Elements.First(x => x.Options.Name.ToLowerInvariant() == args[srmlConfig ? 2 : 3].ToLowerInvariant());
+            var config = srmlConfig ? Main.config : mod.Configs.First(x => string.Equals(x.FileName, args[1], System.StringComparison.InvariantCultureIgnoreCase));
+            var section = config.Sections.First(x => string.Equals(x.Name, args[srmlConfig ? 1 : 2], System.StringComparison.InvariantCultureIgnoreCase));
+            var element = section.Elements.First(x => string.Equals(x.Options.Name, args[srmlConfig ? 2 : 3], System.StringComparison.InvariantCultureIgnoreCase));
 
             if (args.Length >= (srmlConfig ? 4 : 5))
             {
@@ -46,7 +46,7 @@ namespace SRML.Console.Commands
             {
                 if (argIndex == 1) return Main.config.Sections.Select(x => x.Name).ToList();
 
-                var section = Main.config.Sections.FirstOrDefault(x => x.Name.ToLowerInvariant() == args[1].ToLowerInvariant());
+                var section = Main.config.Sections.FirstOrDefault(x => string.Equals(x.Name, args[1], System.StringComparison.InvariantCultureIgnoreCase));
 
                 if (argIndex == 2) return section?.Elements.Select(x => x.Options.Name).ToList();
             }
@@ -56,11 +56,11 @@ namespace SRML.Console.Commands
 
                 if (argIndex == 1) return mod?.Configs.Select(x => x.FileName).ToList();
 
-                var config = mod?.Configs.FirstOrDefault(x => x.FileName.ToLowerInvariant() == args[1].ToLowerInvariant());
+                var config = mod?.Configs.FirstOrDefault(x => string.Equals(x.FileName, args[1], System.StringComparison.InvariantCultureIgnoreCase));
 
                 if (argIndex == 2) return config?.Sections.Select(x => x.Name).ToList();
 
-                var section = config?.Sections.FirstOrDefault(x => x.Name.ToLowerInvariant() == args[2].ToLowerInvariant());
+                var section = config?.Sections.FirstOrDefault(x => string.Equals(x.Name, args[2], System.StringComparison.InvariantCultureIgnoreCase));
 
                 if (argIndex == 3) return section?.Elements.Select(x => x.Options.Name).ToList();
             }

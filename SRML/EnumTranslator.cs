@@ -39,8 +39,8 @@ namespace SRML
             var type = enumValues[0].GetType();
             var newDict = MappedValues.ContainsKey(type) ? MappedValues[type] : new Dictionary<int, string>();
             MappedValues[type] = newDict;
-            int startValue = GetFreeValue(type);
-            for (int i = startValue; i > startValue - enumValues.Count; i--)
+            var startValue = GetFreeValue(type);
+            for (var i = startValue; i > startValue - enumValues.Count; i--)
             {
                 newDict[i] = Enum.GetName(type, enumValues[-i+startValue]);
             }
@@ -141,14 +141,14 @@ namespace SRML
         public void Read(BinaryReader reader)
         {
             MappedValues.Clear();
-            int enumCount = reader.ReadInt32();
-            for (int i = 0; i < enumCount; i++)
+            var enumCount = reader.ReadInt32();
+            for (var i = 0; i < enumCount; i++)
             {
                 var currentType = Type.GetType(reader.ReadString());
-                int valueCount = reader.ReadInt32();
+                var valueCount = reader.ReadInt32();
                 var newDict = new Dictionary<int, string>();
                 MappedValues[currentType] = newDict;
-                for (int j = 0; j < valueCount; j++)
+                for (var j = 0; j < valueCount; j++)
                 {
                     newDict.Add(reader.ReadInt32(),reader.ReadString());
                 }
@@ -327,7 +327,7 @@ namespace SRML
 
         public static bool OnTranslationFallback(Type enumType, ref string value)
         {
-            bool success = false;
+            var success = false;
             foreach (var v in missingDelegates)
             {
                 success |= v(enumType, ref value);
@@ -416,7 +416,7 @@ namespace SRML
             RegisterEnumFixer((EnumTranslator translator, TranslationMode mode, IList list) =>
             {
                 DoDefaultTranslationFallbacks = false;
-                for (int i = list.Count-1;i>=0;i--)
+                for (var i = list.Count-1;i>=0;i--)
                 {
                     var temp = list[i];
                     try
@@ -438,7 +438,7 @@ namespace SRML
                 DoDefaultTranslationFallbacks = false;
                 var keyArray = new object[dict.Count];
                 var valueArray = new object[dict.Count];
-                int counter = 0;
+                var counter = 0;
                 foreach (var v in dict.Keys)
                 {
                     var temp = v;
@@ -464,7 +464,7 @@ namespace SRML
                 }
 
                 dict.Clear();
-                for (int i = 0; i < keyArray.Length; i++)
+                for (var i = 0; i < keyArray.Length; i++)
                 {
 
                     if (keyArray[i] == null) continue;

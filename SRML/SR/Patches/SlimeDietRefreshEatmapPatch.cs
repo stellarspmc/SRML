@@ -9,11 +9,11 @@ namespace SRML.SR.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            List<CodeInstruction> instructions = new List<CodeInstruction>(instr);
-            int insertIndex = -1;
+            var instructions = new List<CodeInstruction>(instr);
+            var insertIndex = -1;
             object jumpTo = null;
             object localVar = null;
-            for (int i = 0; i < instructions.Count; i++)
+            for (var i = 0; i < instructions.Count; i++)
             {
                 if (instructions[i].opcode == OpCodes.Stloc_S && instructions[i - 1].opcode == OpCodes.Ldc_I4_S) localVar = instructions[i].operand;
                 if (instructions[i].opcode == OpCodes.Brtrue_S && instructions[i - 1].opcode == OpCodes.Call)

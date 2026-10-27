@@ -100,7 +100,7 @@ namespace SRML.SR.Templates.Identifiables
             ).SetTransform(Vector3.zero, Vector3.zero, Vector3.one * 0.7f);
 
             // Create Icon UI content
-            GameObjectTemplate imageBack = new GameObjectTemplate("Image Back",
+            var imageBack = new GameObjectTemplate("Image Back",
                 new Create<RectTransform>(trans =>
                 {
                     trans.anchorMin = Vector2.zero;
@@ -129,7 +129,7 @@ namespace SRML.SR.Templates.Identifiables
                 })
             );
 
-            GameObjectTemplate image = new GameObjectTemplate("Image",
+            var image = new GameObjectTemplate("Image",
                 new Create<RectTransform>(trans =>
                 {
                     trans.anchorMin = Vector2.zero;
@@ -158,7 +158,7 @@ namespace SRML.SR.Templates.Identifiables
                 })
             );
 
-            GameObjectTemplate iconUI = new GameObjectTemplate("IconUI",
+            var iconUI = new GameObjectTemplate("IconUI",
                 new Create<RectTransform>(trans =>
                 {
                     trans.anchorMin = Vector2.zero;

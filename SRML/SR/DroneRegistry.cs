@@ -33,7 +33,7 @@ namespace SRML.SR
                     break;
             }
 
-            HashSet<DroneMetadata> metadataCache = new HashSet<DroneMetadata>();
+            var metadataCache = new HashSet<DroneMetadata>();
             foreach(var v in Gadget.DRONE_CLASS)
             {
                 if (!context.LookupDirector.gadgetDefinitionDict.ContainsKey(v)) continue;
