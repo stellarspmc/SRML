@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using HarmonyLib;
+﻿using HarmonyLib;
 using SRML.SR.SaveSystem.Data.Ammo;
 using UnityEngine;
 using System.Diagnostics;
-using Debug = UnityEngine.Debug;
 
 namespace SRML.SR.SaveSystem.Patches
 {

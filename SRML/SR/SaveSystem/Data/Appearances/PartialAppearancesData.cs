@@ -1,12 +1,9 @@
-﻿using HarmonyLib;
-using MonomiPark.SlimeRancher.Persist;
+﻿using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data.Partial;
 using SRML.Utils;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine;
 using static SlimeAppearance;
 
 namespace SRML.SR.SaveSystem.Data.Appearances
@@ -15,7 +12,7 @@ namespace SRML.SR.SaveSystem.Data.Appearances
     {
         static SerializerPair<AppearanceSaveSet> saveSetPair = SerializerPair.GetEnumSerializerPair<AppearanceSaveSet>();
         static SerializerPair<Identifiable.Id> identifiablePair = SerializerPair.GetEnumSerializerPair<Identifiable.Id>();
-        PartialDictionary<Identifiable.Id, List<SlimeAppearance.AppearanceSaveSet>> unlocksCustom = new PartialDictionary<Identifiable.Id, List<AppearanceSaveSet>>((x) => ModdedIDRegistry.IsModdedID(x.Key), identifiablePair, new SerializerPair<List<AppearanceSaveSet>>((x, y) => BinaryUtils.WriteList(x, y, saveSetPair.SerializeGeneric), (x) =>
+        PartialDictionary<Identifiable.Id, List<SlimeAppearance.AppearanceSaveSet>> unlocksCustom = new PartialDictionary<Identifiable.Id, List<AppearanceSaveSet>>(x => ModdedIDRegistry.IsModdedID(x.Key), identifiablePair, new SerializerPair<List<AppearanceSaveSet>>((x, y) => BinaryUtils.WriteList(x, y, saveSetPair.SerializeGeneric), x =>
         {
             var list = new List<AppearanceSaveSet>();
             BinaryUtils.ReadList(x, list, saveSetPair.DeserializeGeneric);
@@ -26,7 +23,7 @@ namespace SRML.SR.SaveSystem.Data.Appearances
 
         Dictionary<Identifiable.Id, PartialCollection<AppearanceSaveSet>> unlocksPartial = new Dictionary<Identifiable.Id, PartialCollection<AppearanceSaveSet>>();
 
-        PartialDictionary<Identifiable.Id, AppearanceSaveSet> selections = new PartialDictionary<Identifiable.Id, AppearanceSaveSet>(x => ModdedIDRegistry.IsModdedID(x.Key) || ModdedIDRegistry.IsModdedID(x.Value), identifiablePair, saveSetPair, (x) => ModdedIDRegistry.IsModdedID(x.Key)?null:new KeyValuePair<Identifiable.Id,AppearanceSaveSet>?(new KeyValuePair<Identifiable.Id, AppearanceSaveSet>(x.Key, AppearanceSaveSet.CLASSIC)));
+        PartialDictionary<Identifiable.Id, AppearanceSaveSet> selections = new PartialDictionary<Identifiable.Id, AppearanceSaveSet>(x => ModdedIDRegistry.IsModdedID(x.Key) || ModdedIDRegistry.IsModdedID(x.Value), identifiablePair, saveSetPair, x => ModdedIDRegistry.IsModdedID(x.Key)?null:new KeyValuePair<Identifiable.Id,AppearanceSaveSet>?(new KeyValuePair<Identifiable.Id, AppearanceSaveSet>(x.Key, AppearanceSaveSet.CLASSIC)));
 
         PartialCollection<AppearanceSaveSet> CreatePartialList()
         {
@@ -67,7 +64,7 @@ namespace SRML.SR.SaveSystem.Data.Appearances
 
             data.unlocks.Remove(Identifiable.Id.NONE);
 
-            foreach (var v in data.unlocks) v.Value.RemoveAll((x) => x == AppearanceSaveSet.NONE);
+            foreach (var v in data.unlocks) v.Value.RemoveAll(x => x == AppearanceSaveSet.NONE);
 
             selections.Push(data.selections);
 

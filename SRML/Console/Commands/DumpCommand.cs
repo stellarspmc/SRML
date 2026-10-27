@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using System;
-using SRML.Console;
 using System.Collections.Generic;
 
 namespace SRML.Console.Commands

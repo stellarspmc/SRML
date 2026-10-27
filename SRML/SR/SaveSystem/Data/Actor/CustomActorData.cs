@@ -75,9 +75,9 @@ namespace SRML.SR.SaveSystem.Data.Actor
             CustomChecker.RegisterCustomChecker((VanillaActorData data) =>
             {
                 if (SaveRegistry.IsCustom(data)) return CustomChecker.CustomLevel.FULL;
-                if (data.fashions.Any((x) => ModdedIDRegistry.IsModdedID<Identifiable.Id>(x)))
+                if (data.fashions.Any(x => ModdedIDRegistry.IsModdedID<Identifiable.Id>(x)))
                     return CustomChecker.CustomLevel.PARTIAL;
-                if (data.emotions.emotionData.Any((x) => ModdedIDRegistry.IsModdedID(x.Key)))
+                if (data.emotions.emotionData.Any(x => ModdedIDRegistry.IsModdedID(x.Key)))
                     return CustomChecker.CustomLevel.PARTIAL;
 
                 return CustomChecker.CustomLevel.VANILLA;

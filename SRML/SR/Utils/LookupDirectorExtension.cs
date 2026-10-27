@@ -82,7 +82,7 @@ public static class LookupDirectorExtension
 		foreach (Identifiable.Id id in GameContext.Instance.LookupDirector.GetSlimeIDs(slimeA))
 			largoIDs.Add(director.CraftLargo(slimeA, id, extraLargoBehaviour, canBeTarr, forceLargo));
 
-		largoIDs.RemoveAll((id) => id == Identifiable.Id.NONE);
+		largoIDs.RemoveAll(id => id == Identifiable.Id.NONE);
 
 		return largoIDs;
 	}
@@ -121,8 +121,8 @@ public static class LookupDirectorExtension
 
 		if (!(canBeTarr?.Invoke(slimeB) ?? true))
 		{
-			largoDef.Diet.EatMap.RemoveAll((entry) => entry.becomesId == Identifiable.Id.TARR_SLIME);
-			largoDef.Diet.EatMap.RemoveAll((entry) => entry.becomesId == Identifiable.Id.GLITCH_TARR_SLIME);
+			largoDef.Diet.EatMap.RemoveAll(entry => entry.becomesId == Identifiable.Id.TARR_SLIME);
+			largoDef.Diet.EatMap.RemoveAll(entry => entry.becomesId == Identifiable.Id.GLITCH_TARR_SLIME);
 		}
 
 		extraLargoBehaviour?.Invoke(largoDef);

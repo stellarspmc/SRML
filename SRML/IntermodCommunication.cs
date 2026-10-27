@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace SRML
@@ -53,47 +52,47 @@ namespace SRML
 
         public static void RegisterIntermodMethod<TResult>(string imcmethodName, Func<TResult> method)
         {
-            RegisterIntermodMethod( imcmethodName,new IntermodCommunicationInfo((x)=>method(),new Type[0],typeof(TResult)));
+            RegisterIntermodMethod( imcmethodName,new IntermodCommunicationInfo(x=>method(),new Type[0],typeof(TResult)));
         }
 
         public static void RegisterIntermodMethod<T,TResult>(string imcmethodName, Func<T,TResult> method)
         {
-            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo((x) => method((T)x[0]), new Type[] { typeof(T) }, typeof(TResult)));
+            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo(x => method((T)x[0]), new Type[] { typeof(T) }, typeof(TResult)));
         }
 
         public static void RegisterIntermodMethod<T, K, TResult>(string imcmethodName, Func<T, K, TResult> method)
         {
-            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo((x) => method((T)x[0],(K)x[1]), new Type[] { typeof(T),typeof(K) }, typeof(TResult)));
+            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo(x => method((T)x[0],(K)x[1]), new Type[] { typeof(T),typeof(K) }, typeof(TResult)));
         }
 
         public static void RegisterIntermodMethod<T, K, R, TResult>(string imcmethodName, Func<T, K, R, TResult> method)
         {
-            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo((x) => method((T)x[0], (K)x[1],(R)x[2]), new Type[] { typeof(T), typeof(K), typeof(R) }, typeof(TResult)));
+            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo(x => method((T)x[0], (K)x[1],(R)x[2]), new Type[] { typeof(T), typeof(K), typeof(R) }, typeof(TResult)));
         }
 
         public static void RegisterIntermodMethod<T, K, R, Q, TResult>(string imcmethodName, Func<T, K, R, Q, TResult> method)
         {
-            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo((x) => method((T)x[0], (K)x[1], (R)x[2], (Q)x[3]), new Type[] { typeof(T), typeof(K), typeof(R),typeof(Q) }, typeof(TResult)));
+            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo(x => method((T)x[0], (K)x[1], (R)x[2], (Q)x[3]), new Type[] { typeof(T), typeof(K), typeof(R),typeof(Q) }, typeof(TResult)));
         }
 
         public static void RegisterIntermodMethod<T>(string imcmethodName, Action<T> method)
         {
-            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo((x) => { method((T)x[0]); return null; }, new Type[] { typeof(T)},typeof(void)));
+            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo(x => { method((T)x[0]); return null; }, new Type[] { typeof(T)},typeof(void)));
         }
 
         public static void RegisterIntermodMethod<T,K>(string imcmethodName, Action<T,K> method)
         {
-            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo((x) => { method((T)x[0],(K)x[1]); return null; }, new Type[] { typeof(T), typeof(K) }, typeof(void)));
+            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo(x => { method((T)x[0],(K)x[1]); return null; }, new Type[] { typeof(T), typeof(K) }, typeof(void)));
         }
 
         public static void RegisterIntermodMethod<T, K, Q>(string imcmethodName, Action<T, K, Q> method)
         {
-            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo((x) => { method((T)x[0], (K)x[1], (Q)x[2]); return null; }, new Type[] { typeof(T), typeof(K), typeof(Q) }, typeof(void)));
+            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo(x => { method((T)x[0], (K)x[1], (Q)x[2]); return null; }, new Type[] { typeof(T), typeof(K), typeof(Q) }, typeof(void)));
         }
 
         public static void RegisterIntermodMethod<T, K, Q, R>(string imcmethodName, Action<T, K, Q, R> method)
         {
-            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo((x) => { method((T)x[0], (K)x[1], (Q)x[2], (R)x[3]); return null; }, new Type[] { typeof(T), typeof(K), typeof(Q),typeof(R) }, typeof(void)));
+            RegisterIntermodMethod(imcmethodName, new IntermodCommunicationInfo(x => { method((T)x[0], (K)x[1], (Q)x[2], (R)x[3]); return null; }, new Type[] { typeof(T), typeof(K), typeof(Q),typeof(R) }, typeof(void)));
         }
 
         public static object CallIMCMethod(string modid, string methodName,params object[] args)

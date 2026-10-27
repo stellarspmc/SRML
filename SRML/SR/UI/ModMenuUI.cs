@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,7 +41,7 @@ namespace SRML.SR.UI
         {
             var newobj = Instantiate(infoButtonPrefab);
             ModButton button = new ModButton(info);
-            newobj.GetComponent<SRToggle>().onValueChanged.AddListener((x) =>
+            newobj.GetComponent<SRToggle>().onValueChanged.AddListener(x =>
             {
                 if (x) OnModSelect(button);
             });

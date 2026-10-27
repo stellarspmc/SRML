@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
-namespace SRML.Editor
-{
+namespace SRML.Editor {
     [CreateAssetMenu(menuName = "SRML/Replacers/FieldReplacer")]
-    public class BundleFieldReplacer : ScriptableObject,IFieldReplacer
-    {
+    public class BundleFieldReplacer : ScriptableObject,IFieldReplacer {
         [SerializeField]
         BundleInstanceInfo instanceInfo;
 
@@ -22,19 +19,17 @@ namespace SRML.Editor
         [SerializeField]
         List<BundleFieldReplacement> fieldReplacements;// = new List<Replacement>();
 
-        public ICollection<IFieldReplacement> FieldReplacements => fieldReplacements.Select((x)=>(IFieldReplacement)x).ToList();
+        public ICollection<IFieldReplacement> FieldReplacements => fieldReplacements.Select(x=>(IFieldReplacement)x).ToList();
 
     }
 
-    public interface IFieldReplacer
-    {
+    public interface IFieldReplacer {
         IInstanceInfo InstanceInfo { get; }
         bool ReplaceInChildren { get; }
         ICollection<IFieldReplacement> FieldReplacements { get; }
     }
 
-    public interface IFieldReplacement
-    {
+    public interface IFieldReplacement {
         bool TryResolveSource(out FieldInfo field);
         bool TryResolveTarget(out FieldInfo field);
     }
@@ -51,21 +46,12 @@ namespace SRML.Editor
         [SerializeField]
         public string replacementSourceFieldName;
 
-        public bool TryResolveSource(out FieldInfo field)
-        {
-            return Resolve(replacementSourceType, replacementSourceFieldName, out field);
-        }
-        public bool TryResolveTarget(out FieldInfo field)
-        {
-            return Resolve(fieldToReplaceType,fieldToReplaceFieldName,out field);
-        }
-
-        private bool Resolve(String typeName, String fieldName, out FieldInfo field)
-        {
+        public bool TryResolveSource(out FieldInfo field) => Resolve(replacementSourceType, replacementSourceFieldName, out field);
+        public bool TryResolveTarget(out FieldInfo field) => Resolve(fieldToReplaceType,fieldToReplaceFieldName,out field);
+        private bool Resolve(String typeName, String fieldName, out FieldInfo field) {
             
-            if (Type.GetType(typeName+", Assembly-CSharp") is System.Type type &&
-                type.GetField(fieldName) is FieldInfo foundField)
-            {
+            if (Type.GetType(typeName+", Assembly-CSharp") is Type type &&
+                type.GetField(fieldName) is FieldInfo foundField) {
                 field = foundField;
                 return true;
             }

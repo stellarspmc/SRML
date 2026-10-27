@@ -1,5 +1,4 @@
-﻿using SRML.SR.Utils.Debug;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace SRML.SR.Utils.Debug

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Newtonsoft.Json.Converters;
-using SRML.SR.SaveSystem.Data.Partial;
 using UnityEngine;
 
 namespace SRML.SR
@@ -123,7 +119,7 @@ namespace SRML.SR
                 return output.TryGetValue(key, out var list) ? list : output[key] = new List<string>();
             }
 
-            foreach(var pair in keyToMod.Where((x)=>x.Value==mod).Select((x)=>x.Key)) GetListForKey(pair.Key).Add(pair.Value);
+            foreach(var pair in keyToMod.Where(x=>x.Value==mod).Select(x=>x.Key)) GetListForKey(pair.Key).Add(pair.Value);
             
             return output;
         }

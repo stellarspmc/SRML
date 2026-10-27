@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 namespace SRML.Utils
 {
@@ -70,7 +68,7 @@ namespace SRML.Utils
         public static void ReadMesh(BinaryReader reader, Mesh mesh)
         {
             mesh.vertices = ReadArray(reader, ReadVector3);
-            mesh.triangles = ReadArray(reader, (x) => x.ReadInt32());
+            mesh.triangles = ReadArray(reader, x => x.ReadInt32());
             mesh.normals = ReadArray(reader, ReadVector3);
             mesh.colors = ReadArray(reader, ReadColor);
             mesh.uv = ReadArray(reader, ReadVector2);

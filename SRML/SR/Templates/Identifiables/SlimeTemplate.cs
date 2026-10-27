@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using MonomiPark.SlimeRancher.Regions;
-using SRML.SR;
-using SRML.SR.Templates.Identifiables;
 using SRML.SR.Utils;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
@@ -203,7 +201,7 @@ namespace SRML.SR.Templates.Identifiables
             RegisterDefinition();
 
             // Create conditional components
-            Create<SlimeFeral> slimeFeral = new Create<SlimeFeral>((feral) =>
+            Create<SlimeFeral> slimeFeral = new Create<SlimeFeral>(feral =>
             {
                 feral.auraPrefab = EffectObjects.fxFeralAura;
                 feral.dynamicToFeral = false;
@@ -213,19 +211,19 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create main object
             mainObject.AddComponents(
-                new Create<SlimeAppearanceApplicator>((app) =>
+                new Create<SlimeAppearanceApplicator>(app =>
                 {
                     app.SlimeDefinition = definition;
                     app.SlimeExpression = SlimeFace.SlimeExpression.Happy;
                 }),
-                new Create<Identifiable>((ident) => ident.id = ID),
-                new Create<RegionMember>((rg) => rg.canHibernate = true),
-                new Create<SlimeVarietyModules>((modules) =>
+                new Create<Identifiable>(ident => ident.id = ID),
+                new Create<RegionMember>(rg => rg.canHibernate = true),
+                new Create<SlimeVarietyModules>(modules =>
                 {
                     modules.baseModule = definition.BaseModule;
                     modules.slimeModules = slimeModule?.Group() ?? definition.SlimeModules;
                 }),
-                new Create<SlimeEat>((eat) =>
+                new Create<SlimeEat>(eat =>
                 {
                     eat.slimeDefinition = definition;
                     eat.damagePerAttack = 20;
@@ -238,22 +236,22 @@ namespace SRML.SR.Templates.Identifiables
                     eat.agitationPerEat = agitPerEat;
                     eat.agitationPerFavEat = agitPerFavEat;
                 }),
-                new Create<ReactToToyNearby>((react) => react.slimeDefinition = definition),
-                new Create<SphereCollider>((col) =>
+                new Create<ReactToToyNearby>(react => react.slimeDefinition = definition),
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.5f;
                     col.sharedMaterial = BaseObjects.originPhysMaterial["Slime"];
                 }),
-                new Create<Rigidbody>((body) =>
+                new Create<Rigidbody>(body =>
                 {
                     body.drag = 0.2f;
                     body.angularDrag = 5f;
                     body.mass = 0.5f;
                     body.useGravity = true;
                 }),
-                new Create<Vacuumable>((vac) => vac.size = vacSize),
-                new Create<GotoConsumable>((goT) =>
+                new Create<Vacuumable>(vac => vac.size = vacSize),
+                new Create<GotoConsumable>(goT =>
                 {
                     goT.maxJump = 10;
                     goT.attemptTime = 10;
@@ -265,25 +263,25 @@ namespace SRML.SR.Templates.Identifiables
                     goT.pursuitSpeedFactor = 1;
                     goT.minDist = 0;
                 }),
-                new Create<SlimeRandomMove>((move) =>
+                new Create<SlimeRandomMove>(move =>
                 {
                     move.verticalFactor = 1;
                     move.scootSpeedFactor = 1;
                 }),
-                new Create<SlimeHealth>((health) => health.maxHealth = maxHealth),
-                new Create<SlimeEmotions>((emo) =>
+                new Create<SlimeHealth>(health => health.maxHealth = maxHealth),
+                new Create<SlimeEmotions>(emo =>
                 {
                     emo.initHunger = hungerState;
                     emo.initAgitation = agitationState;
                     emo.initFear = fearState;
                 }),
                 new Create<SlimeSubbehaviourPlexer>(null),
-                new Create<KeepUpright>((keep) =>
+                new Create<KeepUpright>(keep =>
                 {
                     keep.stability = 0.7f;
                     keep.speed = 4f;
                 }),
-                new Create<FleeThreats>((flee) =>
+                new Create<FleeThreats>(flee =>
                 {
                     flee.fearProfile = fearProfile;
                     flee.driver = SlimeEmotions.Emotion.FEAR;
@@ -291,18 +289,18 @@ namespace SRML.SR.Templates.Identifiables
                     flee.facingStability = 0.2f;
                     flee.facingSpeed = 1;
                 }),
-                new Create<SlimeAudio>((audio) => audio.slimeSounds = definition.Sounds),
+                new Create<SlimeAudio>(audio => audio.slimeSounds = definition.Sounds),
                 new Create<SECTR_PointSource>(null),
                 canBeFeral ? slimeFeral : null,
                 new Create<EscapeStuck>(null),
                 new Create<MaybeCullOnReenable>(null),
-                new Create<DragFloatReactor>((drag) => drag.floatDragMultiplier = 25f),
-                new Create<SplatOnImpact>((splat) =>
+                new Create<DragFloatReactor>(drag => drag.floatDragMultiplier = 25f),
+                new Create<SplatOnImpact>(splat =>
                 {
                     splat.splatPrefab = BaseObjects.splatQuad;
                     splat.splatFXPrefab = EffectObjects.fxSplat;
                 }),
-                new Create<AweTowardsLargos>((awe) =>
+                new Create<AweTowardsLargos>(awe =>
                 {
                     awe.minSearchRad = 5;
                     awe.maxSearchRad = 15;
@@ -312,22 +310,22 @@ namespace SRML.SR.Templates.Identifiables
                     awe.minDist = 0;
                 }),
                 new Create<SlimeFaceAnimator>(null),
-                new Create<CalmedByWaterSpray>((spray) =>
+                new Create<CalmedByWaterSpray>(spray =>
                 {
                     spray.agitationReduction = 0.1f;
                     spray.calmedHours = 0.3333f;
                 }),
                 new Create<TotemLinkerHelper>(null),
                 new Create<CollisionAggregator>(null),
-                new Create<AweTowardsAttractors>((awe) =>
+                new Create<AweTowardsAttractors>(awe =>
                 {
                     awe.facingSpeed = 2.5f;
                     awe.facingStability = 1;
                 }),
-                new Create<AttachFashions>((fash) => fash.gordoMode = false),
+                new Create<AttachFashions>(fash => fash.gordoMode = false),
                 new Create<SlimeEyeComponents>(null),
                 new Create<SlimeMouthComponents>(null),
-                new Create<PlayWithToys>((play) =>
+                new Create<PlayWithToys>(play =>
                 {
                     play.slimeDefinition = definition;
                     play.onlyFloatingToys = false;
@@ -338,9 +336,9 @@ namespace SRML.SR.Templates.Identifiables
                     play.pursuitSpeedFactor = 1;
                     play.minDist = 0;
                 }),
-                new Create<SlimeIgniteReact>((react) => react.igniteFX = EffectObjects.fxStars),
+                new Create<SlimeIgniteReact>(react => react.igniteFX = EffectObjects.fxStars),
                 canBeAGlitch ? new Create<GlitchSlime>(null) : null,
-                new Create<Chomper>((chop) => chop.timePerAttack = 3)
+                new Create<Chomper>(chop => chop.timePerAttack = 3)
             );
 
             mainObject
@@ -355,7 +353,7 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create eat trigger
             mainObject.AddChild(new GameObjectTemplate("EatTrigger",
-                new Create<SphereCollider>((col) =>
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.45f;
@@ -366,13 +364,13 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create totem linker
             mainObject.AddChild(new GameObjectTemplate("TotemLinker",
-                new Create<SphereCollider>((col) =>
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;
                     col.isTrigger = true;
                 }),
-                new Create<TotemLinker>((totem) =>
+                new Create<TotemLinker>(totem =>
                 {
                     totem.receptivenessProb = 0.25f;
                     totem.rethinkReceptivenessMin = 6;
@@ -383,7 +381,7 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create delaunch
             mainObject.AddChild(new GameObjectTemplate("DelaunchTrigger",
-                new Create<SphereCollider>((col) =>
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;
@@ -444,7 +442,7 @@ namespace SRML.SR.Templates.Identifiables
             foreach (Identifiable.Id id in GameContext.Instance.LookupDirector.GetSlimeIDs(ID))
                 largoIDs.Add(CraftLargo(canBeTarr, ID, id, extraLargoBehaviour));
 
-            largoIDs.RemoveAll((id) => id == Identifiable.Id.NONE);
+            largoIDs.RemoveAll(id => id == Identifiable.Id.NONE);
 
             return largoIDs;
         }
@@ -470,8 +468,8 @@ namespace SRML.SR.Templates.Identifiables
 
             if (!canBeTarr)
             {
-                largoDef.Diet.EatMap.RemoveAll((entry) => entry.becomesId == Identifiable.Id.TARR_SLIME);
-                largoDef.Diet.EatMap.RemoveAll((entry) => entry.becomesId == Identifiable.Id.GLITCH_TARR_SLIME);
+                largoDef.Diet.EatMap.RemoveAll(entry => entry.becomesId == Identifiable.Id.TARR_SLIME);
+                largoDef.Diet.EatMap.RemoveAll(entry => entry.becomesId == Identifiable.Id.GLITCH_TARR_SLIME);
             }
 
             extraLargoBehaviour?.Invoke(largoDef);
@@ -541,7 +539,7 @@ namespace SRML.SR.Templates.Identifiables
             GameObjectTemplate module = new GameObjectTemplate("module" + mainObject.Name);
             module.AddComponents(extras.ToArray());
             module.AddComponents(
-                new Create<SlimeEat>((eat) =>
+                new Create<SlimeEat>(eat =>
                 {
                     eat.slimeDefinition = definition;
                     eat.damagePerAttack = 20;
@@ -555,7 +553,7 @@ namespace SRML.SR.Templates.Identifiables
                     eat.agitationPerFavEat = agitPerFavEat;
 
                 }),
-                new Create<ReactToToyNearby>((react) => react.slimeDefinition = definition)
+                new Create<ReactToToyNearby>(react => react.slimeDefinition = definition)
             );
 
             slimeModule = module.ToGameObject(null);

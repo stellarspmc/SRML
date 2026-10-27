@@ -93,7 +93,7 @@ namespace SRML
         /// </summary>
         /// <param name="modid">Mod ID to check</param>
         /// <returns>Whether or not the mod exists</returns>
-        public static bool IsModPresent(string modid) => Mods.Keys.Any((x) => modid == x);
+        public static bool IsModPresent(string modid) => Mods.Keys.Any(x => modid == x);
 
         /// <summary>
         /// Gets the associated <see cref="SRModInfo"/> for the associated <paramref name="modid"/>
@@ -140,7 +140,7 @@ namespace SRML
                 }
             }
 
-            Assembly FindAssembly(object obj, ResolveEventArgs args) => foundAssemblies.FirstOrDefault((x) => x.DoesMatch(new AssemblyName(args.Name)))?.LoadAssembly();
+            Assembly FindAssembly(object obj, ResolveEventArgs args) => foundAssemblies.FirstOrDefault(x => x.DoesMatch(new AssemblyName(args.Name)))?.LoadAssembly();
             AppDomain.CurrentDomain.AssemblyResolve += FindAssembly;
 
             try
@@ -195,7 +195,7 @@ namespace SRML
 
         internal static SRMod GetModForAssembly(Assembly a)
         {
-            return Mods.FirstOrDefault((x) => x.Value.EntryType?.Assembly == a).Value;
+            return Mods.FirstOrDefault(x => x.Value.EntryType?.Assembly == a).Value;
         }
 
         internal static ICollection<SRMod> GetMods()
@@ -546,7 +546,7 @@ namespace SRML
                     modList.Add(mod);
                 }
 
-                if (assembly.GetManifestResourceNames().FirstOrDefault((x) => x.EndsWith("modinfo.json")) is string fileName)
+                if (assembly.GetManifestResourceNames().FirstOrDefault(x => x.EndsWith("modinfo.json")) is string fileName)
                 {
                     ProtoMod mod = null;
                     using (var reader = new StreamReader(assembly.GetManifestResourceStream(fileName)))

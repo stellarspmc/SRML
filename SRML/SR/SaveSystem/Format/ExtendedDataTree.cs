@@ -1,11 +1,6 @@
 ﻿using SRML.SR.SaveSystem.Data;
-using SRML.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Format
 {

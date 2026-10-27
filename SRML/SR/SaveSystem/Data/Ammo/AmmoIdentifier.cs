@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using UnityEngine;
@@ -72,7 +71,7 @@ namespace SRML.SR.SaveSystem.Data.Ammo
         
         public static AmmoIdentifier GetIdentifier(AmmoModel model)
         {
-            var foundKey = _cache.FirstOrDefault((x) => x.Value == model).Key;
+            var foundKey = _cache.FirstOrDefault(x => x.Value == model).Key;
             if (foundKey.AmmoType != AmmoType.NONE) return foundKey;
 
             var newIdentifier = GetIdentifierInternal(model);
@@ -87,7 +86,7 @@ namespace SRML.SR.SaveSystem.Data.Ammo
                 if (candidate.Value == ammoModel) return new AmmoIdentifier(Ammo.AmmoType.PLAYER, (long)candidate.Key);
             }
 
-            foreach (var candidate in SceneContext.Instance.GameModel.gadgetSites.Where((x) => x.Value.HasAttached()))
+            foreach (var candidate in SceneContext.Instance.GameModel.gadgetSites.Where(x => x.Value.HasAttached()))
             {
                 var potentialKey = new AmmoIdentifier(AmmoType.GADGET, candidate.Key);
                 if (candidate.Value.attached is DroneModel drone)
@@ -209,7 +208,7 @@ namespace SRML.SR.SaveSystem.Data.Ammo
                 case AmmoType.GADGET:
                     return ModdedStringRegistry.IsValidString(identifier.stringIdentifier) ? (game.world.placedGadgets[identifier.stringIdentifier].drone?.drone?.ammo is AmmoDataV02 amdat ? new AmmoDataV02[] { amdat }.ToList() : game.world.placedGadgets[identifier.stringIdentifier].ammo) :null;
                 case AmmoType.LANDPLOT:
-                    return game.ranch.plots.FirstOrDefault((x) => x.id == identifier.stringIdentifier)?
+                    return game.ranch.plots.FirstOrDefault(x => x.id == identifier.stringIdentifier)?
                         .siloAmmo[(SiloStorage.StorageType)identifier.longIdentifier];
             }
 

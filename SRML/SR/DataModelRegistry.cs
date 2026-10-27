@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using MonomiPark.SlimeRancher.Regions;
@@ -43,7 +41,7 @@ namespace SRML.SR
 
         public static void RegisterCustomActorModel(Identifiable.Id id, CreateActorDelegate del)
         {
-            RegisterActorModelOverride((x)=>x==id,del);
+            RegisterActorModelOverride(x=>x==id,del);
         }
 
         public static void RegisterCustomActorModel(Identifiable.Id id, Type actorType)
@@ -65,7 +63,7 @@ namespace SRML.SR
 
         public static void RegisterCustomGadgetModel(Gadget.Id id, CreateGadgetDelegate g)
         {
-            RegisterGadgetModelOverride((x)=>x==id,g);
+            RegisterGadgetModelOverride(x=>x==id,g);
         }
 
         public static void RegisterCustomGadgetModel(Gadget.Id id, Type gadgetType)

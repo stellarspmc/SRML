@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using MonomiPark.SlimeRancher.Regions;
-using SRML.SR;
+﻿using MonomiPark.SlimeRancher.Regions;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -70,41 +68,41 @@ namespace SRML.SR.Templates.Identifiables
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<MeshFilter>((filter) => filter.sharedMesh = BaseObjects.originMesh["plort"]),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = materials),
-                new Create<Identifiable>((ident) => ident.id = ID),
-                new Create<Vacuumable>((vac) => vac.size = vacSize),
-                new Create<Rigidbody>((body) =>
+                new Create<MeshFilter>(filter => filter.sharedMesh = BaseObjects.originMesh["plort"]),
+                new Create<MeshRenderer>(render => render.sharedMaterials = materials),
+                new Create<Identifiable>(ident => ident.id = ID),
+                new Create<Vacuumable>(vac => vac.size = vacSize),
+                new Create<Rigidbody>(body =>
                 {
                     body.drag = 0.2f;
                     body.angularDrag = 0.5f;
                     body.mass = 0.3f;
                     body.useGravity = true;
                 }),
-                new Create<SphereCollider>((col) =>
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 1;
                     col.sharedMaterial = BaseObjects.originPhysMaterial["Slime"];
                 }),
-                new Create<DragFloatReactor>((drag) => drag.floatDragMultiplier = 10),
+                new Create<DragFloatReactor>(drag => drag.floatDragMultiplier = 10),
                 new Create<CollisionAggregator>(null),
-                new Create<RegionMember>((rg) => rg.canHibernate = true),
-                new Create<PlortInvulnerability>((plort) => plort.invulnerabilityPeriod = 3),
-                new Create<PlaySoundOnHit>((hit) =>
+                new Create<RegionMember>(rg => rg.canHibernate = true),
+                new Create<PlortInvulnerability>(plort => plort.invulnerabilityPeriod = 3),
+                new Create<PlaySoundOnHit>(hit =>
                 {
                     hit.hitCue = EffectObjects.cueHitPlort;
                     hit.minTimeBetween = 0.2f;
                     hit.minForce = 1;
                     hit.includeControllerCollisions = false;
                 }),
-                new Create<DestroyOnIgnite>((dest) => dest.igniteFX = EffectObjects.fxPlortDespawn),
-                new Create<DestroyPlortAfterTime>((dest) =>
+                new Create<DestroyOnIgnite>(dest => dest.igniteFX = EffectObjects.fxPlortDespawn),
+                new Create<DestroyPlortAfterTime>(dest =>
                 {
                     dest.lifeTimeHours = 24;
                     dest.destroyFX = EffectObjects.fxPlortDespawn;
                 }),
-                new Create<PlortInstability>((insta) =>
+                new Create<PlortInstability>(insta =>
                 {
                     insta.lifetimeHours = 0.5f;
                     insta.explodePower = 400;
@@ -116,13 +114,13 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create model
             mainObject.AddChild(new GameObjectTemplate("Shield",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = BaseObjects.originMesh["plort_shell"]),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = BaseObjects.originMaterial["plortShield"].Group())
+                new Create<MeshFilter>(filter => filter.sharedMesh = BaseObjects.originMesh["plort_shell"]),
+                new Create<MeshRenderer>(render => render.sharedMaterials = BaseObjects.originMaterial["plortShield"].Group())
             ).SetTransform(Vector3.zero, Vector3.zero, Vector3.one * 1.1f));
 
             // Create delaunch
             mainObject.AddChild(new GameObjectTemplate("DelaunchTrigger",
-                new Create<SphereCollider>((col) =>
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;

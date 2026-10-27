@@ -1,9 +1,5 @@
 ﻿using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.SR

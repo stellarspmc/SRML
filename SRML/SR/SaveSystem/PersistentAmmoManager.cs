@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.SaveSystem.Data;
 using SRML.SR.SaveSystem.Data.Ammo;
 using SRML.SR.SaveSystem.Format;
 using UnityEngine;
-using static PlayerState;
 
 namespace SRML.SR.SaveSystem
 {
@@ -81,7 +76,7 @@ namespace SRML.SR.SaveSystem
 
         internal static void Push(ModdedSaveData data)
         {
-            foreach (var v in PersistentAmmoData.Where((x)=>!x.Value.DataModel.HasNoData()))
+            foreach (var v in PersistentAmmoData.Where(x=>!x.Value.DataModel.HasNoData()))
             {
                 data.ammoDataEntries.Add(new IdentifiableAmmoData(){identifier = v.Key,model = v.Value.DataModel});
             }

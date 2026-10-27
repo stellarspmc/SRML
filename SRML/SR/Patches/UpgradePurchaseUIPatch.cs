@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 using HarmonyLib;
-using UnityEngine;
 
 namespace SRML.SR.Patches
 {
@@ -36,7 +33,7 @@ namespace SRML.SR.Patches
 
         static void UpgradeFix(PersonalUpgradeUI ui, ref PurchaseUI.Purchasable[] purchasables)
         {
-            purchasables = purchasables.AddRangeToArray(PersonalUpgradeRegistry.moddedUpgrades.Select((x)=>ui.CreateUpgradePurchasable(x.Key)).ToArray());
+            purchasables = purchasables.AddRangeToArray(PersonalUpgradeRegistry.moddedUpgrades.Select(x=>ui.CreateUpgradePurchasable(x.Key)).ToArray());
         }
     }
 }

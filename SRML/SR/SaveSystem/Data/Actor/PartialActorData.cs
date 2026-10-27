@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using MonomiPark.SlimeRancher.Persist;
+﻿using System.IO;
 using SRML.SR.SaveSystem.Data.Partial;
 using SRML.SR.SaveSystem.Format;
 using SRML.Utils;
-using UnityEngine;
 using VanillaActorData = MonomiPark.SlimeRancher.Persist.ActorDataV09;
 namespace SRML.SR.SaveSystem.Data.Actor
 {
     internal class PartialActorData : VersionedPartialData<VanillaActorData>
     {
         public PartialCollection<Identifiable.Id> partialFashions = new PartialCollection<Identifiable.Id>(ModdedIDRegistry.IsModdedID, SerializerPair.GetEnumSerializerPair<Identifiable.Id>());
-        public PartialDictionary<SlimeEmotions.Emotion,float> partialEmotions = new PartialDictionary<SlimeEmotions.Emotion, float>((x)=>ModdedIDRegistry.IsModdedID(x.Key),SerializerPair.GetEnumSerializerPair<SlimeEmotions.Emotion>(),new SerializerPair<float>((x,y)=>x.Write(y),(x)=>x.ReadSingle()));
+        public PartialDictionary<SlimeEmotions.Emotion,float> partialEmotions = new PartialDictionary<SlimeEmotions.Emotion, float>(x=>ModdedIDRegistry.IsModdedID(x.Key),SerializerPair.GetEnumSerializerPair<SlimeEmotions.Emotion>(),new SerializerPair<float>((x,y)=>x.Write(y),x=>x.ReadSingle()));
 
         public override int LatestVersion => 0;
 

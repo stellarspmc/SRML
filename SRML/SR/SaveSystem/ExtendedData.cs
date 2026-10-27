@@ -36,7 +36,7 @@ namespace SRML.SR.SaveSystem
                                 pdata = new PreparedData() { Data = new CompoundDataPiece("root"), SourceType = PreparedData.PreparationSource.SPAWN };
                                 preparedData[identifier] = pdata;
                             }
-                            extendedDataTree.dataPiece.DataList.Do((x) => pdata.Data.GetCompoundPiece(mod.modid).DataList.Add(x));
+                            extendedDataTree.dataPiece.DataList.Do(x => pdata.Data.GetCompoundPiece(mod.modid).DataList.Add(x));
                             break;
                         default:
                             throw new NotImplementedException();
@@ -181,7 +181,7 @@ namespace SRML.SR.SaveSystem
 
         static ExtendedData()
         {
-            SRCallbacks.OnSaveGameLoaded += (s) =>
+            SRCallbacks.OnSaveGameLoaded += s =>
             {
                 foreach (var v in worldSaveData)
                 {

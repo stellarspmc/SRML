@@ -28,7 +28,7 @@ namespace SRML.SR.Templates.UIs
             // Create main object
             mainObject.AddComponents(
                 baseUI,
-                new Create<UIInputLocker>((locker) => locker.lockEvenSpecialScenes = false)
+                new Create<UIInputLocker>(locker => locker.lockEvenSpecialScenes = false)
             );
 
             return this;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using HarmonyLib;
 using MonomiPark.SlimeRancher.DataModel;
 using UnityEngine;
@@ -16,7 +13,7 @@ namespace SRML.SR.Patches
         {
             __result = null;
             var id = gameObj.GetComponent<Gadget>().id;
-            var _override = DataModelRegistry.gadgetOverrideMapping.FirstOrDefault((x) => x.Key(id));
+            var _override = DataModelRegistry.gadgetOverrideMapping.FirstOrDefault(x => x.Key(id));
             if (_override.Value == null)
                 return true;
 

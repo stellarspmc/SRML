@@ -16,19 +16,19 @@ namespace SRML.SR.SaveSystem.Data
         internal static readonly Dictionary<DataType, SerializerPair> serializerPairs = new Dictionary<DataType, SerializerPair>()
         {
 
-            {DataType.INT32,new SerializerPair<int>((x,y)=>x.Write(y),(x)=>x.ReadInt32()) },
-            {DataType.INT64,new SerializerPair<long>((x,y)=>x.Write(y),(x)=>x.ReadInt64()) },
-            {DataType.BYTE,new SerializerPair<byte>((x,y)=>x.Write(y),(x)=>x.ReadByte()) },
-            {DataType.UINT32,new SerializerPair<uint>((x,y)=>x.Write(y),(x)=>x.ReadUInt32()) },
-            {DataType.UINT64,new SerializerPair<ulong>((x,y)=>x.Write(y),(x)=>x.ReadUInt64()) },
-            {DataType.FLOAT,new SerializerPair<float>((x,y)=>x.Write(y),(x)=>x.ReadSingle()) },
-            {DataType.DOUBLE,new SerializerPair<double>((x,y)=>x.Write(y),(x)=>x.ReadDouble()) },
+            {DataType.INT32,new SerializerPair<int>((x,y)=>x.Write(y),x=>x.ReadInt32()) },
+            {DataType.INT64,new SerializerPair<long>((x,y)=>x.Write(y),x=>x.ReadInt64()) },
+            {DataType.BYTE,new SerializerPair<byte>((x,y)=>x.Write(y),x=>x.ReadByte()) },
+            {DataType.UINT32,new SerializerPair<uint>((x,y)=>x.Write(y),x=>x.ReadUInt32()) },
+            {DataType.UINT64,new SerializerPair<ulong>((x,y)=>x.Write(y),x=>x.ReadUInt64()) },
+            {DataType.FLOAT,new SerializerPair<float>((x,y)=>x.Write(y),x=>x.ReadSingle()) },
+            {DataType.DOUBLE,new SerializerPair<double>((x,y)=>x.Write(y),x=>x.ReadDouble()) },
             {DataType.VECTOR2,new SerializerPair<Vector2>(BinaryUtils.WriteVector2,BinaryUtils.ReadVector2) },
             {DataType.VECTOR3,new SerializerPair<Vector3>(BinaryUtils.WriteVector3,BinaryUtils.ReadVector3) },
             {DataType.VECTOR4,new SerializerPair<Vector4>(BinaryUtils.WriteVector4,BinaryUtils.ReadVector4) },
             {DataType.QUATERNION,new SerializerPair<Quaternion>(BinaryUtils.WriteQuaternion,BinaryUtils.ReadQuaternion) },
             {DataType.MATRIX4,new SerializerPair<Matrix4x4>(BinaryUtils.WriteMatrix4,BinaryUtils.ReadMatrix4) },
-            {DataType.STRING,new SerializerPair<string>((x,y)=>x.Write(y),(x)=>x.ReadString()) },
+            {DataType.STRING,new SerializerPair<string>((x,y)=>x.Write(y),x=>x.ReadString()) },
             {DataType.COMPOUND,new SerializerPair<HashSet<DataPiece>>((x, y) =>
             {
                 x.Write(y.Count);
@@ -37,7 +37,7 @@ namespace SRML.SR.SaveSystem.Data
                     Serialize(x, v);
                 }
             },
-            (x) =>
+            x =>
             {
                 var newList = new HashSet<DataPiece>();
                 int count = x.ReadInt32();
@@ -84,11 +84,11 @@ namespace SRML.SR.SaveSystem.Data
                     
                 }
             },
-            (x) =>
+            x =>
             {
                 var typeId = (DataType)x.ReadInt32();
                 if(typeId!=DataType.ENUM){
-                var arrayType = typeToDataType.FirstOrDefault((g) => g.Value == typeId).Key;
+                var arrayType = typeToDataType.FirstOrDefault(g => g.Value == typeId).Key;
                 if (arrayType == null) throw new Exception($"Unrecognized Data Type {typeId}");
                 if(!serializerPairs.TryGetValue(typeId,out var serializer)) throw new Exception($"Unrecognized Data Type {typeId}");
                 int count = x.ReadInt32();
@@ -115,16 +115,16 @@ namespace SRML.SR.SaveSystem.Data
                     return array;
                 }
             }) },
-            {DataType.BOOLEAN,new SerializerPair<bool>((x,y)=>x.Write(y),(x)=>x.ReadBoolean()) },
+            {DataType.BOOLEAN,new SerializerPair<bool>((x,y)=>x.Write(y),x=>x.ReadBoolean()) },
             {DataType.COLOR, new SerializerPair<Color>((x, y) => {
                 x.Write(y.r);
                 x.Write(y.g);
                 x.Write(y.b);
                 x.Write(y.a);
             },
-            (x) => { return new Color(x.ReadSingle(), x.ReadSingle(), x.ReadSingle(), x.ReadSingle()); }) },
+            x => { return new Color(x.ReadSingle(), x.ReadSingle(), x.ReadSingle(), x.ReadSingle()); }) },
             {DataType.ENUM, new SerializerPair<object>((x,y)=>{
-            x.Write(y.GetType().AssemblyQualifiedName);x.Write((int)y); },(x)=>Enum.ToObject(Type.GetType(x.ReadString()),x.ReadInt32()))}
+            x.Write(y.GetType().AssemblyQualifiedName);x.Write((int)y); },x=>Enum.ToObject(Type.GetType(x.ReadString()),x.ReadInt32()))}
         };
 
         internal static readonly Dictionary<Type, DataType> typeToDataType = new Dictionary<Type, DataType>();
@@ -235,7 +235,7 @@ namespace SRML.SR.SaveSystem.Data
 
         public Type GetDataType()
         {
-            return typeId == DataType.ENUM?data?.GetType():typeToDataType.FirstOrDefault((g) => g.Value == typeId).Key;
+            return typeId == DataType.ENUM?data?.GetType():typeToDataType.FirstOrDefault(g => g.Value == typeId).Key;
         }
 
         public override bool Equals(object obj)

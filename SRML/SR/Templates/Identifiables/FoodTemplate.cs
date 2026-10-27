@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using MonomiPark.SlimeRancher.Regions;
-using SRML.SR;
+﻿using MonomiPark.SlimeRancher.Regions;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -168,25 +166,25 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create main object
             mainObject.AddComponents(
-                new Create<MeshFilter>((filter) => filter.sharedMesh = mesh),
-                new Create<Identifiable>((ident) => ident.id = ID),
-                new Create<Vacuumable>((vac) => vac.size = vacSize),
-                new Create<Rigidbody>((body) =>
+                new Create<MeshFilter>(filter => filter.sharedMesh = mesh),
+                new Create<Identifiable>(ident => ident.id = ID),
+                new Create<Vacuumable>(vac => vac.size = vacSize),
+                new Create<Rigidbody>(body =>
                 {
                     body.drag = 0.2f;
                     body.angularDrag = 5f;
                     body.mass = 0.3f;
                     body.useGravity = true;
                 }),
-                new Create<DragFloatReactor>((drag) => drag.floatDragMultiplier = 10),
-                new Create<MeshCollider>((col) =>
+                new Create<DragFloatReactor>(drag => drag.floatDragMultiplier = 10),
+                new Create<MeshCollider>(col =>
                 {
                     col.sharedMesh = mesh;
                     col.convex = true;
                 }),
                 new Create<CollisionAggregator>(null),
-                new Create<RegionMember>((rg) => rg.canHibernate = true),
-                new Create<ResourceCycle>((res) =>
+                new Create<RegionMember>(rg => rg.canHibernate = true),
+                new Create<ResourceCycle>(res =>
                 {
                     res.unripeGameHours = unripeHours;
                     res.ripeGameHours = ripeHours;
@@ -199,7 +197,7 @@ namespace SRML.SR.Templates.Identifiables
                     res.addEjectionForce = ejectWhenMature;
                     res.releasePrepTime = 0.5f;
                 }),
-                new Create<SECTR_PointSource>((source) =>
+                new Create<SECTR_PointSource>(source =>
                 {
                     source.Loop = false;
                     source.PlayOnStart = false;
@@ -207,7 +205,7 @@ namespace SRML.SR.Templates.Identifiables
                     source.Volume = 1;
                     source.Pitch = 1;
                 }),
-                new Create<PlaySoundOnHit>((hit) =>
+                new Create<PlaySoundOnHit>(hit =>
                 {
                     hit.hitCue = hitCue;
                     hit.minTimeBetween = 0.2f;
@@ -218,7 +216,7 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create delaunch trigger
             mainObject.AddChild(new GameObjectTemplate("DelaunchTrigger",
-                new Create<SphereCollider>((col) =>
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;
@@ -229,8 +227,8 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create model
             mainObject.AddChild(new GameObjectTemplate("model_food",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = mesh),
-                new Create<MeshRenderer>((render) =>
+                new Create<MeshFilter>(filter => filter.sharedMesh = mesh),
+                new Create<MeshRenderer>(render =>
                 {
                     render.sharedMaterials = materials;
                     render.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;

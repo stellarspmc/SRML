@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using Sentry;
 using SRML.SR.Utils;
 using SRML.Utils;
 using System;
@@ -342,7 +341,7 @@ namespace SRML.SR
 
             if ((props & (LargoProps.GENERATE_SECRET_STYLES)) != 0)
             {
-                GameContext.Instance.DLCDirector.onPackageInstalled += (x) =>
+                GameContext.Instance.DLCDirector.onPackageInstalled += x =>
                 {
                     if (x == DLCPackage.Id.SECRET_STYLE)
                     {

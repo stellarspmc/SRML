@@ -1,5 +1,4 @@
 ﻿using System;
-using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.SaveSystem.Data;
 
 namespace SRML.SR.SaveSystem.Utils

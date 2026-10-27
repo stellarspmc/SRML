@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SRML.SR.SaveSystem
 {
@@ -18,7 +17,7 @@ namespace SRML.SR.SaveSystem
 
         public IList GetIDsForMod(SRMod mod)
         {
-            return this.Where((x) => x.Value == mod).Select((x) => x.Key).ToList();
+            return this.Where(x => x.Value == mod).Select(x => x.Key).ToList();
         }
 
         public SRMod GetModForID(object val)

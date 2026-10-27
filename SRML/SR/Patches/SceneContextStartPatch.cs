@@ -1,7 +1,6 @@
 ﻿using System;
 using HarmonyLib;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+
 namespace SRML.SR.Patches
 {
     [HarmonyPatch(typeof(SceneContext))]

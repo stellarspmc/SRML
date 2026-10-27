@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MonomiPark.SlimeRancher.Persist;
-using rail;
-using UnityEngine;
 using VanillaAmmoData = MonomiPark.SlimeRancher.Persist.AmmoDataV02;
 namespace SRML.SR.SaveSystem.Utils
 {
@@ -44,12 +41,12 @@ namespace SRML.SR.SaveSystem.Utils
 
         public static List<VanillaAmmoData> RipOutModdedData(List<VanillaAmmoData> original)
         {
-            return RipOutWhere(original, (x) => ModdedIDRegistry.IsModdedID(x.id));
+            return RipOutWhere(original, x => ModdedIDRegistry.IsModdedID(x.id));
         }
 
         public static bool HasCustomData(List<VanillaAmmoData> ammo)
         {
-            return ammo.Any((x) => ModdedIDRegistry.IsModdedID(x.id));
+            return ammo.Any(x => ModdedIDRegistry.IsModdedID(x.id));
         }
 
         public static List<List<VanillaAmmoData>> GetAllAmmoData(GameV12 game)
@@ -58,13 +55,13 @@ namespace SRML.SR.SaveSystem.Utils
 
             ammoDataData.AddRange(game.player.ammo.Values);
 
-            ammoDataData.AddRange(game.ranch.plots.SelectMany((x)=>x.siloAmmo).Select((x)=>x.Value));
+            ammoDataData.AddRange(game.ranch.plots.SelectMany(x=>x.siloAmmo).Select(x=>x.Value));
 
-            ammoDataData.AddRange(game.world.placedGadgets.Values.Select((x)=>x.ammo));
+            ammoDataData.AddRange(game.world.placedGadgets.Values.Select(x=>x.ammo));
 
             ammoDataData.AddRange(game.world.placedGadgets.Select(x => x.Value.drone?.drone?.ammo).Where(x=>x!=null).Select(x=>new List<VanillaAmmoData>() { x }));
 
-            ammoDataData.RemoveAll((x) => x == null);
+            ammoDataData.RemoveAll(x => x == null);
 
             return ammoDataData;
         }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SRML.Console;
 using SRML.SR.Utils.BaseObjects;
 using SRML.SR.Utils.Debug;
 using UnityEngine;
@@ -333,7 +332,7 @@ namespace SRML.SR.Templates.Plantables
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<SpawnResource>((spawn) =>
+                new Create<SpawnResource>(spawn =>
                 {
                     spawn.BonusChance = bonusChance;
                     spawn.forceDestroyLeftoversOnSpawn = false;
@@ -350,7 +349,7 @@ namespace SRML.SR.Templates.Plantables
                     spawn.ObjectsToSpawn = toSpawn.ToArray();
                     spawn.BonusObjectsToSpawn = bonusToSpawn.ToArray();
                 }),
-                new Create<BoxCollider>((col) =>
+                new Create<BoxCollider>(col =>
                 {
                     col.size = new Vector3(8, 0.1f, 8);
                     col.center = new Vector3(0, 0, 0.1f);
@@ -361,7 +360,7 @@ namespace SRML.SR.Templates.Plantables
             if (!isDeluxe)
             {
                 mainObject.AddComponents(
-                    new Create<ScaleMarker>((scale) => scale.doNotScaleAsReplacement = false)
+                    new Create<ScaleMarker>(scale => scale.doNotScaleAsReplacement = false)
                 );
             }
 
@@ -374,7 +373,7 @@ namespace SRML.SR.Templates.Plantables
                 droneNetworkNodes[i] = new GameObjectTemplate($"DroneNetworkNode{(i + 1).ToString("00")}",
                     new Create<PathingNetworkNode>(null)
                 ).AddChild(new GameObjectTemplate("NodeLoc").SetTransform(new Vector3(0, 2, 0), Vector3.zero, Vector3.one).SetDebugMarker(MarkerType.DroneNode))
-                .AddAfterChildren((obj) => obj.GetComponent<PathingNetworkNode>().nodeLoc = obj.transform.GetChild(0))
+                .AddAfterChildren(obj => obj.GetComponent<PathingNetworkNode>().nodeLoc = obj.transform.GetChild(0))
                 .SetTransform(new Vector3(trans.position.x * 1.5f, trans.position.y, trans.position.z * 1.5f), trans.rotation, trans.scale);
             }
 
@@ -387,9 +386,9 @@ namespace SRML.SR.Templates.Plantables
 
             // Add tree
             GameObjectTemplate treeObj = new GameObjectTemplate("tree_bark",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = tree ?? GardenObjects.modelTreeMeshs[treeID] ?? GardenObjects.modelTreeMeshs[SpawnResource.Id.POGO_TREE]),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = treeMaterials ?? GardenObjects.modelTreeMaterials[treeID] ?? GardenObjects.modelTreeMaterials[SpawnResource.Id.POGO_TREE]),
-                new Create<MeshCollider>((col) =>
+                new Create<MeshFilter>(filter => filter.sharedMesh = tree ?? GardenObjects.modelTreeMeshs[treeID] ?? GardenObjects.modelTreeMeshs[SpawnResource.Id.POGO_TREE]),
+                new Create<MeshRenderer>(render => render.sharedMaterials = treeMaterials ?? GardenObjects.modelTreeMaterials[treeID] ?? GardenObjects.modelTreeMaterials[SpawnResource.Id.POGO_TREE]),
+                new Create<MeshCollider>(col =>
                 {
                     col.sharedMesh = treeCol ?? GardenObjects.modelTreeCols[treeID] ?? GardenObjects.modelTreeCols[SpawnResource.Id.POGO_TREE];
                     col.convex = treeCol == tree;
@@ -397,9 +396,9 @@ namespace SRML.SR.Templates.Plantables
             ).SetTransform(Vector3.up * -0.75f, Vector3.zero, customTreeScale ? treeScale : Vector3.one * 0.5f);
 
             GameObjectTemplate leavesObj = new GameObjectTemplate("leaves_tree",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = leaves ?? GardenObjects.modelLeavesMeshs[leavesID] ?? GardenObjects.modelLeavesMeshs[SpawnResource.Id.POGO_TREE]),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = leavesMaterials ?? GardenObjects.modelLeavesMaterials[leavesID] ?? GardenObjects.modelLeavesMaterials[SpawnResource.Id.POGO_TREE]),
-                new Create<MeshCollider>((col) =>
+                new Create<MeshFilter>(filter => filter.sharedMesh = leaves ?? GardenObjects.modelLeavesMeshs[leavesID] ?? GardenObjects.modelLeavesMeshs[SpawnResource.Id.POGO_TREE]),
+                new Create<MeshRenderer>(render => render.sharedMaterials = leavesMaterials ?? GardenObjects.modelLeavesMaterials[leavesID] ?? GardenObjects.modelLeavesMaterials[SpawnResource.Id.POGO_TREE]),
+                new Create<MeshCollider>(col =>
                 {
                     col.sharedMesh = leavesCol ?? GardenObjects.modelLeavesCols[leavesID] ?? GardenObjects.modelLeavesCols[SpawnResource.Id.POGO_TREE];
                     col.convex = leavesCol == leaves;
@@ -413,7 +412,7 @@ namespace SRML.SR.Templates.Plantables
             else
             {
                 mainObject.AddChild(treeObj.Clone().AddComponents(
-                    new Create<ScaleMarker>((scale) => scale.doNotScaleAsReplacement = false)
+                    new Create<ScaleMarker>(scale => scale.doNotScaleAsReplacement = false)
                 ).AddChild(leavesObj));
             }
 
@@ -422,9 +421,9 @@ namespace SRML.SR.Templates.Plantables
             {
                 ObjectTransformValues trans = customSpawnJoints == null ? GardenObjects.treeSpawnJoints[leavesID][i] : customSpawnJoints[i];
                 mainObject.AddChild(new GameObjectTemplate($"SpawnJoint{(i + 1).ToString("00")}",
-                    new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
-                    new Create<MeshRenderer>((render) => render.sharedMaterials = GardenObjects.modelMaterials.ContainsKey(ID) ? GardenObjects.modelMaterials[ID] : modelMaterials),
-                    new Create<Rigidbody>((body) =>
+                    new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
+                    new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.modelMaterials.ContainsKey(ID) ? GardenObjects.modelMaterials[ID] : modelMaterials),
+                    new Create<Rigidbody>(body =>
                     {
                         body.drag = 0;
                         body.angularDrag = 0.05f;
@@ -447,9 +446,9 @@ namespace SRML.SR.Templates.Plantables
                 {
                     ObjectTransformValues trans = customSpawnJoints == null ? GardenObjects.treeSpawnJoints[leavesID][i] : customSpawnJoints[i];
                     mainObject.AddChild(new GameObjectTemplate($"SpawnJoint{(i + 1).ToString("00")}",
-                        new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
-                        new Create<MeshRenderer>((render) => render.sharedMaterials = GardenObjects.modelMaterials.ContainsKey(ID) ? GardenObjects.modelMaterials[ID] : modelMaterials),
-                        new Create<Rigidbody>((body) =>
+                        new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
+                        new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.modelMaterials.ContainsKey(ID) ? GardenObjects.modelMaterials[ID] : modelMaterials),
+                        new Create<Rigidbody>(body =>
                         {
                             body.drag = 0;
                             body.angularDrag = 0.05f;
@@ -466,12 +465,12 @@ namespace SRML.SR.Templates.Plantables
 
                 // Add trees
                 mainObject.AddChild(treeObj.Clone().AddComponents(
-                    new Create<ScaleMarker>((scale) => scale.doNotScaleAsReplacement = false)
+                    new Create<ScaleMarker>(scale => scale.doNotScaleAsReplacement = false)
                 ).SetTransform(new Vector3(3.6f, 0.2f, -3.6f), new Vector3(0, 225, 0), customTreeScale ? treeDeluxeScale : new Vector3(0.4f, 0.5f, 0.4f))
                 .AddChild(leavesObj.Clone().SetTransform(leavesDeluxePosition, Vector3.zero, customLeavesScale ? leavesDeluxeScale : new Vector3(1.3f, 0.9f, 1.3f))));
 
                 mainObject.AddChild(treeObj.Clone().AddComponents(
-                    new Create<ScaleMarker>((scale) => scale.doNotScaleAsReplacement = false)
+                    new Create<ScaleMarker>(scale => scale.doNotScaleAsReplacement = false)
                 ).SetTransform(new Vector3(-3.6f, 0.2f, 3.6f), new Vector3(0, 45, 0), customTreeScale ? treeDeluxeScale : new Vector3(0.4f, 0.5f, 0.4f))
                 .AddChild(leavesObj.Clone().SetTransform(leavesDeluxePosition, Vector3.zero, customLeavesScale ? leavesDeluxeScale : new Vector3(1.3f, 0.9f, 1.3f))));
             }

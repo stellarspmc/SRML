@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using SRML.Utils;
 
 namespace SRML.SR.SaveSystem.Data.Partial
@@ -49,7 +47,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public override void Read(BinaryReader reader)
         {
-            BinaryUtils.ReadDictionary(reader,hoistedValues,(x)=>x.ReadInt32(),(x)=> (T)serializer.Deserialize(x));
+            BinaryUtils.ReadDictionary(reader,hoistedValues,x=>x.ReadInt32(),x=> (T)serializer.Deserialize(x));
         }
 
         public override void Write(BinaryWriter writer)

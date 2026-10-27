@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using SRML.SR;
 using SRML.SR.UI.Utils;
 using TMPro;
 using UnityEngine;
@@ -121,7 +120,7 @@ namespace SRML.SR.UI
 
         internal static void CreateBasicErrorOnMenu(string error, bool doAbort = true)
         {
-            SRCallbacks.OnMainMenuLoaded += (u) =>
+            SRCallbacks.OnMainMenuLoaded += u =>
             {
                 CreateBasicError(error, u, doAbort);
             };

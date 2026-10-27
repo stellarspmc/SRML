@@ -49,12 +49,12 @@ namespace SRML.SR.SaveSystem.Registry
 
         public bool BelongsToMe(object b)
         {
-            return Registries.Any((x) => x.BelongsToMe(b));
+            return Registries.Any(x => x.BelongsToMe(b));
         }
 
         public bool IsModelRegistered(Type model)
         {
-            return Registries.Any((x) => x.IsModelRegistered(model));
+            return Registries.Any(x => x.IsModelRegistered(model));
         }
 
         public DataRegistry<T> GetRegistryFor<T>() where T : IDataRegistryMember

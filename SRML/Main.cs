@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Policy;
-using System.Text;
 using HarmonyLib;
-using MonomiPark.SlimeRancher.DataModel;
 using SRML.Config;
 using SRML.Console;
 using SRML.Editor;

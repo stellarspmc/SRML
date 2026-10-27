@@ -76,9 +76,9 @@ namespace SRML.SR.Templates
             if (BaseObjects.markerMaterials.ContainsKey(type))
             {
                 AddChild(new GameObjectTemplate("DebugMarker",
-                    new Create<MeshFilter>((filter) => filter.sharedMesh = BaseObjects.cubeMesh),
-                    new Create<MeshRenderer>((render) => render.sharedMaterial = BaseObjects.markerMaterials[type]),
-                    new Create<DebugMarker>((marker) =>
+                    new Create<MeshFilter>(filter => filter.sharedMesh = BaseObjects.cubeMesh),
+                    new Create<MeshRenderer>(render => render.sharedMaterial = BaseObjects.markerMaterials[type]),
+                    new Create<DebugMarker>(marker =>
                     {
                         marker.scaleMult = scaleMult;
                         marker.type = type;

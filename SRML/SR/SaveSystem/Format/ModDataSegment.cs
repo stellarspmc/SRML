@@ -1,19 +1,8 @@
-﻿using MonomiPark.SlimeRancher.DataModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using MonomiPark.SlimeRancher.Persist;
-using rail;
 using SRML.SR.SaveSystem.Data;
-using SRML.SR.SaveSystem.Data.Actor;
 using SRML.SR.SaveSystem.Data.Ammo;
-using VanillaActorData = MonomiPark.SlimeRancher.Persist.ActorDataV09;
-using UnityEngine;
-using VanillaGadgetData = MonomiPark.SlimeRancher.Persist.PlacedGadgetV08;
-using SRML.SR.SaveSystem.Data.Gadget;
-using SRML.SR.SaveSystem.Registry;
 using SRML.Utils;
 using VanillaAmmoData = MonomiPark.SlimeRancher.Persist.AmmoDataV02;
 namespace SRML.SR.SaveSystem.Format
@@ -70,7 +59,7 @@ namespace SRML.SR.SaveSystem.Format
             {
                 playerData.Read(reader);
                 pediaData.Read(reader);
-                BinaryUtils.ReadDictionary(reader,customAmmo,(x)=>AmmoIdentifier.Read(x), (x) =>
+                BinaryUtils.ReadDictionary(reader,customAmmo,x=>AmmoIdentifier.Read(x), x =>
                 {
                     var list = new List<VanillaAmmoData>();
                     int ammoCount = x.ReadInt32();

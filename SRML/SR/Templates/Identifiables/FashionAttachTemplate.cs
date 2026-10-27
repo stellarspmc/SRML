@@ -73,8 +73,8 @@ namespace SRML.SR.Templates.Identifiables
             foreach (LayerInfo layer in layers)
             {
                 model.AddChild(new GameObjectTemplate("layer" + num,
-                    new Create<MeshFilter>((filter) => filter.sharedMesh = layer.mesh),
-                    new Create<MeshRenderer>((render) => render.sharedMaterials = layer.materials)
+                    new Create<MeshFilter>(filter => filter.sharedMesh = layer.mesh),
+                    new Create<MeshRenderer>(render => render.sharedMaterials = layer.materials)
                 ));
             }
 

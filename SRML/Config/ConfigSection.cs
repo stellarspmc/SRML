@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using IniParser;
+﻿using System.Collections.Generic;
 using IniParser.Model;
 using UnityEngine;
 
@@ -30,7 +25,7 @@ namespace SRML.Config
         public void AddElement(ConfigElement element)
         {
             elementDict[element.Options.Name] = element;
-            element.OnValueChanged += (val) => OnValueChanged?.Invoke(element.Options.Name, val);
+            element.OnValueChanged += val => OnValueChanged?.Invoke(element.Options.Name, val);
         }
 
         public ConfigElement this[string index] => elementDict[index];

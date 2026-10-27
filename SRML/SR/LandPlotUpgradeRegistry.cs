@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.SR
@@ -69,7 +68,7 @@ namespace SRML.SR
         /// <exception cref="ArgumentException">Throws if the <see cref="PlotUpgrader"/> is already registered.</exception>
         public static void RegisterPlotUpgrader<T>(LandPlot.Id plot) where T : PlotUpgrader
         {
-            if (moddedUpgraders.Exists((x) => x.Item1 == typeof(T) && x.Item2 == plot))
+            if (moddedUpgraders.Exists(x => x.Item1 == typeof(T) && x.Item2 == plot))
                 throw new ArgumentException($"Type \'{typeof(T).FullName}\' is already registered as a plot upgrader for {plot}");
             moddedUpgraders.Add((typeof(T), plot));
             if (SRModLoader.CurrentLoadingStep == SRModLoader.LoadingStep.PRELOAD)

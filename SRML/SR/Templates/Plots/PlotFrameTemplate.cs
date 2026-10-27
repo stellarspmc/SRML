@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using SRML.Console;
-using SRML.SR.Utils.Debug;
-using SRML.SR.Utils.BaseObjects;
+﻿using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
 namespace SRML.SR.Templates.Plots
@@ -25,13 +22,13 @@ namespace SRML.SR.Templates.Plots
             // Create a base post
             GameObjectTemplate post = new GameObjectTemplate("Post")
             .AddChild(new GameObjectTemplate("plotBase",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = RanchObjects.plotBase),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = RanchObjects.plotBaseMaterials)
+                new Create<MeshFilter>(filter => filter.sharedMesh = RanchObjects.plotBase),
+                new Create<MeshRenderer>(render => render.sharedMaterials = RanchObjects.plotBaseMaterials)
             ))
             .AddChild(new GameObjectTemplate("plotPost",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = RanchObjects.plotPost),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = RanchObjects.plotBaseMaterials),
-                new Create<CapsuleCollider>((col) =>
+                new Create<MeshFilter>(filter => filter.sharedMesh = RanchObjects.plotPost),
+                new Create<MeshRenderer>(render => render.sharedMaterials = RanchObjects.plotBaseMaterials),
+                new Create<CapsuleCollider>(col =>
                 {
                     col.center = Vector3.up * 2.3f;
                     col.radius = 0.4455906f;

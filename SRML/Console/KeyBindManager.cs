@@ -2,11 +2,9 @@
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR;
 using SRML.Utils;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.Console
@@ -37,7 +35,7 @@ namespace SRML.Console
             customKeyBinds.Clear();
             using(var file = new BinaryReader(File.Open(path, FileMode.Open)))
             {
-                BinaryUtils.ReadList(file, customKeyBinds, (x) => KeyBinding.Read(x));
+                BinaryUtils.ReadList(file, customKeyBinds, x => KeyBinding.Read(x));
             }
         }
 

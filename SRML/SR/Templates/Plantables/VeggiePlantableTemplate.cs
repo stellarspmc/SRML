@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SRML.Console;
 using SRML.SR.Utils.BaseObjects;
 using SRML.SR.Utils.Debug;
 using UnityEngine;
@@ -216,7 +215,7 @@ namespace SRML.SR.Templates.Plantables
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<SpawnResource>((spawn) =>
+                new Create<SpawnResource>(spawn =>
                 {
                     spawn.BonusChance = bonusChance;
                     spawn.forceDestroyLeftoversOnSpawn = false;
@@ -233,22 +232,22 @@ namespace SRML.SR.Templates.Plantables
                     spawn.ObjectsToSpawn = toSpawn.ToArray();
                     spawn.BonusObjectsToSpawn = bonusToSpawn.ToArray();
                 }),
-                new Create<BoxCollider>((col) =>
+                new Create<BoxCollider>(col =>
                 {
                     col.size = new Vector3(8, 0.1f, 8);
                     col.center = new Vector3(0, 0, 0.1f);
                     col.isTrigger = true;
                 }),
-                new Create<ScaleYOnlyMarker>((scale) => scale.doNotScaleAsReplacement = false)
+                new Create<ScaleYOnlyMarker>(scale => scale.doNotScaleAsReplacement = false)
             ).AddAfterChildren(GrabJoints);
 
             // Add spawn joints
             for (int i = 0; i < 20; i++)
             {
                 mainObject.AddChild(new GameObjectTemplate($"SpawnJoint{(i + 1).ToString("00")}",
-                    new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
-                    new Create<MeshRenderer>((render) => render.sharedMaterials = GardenObjects.modelMaterials.ContainsKey(ID) ? GardenObjects.modelMaterials[ID] : modelMaterials),
-                    new Create<Rigidbody>((body) =>
+                    new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
+                    new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.modelMaterials.ContainsKey(ID) ? GardenObjects.modelMaterials[ID] : modelMaterials),
+                    new Create<Rigidbody>(body =>
                     {
                         body.drag = 0;
                         body.angularDrag = 0.05f;
@@ -265,16 +264,16 @@ namespace SRML.SR.Templates.Plantables
 
             // Add beds
             GameObjectTemplate sprout = new GameObjectTemplate("Sprout",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = this.sprout ?? GardenObjects.modelSproutMeshs[sproutID] ?? GardenObjects.modelSproutMeshs[SpawnResource.Id.CARROT_PATCH]),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = sproutMaterials == null ? GardenObjects.modelSproutMaterials[sproutID] ?? GardenObjects.modelSproutMaterials[SpawnResource.Id.CARROT_PATCH] : sproutMaterials)
+                new Create<MeshFilter>(filter => filter.sharedMesh = this.sprout ?? GardenObjects.modelSproutMeshs[sproutID] ?? GardenObjects.modelSproutMeshs[SpawnResource.Id.CARROT_PATCH]),
+                new Create<MeshRenderer>(render => render.sharedMaterials = sproutMaterials == null ? GardenObjects.modelSproutMaterials[sproutID] ?? GardenObjects.modelSproutMaterials[SpawnResource.Id.CARROT_PATCH] : sproutMaterials)
             );
 
             GameObjectTemplate dirt = new GameObjectTemplate("Dirt",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.dirtMesh),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = GardenObjects.dirtMaterials)
+                new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.dirtMesh),
+                new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.dirtMaterials)
             ).AddChild(new GameObjectTemplate("rocks_long",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.rockMesh),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = GardenObjects.rockMaterials)
+                new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.rockMesh),
+                new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.rockMaterials)
             )).SetTransform(Vector3.zero, Vector3.up * 90f, new Vector3(0.5f, 0.4f, 0.5f));
 
             GameObjectTemplate baseBeds = new GameObjectTemplate("BaseBeds");
@@ -282,14 +281,14 @@ namespace SRML.SR.Templates.Plantables
             for (int i = 0; i < 4; i++)
             {
                 (isDeluxe ? baseBeds : mainObject).AddChild(new GameObjectTemplate("Bed",
-                    new Create<LODGroup>((group) =>
+                    new Create<LODGroup>(group =>
                     {
                         group.localReferencePoint = Vector3.one * 0.1f;
                         group.size = 8.657982f;
                         group.fadeMode = LODFadeMode.None;
                         group.animateCrossFading = false;
                     }),
-                    new Create<CapsuleCollider>((col) =>
+                    new Create<CapsuleCollider>(col =>
                     {
                         col.center = new Vector3(0, -0.6f, 0);
                         col.radius = 0.8f;
@@ -315,9 +314,9 @@ namespace SRML.SR.Templates.Plantables
                 for (int i = 20; i < 34; i++)
                 {
                     mainObject.AddChild(new GameObjectTemplate($"SpawnJoint{(i + 1).ToString("00")}",
-                        new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
-                        new Create<MeshRenderer>((render) => render.sharedMaterials = GardenObjects.modelMaterials.ContainsKey(ID) ? GardenObjects.modelMaterials[ID] : modelMaterials),
-                        new Create<Rigidbody>((body) =>
+                        new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
+                        new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.modelMaterials.ContainsKey(ID) ? GardenObjects.modelMaterials[ID] : modelMaterials),
+                        new Create<Rigidbody>(body =>
                         {
                             body.drag = 0;
                             body.angularDrag = 0.05f;
@@ -334,24 +333,24 @@ namespace SRML.SR.Templates.Plantables
 
                 // Add beds
                 GameObjectTemplate dirtDeluxe = new GameObjectTemplate("Dirt",
-                    new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.deluxeDirtMesh),
-                    new Create<MeshRenderer>((render) => render.sharedMaterials = GardenObjects.deluxeDirtMaterials)
+                    new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.deluxeDirtMesh),
+                    new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.deluxeDirtMaterials)
                 ).AddChild(new GameObjectTemplate("rocks_long",
-                    new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.deluxeRockMesh),
-                    new Create<MeshRenderer>((render) => render.sharedMaterials = GardenObjects.deluxeRockMaterials)
+                    new Create<MeshFilter>(filter => filter.sharedMesh = GardenObjects.deluxeRockMesh),
+                    new Create<MeshRenderer>(render => render.sharedMaterials = GardenObjects.deluxeRockMaterials)
                 )).SetTransform(Vector3.zero, Vector3.up * 90f, new Vector3(0.5f, 0.3f, 0.5f));
 
                 for (int i = 4; i < 6; i++)
                 {
                     mainObject.AddChild(new GameObjectTemplate("Bed",
-                        new Create<LODGroup>((group) =>
+                        new Create<LODGroup>(group =>
                         {
                             group.localReferencePoint = Vector3.one * 0.1f;
                             group.size = 8.657982f;
                             group.fadeMode = LODFadeMode.None;
                             group.animateCrossFading = false;
                         }),
-                        new Create<ScaleYOnlyMarker>((scale) => scale.doNotScaleAsReplacement = false)
+                        new Create<ScaleYOnlyMarker>(scale => scale.doNotScaleAsReplacement = false)
                     ).SetTransform(GardenObjects.beds[i])
                     .AddChild(dirtDeluxe)
                     .AddChild(sprout.Clone().SetTransform(GardenObjects.bedSprouts[4]))

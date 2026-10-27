@@ -1,10 +1,7 @@
-﻿using SRML.SR;
-using SRML.SR.SaveSystem;
+﻿using SRML.SR.SaveSystem;
 using SRML.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.SR.Utils
@@ -29,7 +26,7 @@ namespace SRML.SR.Utils
         internal static Dictionary<Type, GameObject> idHandlerPrefabs = new Dictionary<Type, GameObject>();
         static IdHandlerUtils()
         {
-            SRCallbacks.PreSaveGameLoaded += (s) =>
+            SRCallbacks.PreSaveGameLoaded += s =>
             {
                 foreach (IdHandler handler in UnityEngine.Object.FindObjectsOfType<IdHandler>())
                 {

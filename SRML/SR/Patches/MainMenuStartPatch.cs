@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using HarmonyLib;
 using SRML.SR.UI;
-using UnityEngine;
 
 namespace SRML.SR.Patches
 {

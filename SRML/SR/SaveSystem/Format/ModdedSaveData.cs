@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using SRML.SR.SaveSystem.Data;
-using SRML.SR.SaveSystem.Data.Ammo;
 using SRML.SR.SaveSystem.Data.Appearances;
 using SRML.SR.SaveSystem.Data.Partial;
-using SRML.Utils;
 using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Format
@@ -145,7 +142,7 @@ namespace SRML.SR.SaveSystem.Format
 
         public ModDataSegment GetSegmentForMod(SRMod mod)
         {
-            if (!(segments.FirstOrDefault((x) => x.modid == mod.ModInfo.Id) is ModDataSegment seg))
+            if (!(segments.FirstOrDefault(x => x.modid == mod.ModInfo.Id) is ModDataSegment seg))
             {
                 var segment = new ModDataSegment();
                 segment.modid = mod.ModInfo.Id;

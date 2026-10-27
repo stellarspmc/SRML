@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using MonomiPark.SlimeRancher.DataModel;
-using MonomiPark.SlimeRancher.Regions;
-using SRML.Console;
 using SRML.SR.Templates;
 using SRML.SR.Utils.Debug;
 using UnityEngine;

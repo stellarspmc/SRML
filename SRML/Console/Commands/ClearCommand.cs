@@ -1,7 +1,4 @@
-﻿using System;
-using SRML.Console;
-
-namespace SRML.Console.Commands
+﻿namespace SRML.Console.Commands
 {
 	/// <summary>
 	/// A command to clear the console

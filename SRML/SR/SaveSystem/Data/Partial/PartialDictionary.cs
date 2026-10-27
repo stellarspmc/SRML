@@ -2,10 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using SRML.Utils;
-using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Data.Partial
 {
@@ -26,7 +23,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
             this.hoistPredicate = hoistPredicate;
             this.keySerializer = keySerializer;
             this.valueSerializer = valueSerializer;
-            if (filler == null) filler = (x) => null;
+            if (filler == null) filler = x => null;
             this.hoistFiller = filler;
         }
 

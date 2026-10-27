@@ -1,12 +1,7 @@
 ﻿using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.SaveSystem;
-using SRML.SR.Translation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using UnityEngine;
 
 namespace SRML.SR
 {

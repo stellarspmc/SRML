@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using SRML.SR.Utils;
 using SRML.SR.SaveSystem;
-using UnityEngine;
 
 namespace SRML.SR
 {

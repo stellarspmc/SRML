@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
 namespace SRML
 {
@@ -101,7 +100,7 @@ namespace SRML
             if (!MappedValues.ContainsKey(type)) return ((int) val);
             if (!EnumMinCache.ContainsKey(type)) EnumMinCache[type] = ((int[])Enum.GetValues(type)).Min();
 
-            var potential = MappedValues[type].FirstOrDefault((x) => Enum.GetName(type, val) == x.Value);
+            var potential = MappedValues[type].FirstOrDefault(x => Enum.GetName(type, val) == x.Value);
             return potential.Key < EnumMinCache[type] ? potential.Key : ((int)val);
         }
 
@@ -368,7 +367,7 @@ namespace SRML
                 toFix = TranslateEnum(type, translator, mode, toFix);
             }
             else
-            foreach (var v in enumFixers.Where((x) => x.Key.IsAssignableFrom(type)))
+            foreach (var v in enumFixers.Where(x => x.Key.IsAssignableFrom(type)))
             {
                 v.Value(translator, mode, toFix);
             }
@@ -390,7 +389,7 @@ namespace SRML
                 throw new Exception("Use TranslateEnum for enumvalues");
             }
             else
-                foreach (var v in enumFixers.Where((x) => x.Key.IsAssignableFrom(type))) v.Value(translator, mode, toFix);
+                foreach (var v in enumFixers.Where(x => x.Key.IsAssignableFrom(type))) v.Value(translator, mode, toFix);
         }
 
         public static T TranslateEnum<T>(EnumTranslator translator,TranslationMode mode, T id)

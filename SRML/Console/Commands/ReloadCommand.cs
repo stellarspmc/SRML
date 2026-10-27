@@ -1,5 +1,4 @@
 ﻿using System;
-using SRML.Console;
 
 namespace SRML.Console.Commands
 {

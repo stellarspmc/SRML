@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using MonomiPark.SlimeRancher.Regions;
-using SRML.SR;
+﻿using MonomiPark.SlimeRancher.Regions;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 using UnityEngine.UI;
@@ -66,29 +64,29 @@ namespace SRML.SR.Templates.Identifiables
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<Identifiable>((ident) => ident.id = ID),
-                new Create<Vacuumable>((vac) => vac.size = vacSize),
-                new Create<Rigidbody>((body) =>
+                new Create<Identifiable>(ident => ident.id = ID),
+                new Create<Vacuumable>(vac => vac.size = vacSize),
+                new Create<Rigidbody>(body =>
                 {
                     body.drag = 0;
                     body.angularDrag = 0.05f;
                     body.mass = 0.1f;
                     body.useGravity = true;
                 }),
-                new Create<SphereCollider>((col) =>
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.5f;
                 }),
                 new Create<CollisionAggregator>(null),
-                new Create<RegionMember>((rg) => rg.canHibernate = true),
-                new Create<Fashion>((fash) =>
+                new Create<RegionMember>(rg => rg.canHibernate = true),
+                new Create<Fashion>(fash =>
                 {
                     fash.slot = slot;
                     fash.attachPrefab = attachPrefab;
                     fash.attachFX = EffectObjects.fxFashionApply;
                 }),
-                new Create<DestroyOnTouching>((dest) =>
+                new Create<DestroyOnTouching>(dest =>
                 {
                     dest.hoursOfContactAllowed = 0;
                     dest.wateringRadius = 0;
@@ -103,7 +101,7 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create Icon UI content
             GameObjectTemplate imageBack = new GameObjectTemplate("Image Back",
-                new Create<RectTransform>((trans) =>
+                new Create<RectTransform>(trans =>
                 {
                     trans.anchorMin = Vector2.zero;
                     trans.anchorMax = Vector2.one;
@@ -113,7 +111,7 @@ namespace SRML.SR.Templates.Identifiables
                     trans.localEulerAngles = new Vector3(0, 180, 0);
                 }),
                 new Create<CanvasRenderer>(null),
-                new Create<Image>((img) =>
+                new Create<Image>(img =>
                 {
                     img.sprite = icon;
                     img.overrideSprite = icon;
@@ -132,7 +130,7 @@ namespace SRML.SR.Templates.Identifiables
             );
 
             GameObjectTemplate image = new GameObjectTemplate("Image",
-                new Create<RectTransform>((trans) =>
+                new Create<RectTransform>(trans =>
                 {
                     trans.anchorMin = Vector2.zero;
                     trans.anchorMax = Vector2.one;
@@ -142,7 +140,7 @@ namespace SRML.SR.Templates.Identifiables
                     trans.localEulerAngles = Vector3.zero;
                 }),
                 new Create<CanvasRenderer>(null),
-                new Create<Image>((img) =>
+                new Create<Image>(img =>
                 {
                     img.sprite = icon;
                     img.overrideSprite = icon;
@@ -161,7 +159,7 @@ namespace SRML.SR.Templates.Identifiables
             );
 
             GameObjectTemplate iconUI = new GameObjectTemplate("IconUI",
-                new Create<RectTransform>((trans) =>
+                new Create<RectTransform>(trans =>
                 {
                     trans.anchorMin = Vector2.zero;
                     trans.anchorMax = Vector2.zero;
@@ -173,8 +171,8 @@ namespace SRML.SR.Templates.Identifiables
                     trans.offsetMax = Vector2.one * 40f;
                     trans.localScale = new Vector3(0, 0, 1.3f);
                 }),
-                new Create<Canvas>((canvas) => canvas.renderMode = RenderMode.WorldSpace),
-                new Create<CanvasScaler>((scale) =>
+                new Create<Canvas>(canvas => canvas.renderMode = RenderMode.WorldSpace),
+                new Create<CanvasScaler>(scale =>
                 {
                     scale.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
                     scale.referenceResolution = new Vector2(800, 600);
@@ -189,13 +187,13 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create Surround Sphere
             mainObject.AddChild(new GameObjectTemplate("SurroundSphere",
-                new Create<MeshFilter>((filter) => filter.sharedMesh = BaseObjects.originMesh["plort_shell"]),
-                new Create<MeshRenderer>((render) => render.sharedMaterials = BaseObjects.originMaterial["EyeShine"].Group())
+                new Create<MeshFilter>(filter => filter.sharedMesh = BaseObjects.originMesh["plort_shell"]),
+                new Create<MeshRenderer>(render => render.sharedMaterials = BaseObjects.originMaterial["EyeShine"].Group())
             ).SetTransform(Vector3.zero, new Vector3(45, 90, 0), Vector3.one * 0.5f));
 
             // Create delaunch
             mainObject.AddChild(new GameObjectTemplate("DelaunchTrigger",
-                new Create<SphereCollider>((col) =>
+                new Create<SphereCollider>(col =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;

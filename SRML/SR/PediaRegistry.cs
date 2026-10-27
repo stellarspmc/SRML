@@ -4,9 +4,7 @@ using SRML.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using static SRML.SR.PediaRegistry.PediaTab;
 
@@ -289,7 +287,7 @@ namespace SRML.SR
             public virtual Toggle.ToggleEvent GetOnSelectAction()
             {
                 var newAction = new Toggle.ToggleEvent();
-                newAction.AddListener((x)=>
+                newAction.AddListener(x=>
                 {
                     if(TabToggle?.isOn ?? false)
                     {
