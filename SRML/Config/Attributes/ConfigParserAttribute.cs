@@ -1,13 +1,17 @@
 ﻿using SRML.Config.Parsing;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.Config.Attributes;
-
-public class ConfigParserAttribute : Attribute
+namespace SRML.Config.Attributes
 {
-    public IStringParser Parser;
-    public ConfigParserAttribute(IStringParser parser)
+    public class ConfigParserAttribute : Attribute
     {
-        Parser = parser;
+        public IStringParser Parser;
+        public ConfigParserAttribute(IStringParser parser)
+        {
+            Parser = parser;
+        }
     }
 }

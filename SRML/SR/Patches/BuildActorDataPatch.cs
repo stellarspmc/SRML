@@ -2,36 +2,41 @@
 using MonomiPark.SlimeRancher;
 using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
+using UnityEngine;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(SavedGame))]
-[HarmonyPatch("BuildActorData")]
-internal static class BuildActorDataPatch
+namespace SRML.SR.Patches
 {
-
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
-    { 
-        foreach(var v in instr)
-        {
-            if (v.opcode == OpCodes.Ret)
-            { 
-                yield return new CodeInstruction(OpCodes.Ldarg,4);
-                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(BuildActorDataPatch), "Alternate"));
-                yield return new CodeInstruction(OpCodes.Ldloc_0);
-                yield return v;
-            }
-            else yield return v;
-        }
-    }
-    public static void Alternate(ActorDataV09 data,ActorModel model)
+    [HarmonyPatch(typeof(SavedGame))]
+    [HarmonyPatch("BuildActorData")]
+    internal static class BuildActorDataPatch
     {
-        foreach (var v in DataModelRegistry.actorSavers.Where(x => x.Key(model)))
+
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
+        { 
+            foreach(var v in instr)
+            {
+                if (v.opcode == OpCodes.Ret)
+                { 
+                    yield return new CodeInstruction(OpCodes.Ldarg,4);
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(BuildActorDataPatch), "Alternate"));
+                    yield return new CodeInstruction(OpCodes.Ldloc_0);
+                    yield return v;
+                }
+                else yield return v;
+            }
+        }
+        public static void Alternate(ActorDataV09 data,ActorModel model)
         {
-            v.Value(model, data);
+            foreach (var v in DataModelRegistry.actorSavers.Where(x => x.Key(model)))
+            {
+                v.Value(model, data);
+            }
         }
     }
 }

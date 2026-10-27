@@ -1,13 +1,18 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(GardenCatcher))]
-[HarmonyPatch("Awake")]
-internal static class GardenCatcherAwakePatch
+namespace SRML.SR.Patches
 {
-    public static void Prefix(GardenCatcher __instance)
+    [HarmonyPatch(typeof(GardenCatcher))]
+    [HarmonyPatch("Awake")]
+    internal static class GardenCatcherAwakePatch
     {
-        PlantSlotRegistry.Patch(__instance);
+        public static void Prefix(GardenCatcher __instance)
+        {
+            PlantSlotRegistry.Patch(__instance);
+        }
     }
 }

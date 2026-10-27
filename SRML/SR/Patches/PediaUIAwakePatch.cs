@@ -1,17 +1,22 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(PediaUI))]
-[HarmonyPatch("Awake")]
-internal static class PediaUIAwakePatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(PediaUI __instance)
+    [HarmonyPatch(typeof(PediaUI))]
+    [HarmonyPatch("Awake")]
+    internal static class PediaUIAwakePatch
     {
-        PediaRegistry.activeRenderer = null; 
-        foreach(var v in PediaRegistry.customTabs)
+        public static void Postfix(PediaUI __instance)
         {
-            if(v.Key.IsVisible?.Invoke()??true) v.Key.InitForPediaAwake(__instance);
+            PediaRegistry.activeRenderer = null; 
+            foreach(var v in PediaRegistry.customTabs)
+            {
+                if(v.Key.IsVisible?.Invoke()??true) v.Key.InitForPediaAwake(__instance);
+            }
         }
     }
 }

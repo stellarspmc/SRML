@@ -1,7 +1,13 @@
-﻿namespace SRML.SR.SaveSystem;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-interface IVersionedSerializable : ISerializable
+namespace SRML.SR.SaveSystem
 {
-    int LatestVersion { get; }
-    int Version { get; }
+    interface IVersionedSerializable : ISerializable
+    {
+        int LatestVersion { get; }
+        int Version { get; }
+    }
 }

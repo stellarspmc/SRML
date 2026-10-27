@@ -1,61 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using HarmonyLib;
 using MonomiPark.SlimeRancher;
 using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data.Gadget;
+using UnityEngine;
 using VanillaGadgetData = MonomiPark.SlimeRancher.Persist.PlacedGadgetV08;
-namespace SRML.SR.SaveSystem.Patches;
-
-[HarmonyPatch(typeof(SavedGame))]
-internal static class PullGadgetDataPatch
+namespace SRML.SR.SaveSystem.Patches
 {
-    public static MethodInfo TargetMethod()
+    [HarmonyPatch(typeof(SavedGame))]
+    internal static class PullGadgetDataPatch
     {
-        return AccessTools.Method(typeof(SavedGame), "Pull", new Type[] {typeof(GameModel), typeof(WorldV22)});
-    }
-
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
-    {
-        using (var code = instr.GetEnumerator())
+        public static MethodInfo TargetMethod()
         {
-            while (code.MoveNext())
+            return AccessTools.Method(typeof(SavedGame), "Pull", new Type[] {typeof(GameModel), typeof(WorldV22)});
+        }
+
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
+        {
+            using (var code = instr.GetEnumerator())
             {
-                var cur = code.Current;
-                if (cur.opcode == OpCodes.Callvirt && cur.operand is MethodInfo info && info.Name == "HasAttached")
+                while (code.MoveNext())
                 {
-                    yield return cur;
-                    code.MoveNext();
-                    yield return code.Current;
-                    code.MoveNext();//skip newobj
-                    yield return new CodeInstruction(OpCodes.Ldloca_S,(byte)22);
-                    yield return new CodeInstruction(OpCodes.Call,
-                        AccessTools.Method(typeof(KeyValuePair<string, GadgetSiteModel>), "get_Value"));
-                    yield return new CodeInstruction(OpCodes.Call,
-                        AccessTools.Method(typeof(PullGadgetDataPatch), "CreateGadgetData"));
-                }
-                else
-                {
-                    yield return cur;
+                    var cur = code.Current;
+                    if (cur.opcode == OpCodes.Callvirt && cur.operand is MethodInfo info && info.Name == "HasAttached")
+                    {
+                        yield return cur;
+                        code.MoveNext();
+                        yield return code.Current;
+                        code.MoveNext();//skip newobj
+                        yield return new CodeInstruction(OpCodes.Ldloca_S,(byte)22);
+                        yield return new CodeInstruction(OpCodes.Call,
+                            AccessTools.Method(typeof(KeyValuePair<string, GadgetSiteModel>), "get_Value"));
+                        yield return new CodeInstruction(OpCodes.Call,
+                            AccessTools.Method(typeof(PullGadgetDataPatch), "CreateGadgetData"));
+                    }
+                    else
+                    {
+                        yield return cur;
+                    }
                 }
             }
         }
-    }
 
-    public static VanillaGadgetData CreateGadgetData(GadgetSiteModel model)
-    {
-        var mod = SaveRegistry.ModForModelType(model.attached.GetType());
-        if (mod != null)
+        public static VanillaGadgetData CreateGadgetData(GadgetSiteModel model)
         {
-            var info = SaveRegistry.GetSaveInfo(mod).GetRegistryFor<CustomGadgetData>();
-            var newmodel = info.GetDataForID(info.GetIDForModel(model.attached.GetType()));
-            newmodel.PullCustomModel(model.attached);
-            return newmodel;
-        }
-        return new VanillaGadgetData();
+            var mod = SaveRegistry.ModForModelType(model.attached.GetType());
+            if (mod != null)
+            {
+                var info = SaveRegistry.GetSaveInfo(mod).GetRegistryFor<CustomGadgetData>();
+                var newmodel = info.GetDataForID(info.GetIDForModel(model.attached.GetType()));
+                newmodel.PullCustomModel(model.attached);
+                return newmodel;
+            }
+            return new VanillaGadgetData();
 
+        }
     }
 }

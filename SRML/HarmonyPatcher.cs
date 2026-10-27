@@ -1,47 +1,48 @@
 ﻿using System.Reflection;
 using HarmonyLib;
 
-namespace SRML;
-
-/// <summary>
-/// Utility class to help manage the main SRML harmony instance
-/// </summary>
-public static class HarmonyPatcher
+namespace SRML
 {
-    private static Harmony _instance;
-
-    internal static Harmony Instance
+    /// <summary>
+    /// Utility class to help manage the main SRML harmony instance
+    /// </summary>
+    public static class HarmonyPatcher
     {
-        get
+        private static Harmony _instance;
+
+        internal static Harmony Instance
         {
-            if (_instance == null)
+            get
             {
-                InitializeInstance();
+                if (_instance == null)
+                {
+                    InitializeInstance();
+                }
+
+                return _instance;
             }
-
-            return _instance;
         }
-    }
 
-    static void InitializeInstance()
-    {
-        _instance = new Harmony("net.veesus.srml");
-    }
+        static void InitializeInstance()
+        {
+            _instance = new Harmony("net.veesus.srml");
+        }
 
-    internal static void PatchAll()
-    {
-        Instance.PatchAll(Assembly.GetExecutingAssembly());
-    }
+        internal static void PatchAll()
+        {
+            Instance.PatchAll(Assembly.GetExecutingAssembly());
+        }
 
-    public static Harmony SetInstance(string name)
-    {
-        var currentMod = SRMod.GetCurrentMod();
-        currentMod.CreateHarmonyInstance(name);
-        return currentMod.HarmonyInstance;
-    }
+        public static Harmony SetInstance(string name)
+        {
+            var currentMod = SRMod.GetCurrentMod();
+            currentMod.CreateHarmonyInstance(name);
+            return currentMod.HarmonyInstance;
+        }
 
-    public static Harmony GetInstance()
-    {
-        return SRMod.GetCurrentMod().HarmonyInstance;
+        public static Harmony GetInstance()
+        {
+            return SRMod.GetCurrentMod().HarmonyInstance;
+        }
     }
 }

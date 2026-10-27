@@ -1,30 +1,35 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(PediaUI))]
-[HarmonyPatch("SelectTabForId")]
-internal static class PediaUISelectTabPatch
+namespace SRML.SR.Patches
 {
-    public static void Prefix(PediaUI __instance, PediaDirector.Id id)
+    [HarmonyPatch(typeof(PediaUI))]
+    [HarmonyPatch("SelectTabForId")]
+    internal static class PediaUISelectTabPatch
     {
-        if (id == PediaDirector.Id.LOCKED) return;
-
-        if (PediaRegistry.activeTabRenderer != null)
+        public static void Prefix(PediaUI __instance, PediaDirector.Id id)
         {
-            PediaRegistry.activeTabRenderer.OnTabDeselected(__instance.gameObject);
-            PediaRegistry.activeTabRenderer = null;
-        }
+            if (id == PediaDirector.Id.LOCKED) return;
 
-        foreach (var v in PediaRegistry.customTabs)
-        {
-            if (v.Key.Entries.Contains(id))
+            if (PediaRegistry.activeTabRenderer != null)
             {
-                v.Key.TabToggle.isOn = true;
+                PediaRegistry.activeTabRenderer.OnTabDeselected(__instance.gameObject);
+                PediaRegistry.activeTabRenderer = null;
+            }
 
-                __instance.BuildListing(v.Key.Entries.ToArray());
-                PediaRegistry.activeTabRenderer = v.Key.TabRenderer;
-                if (PediaRegistry.activeTabRenderer != null) PediaRegistry.activeTabRenderer.OnTabSelected(__instance.gameObject);
+            foreach (var v in PediaRegistry.customTabs)
+            {
+                if (v.Key.Entries.Contains(id))
+                {
+                    v.Key.TabToggle.isOn = true;
+
+                    __instance.BuildListing(v.Key.Entries.ToArray());
+                    PediaRegistry.activeTabRenderer = v.Key.TabRenderer;
+                    if (PediaRegistry.activeTabRenderer != null) PediaRegistry.activeTabRenderer.OnTabSelected(__instance.gameObject);
+                }
             }
         }
     }

@@ -1,23 +1,27 @@
-﻿namespace SRML.Console.Commands;
+﻿using System;
+using SRML.Console;
 
-/// <summary>
-/// A command to clear the console
-/// </summary>
-public class ClearCommand : ConsoleCommand
+namespace SRML.Console.Commands
 {
-	public override string ID { get; } = "clear";
-	public override string Usage { get; } = "clear";
-	public override string Description { get; } = "Clears the console";
-
-	public override bool Execute(string[] args)
+	/// <summary>
+	/// A command to clear the console
+	/// </summary>
+	public class ClearCommand : ConsoleCommand
 	{
-		if (args != null)
-		{
-			Console.Instance.LogError($"The '<color=white>{ID}</color>' command takes no arguments");
-			return false;
-		}
+		public override string ID { get; } = "clear";
+		public override string Usage { get; } = "clear";
+		public override string Description { get; } = "Clears the console";
 
-		Console.lines.Clear();
-		return true;
+		public override bool Execute(string[] args)
+		{
+			if (args != null)
+			{
+				Console.Instance.LogError($"The '<color=white>{ID}</color>' command takes no arguments");
+				return false;
+			}
+
+            Console.lines.Clear();
+			return true;
+		}
 	}
 }

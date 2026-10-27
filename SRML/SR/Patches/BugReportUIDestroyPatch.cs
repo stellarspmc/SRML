@@ -1,17 +1,18 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(BaseUI), "Awake")]
-internal static class BugReportUIDestroyPatch
+namespace SRML.SR.Patches
 {
-    public static void Prefix(BaseUI __instance)
+    [HarmonyPatch(typeof(BaseUI), "Awake")]
+    internal static class BugReportUIDestroyPatch
     {
-        if (__instance is BugReportUI)
+        public static void Prefix(BaseUI __instance)
         {
-            GameObject.Destroy(__instance.gameObject);
-            GameContext.Instance.UITemplates.CreateErrorDialog("Bug reports are disabled when SRML is installed!").AddComponent<UIInputLocker>();
+            if (__instance is BugReportUI)
+            {
+                GameObject.Destroy(__instance.gameObject);
+                GameContext.Instance.UITemplates.CreateErrorDialog("Bug reports are disabled when SRML is installed!").AddComponent<UIInputLocker>();
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ public static class ComponentExtensions
 
 	public static T[] Group<T>(this T obj, params T[] others) where T : Object
 	{
-		var objs = new List<T>
+		List<T> objs = new List<T>
 		{
 			obj
 		};
@@ -48,7 +48,7 @@ public static class ComponentExtensions
 
 	public static void CopyAllTo<T>(this T comp, T otherComp) where T : Component
 	{
-		foreach (var field in comp.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+		foreach (FieldInfo field in comp.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
 		{
 			try
 			{
@@ -57,7 +57,7 @@ public static class ComponentExtensions
 			catch { continue; }
 		}
 
-		foreach (var field in comp.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+		foreach (FieldInfo field in comp.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly))
 		{
 			if (field.GetCustomAttributes(typeof(SerializeField), false).Length > 0)
 			{
@@ -69,7 +69,7 @@ public static class ComponentExtensions
 			}
 		}
 
-		foreach (var field in comp.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+		foreach (PropertyInfo field in comp.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
 		{
 			try
 			{

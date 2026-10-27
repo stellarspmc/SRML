@@ -1,63 +1,68 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.Config.Parsing;
-
-public class DelegateStringParser<T> : StringParser<T>
+namespace SRML.Config.Parsing
 {
-    public delegate string EncodeGenericDelegate(T obj);
-    public delegate T ParseGenericDelegate(string str);
 
-    EncodeGenericDelegate encoder;
-    ParseGenericDelegate parser;
-
-    public DelegateStringParser(EncodeGenericDelegate encoder, ParseGenericDelegate parser)
+    public class DelegateStringParser<T> : StringParser<T>
     {
-        this.encoder = encoder;
-        this.parser = parser;
+        public delegate string EncodeGenericDelegate(T obj);
+        public delegate T ParseGenericDelegate(string str);
+
+        EncodeGenericDelegate encoder;
+        ParseGenericDelegate parser;
+
+        public DelegateStringParser(EncodeGenericDelegate encoder, ParseGenericDelegate parser)
+        {
+            this.encoder = encoder;
+            this.parser = parser;
+        }
+        public override string Encode(T obj)
+        {
+            return encoder(obj);
+        }
+
+        public override T Parse(string str)
+        {
+            return parser(str);
+        }
     }
-    public override string Encode(T obj)
+    public abstract class StringParser<T> : IStringParser
     {
-        return encoder(obj);
-    }
+        public Type ParsedType => typeof(T);
 
-    public override T Parse(string str)
+        public abstract string Encode(T obj);
+
+        public abstract T Parse(string str);
+
+        public string EncodeObject(object obj)
+        {
+            return Encode((T)obj);
+        }
+
+        public object ParseObject(string str)
+        {
+            return Parse(str);
+        }
+
+        public string GetUsageString()
+        {
+            return ParsedType.Name;
+        }
+    }
+    public interface IStringParser
     {
-        return parser(str);
+        Type ParsedType { get; }
+        object ParseObject(string str);
+        string EncodeObject(object obj);
+
+        string GetUsageString();
     }
-}
-public abstract class StringParser<T> : IStringParser
-{
-    public Type ParsedType => typeof(T);
 
-    public abstract string Encode(T obj);
-
-    public abstract T Parse(string str);
-
-    public string EncodeObject(object obj)
+    public interface IStringParserProvider
     {
-        return Encode((T)obj);
+        IStringParser GetParser();
     }
-
-    public object ParseObject(string str)
-    {
-        return Parse(str);
-    }
-
-    public string GetUsageString()
-    {
-        return ParsedType.Name;
-    }
-}
-public interface IStringParser
-{
-    Type ParsedType { get; }
-    object ParseObject(string str);
-    string EncodeObject(object obj);
-
-    string GetUsageString();
-}
-
-public interface IStringParserProvider
-{
-    IStringParser GetParser();
 }

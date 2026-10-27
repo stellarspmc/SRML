@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 
-namespace SRML.SR.Templates;
-
-public interface ICreateComponent
+namespace SRML.SR.Templates
 {
-    void AddComponent(GameObject obj);
+    public interface ICreateComponent
+    {
+        void AddComponent(GameObject obj);
+    }
 }

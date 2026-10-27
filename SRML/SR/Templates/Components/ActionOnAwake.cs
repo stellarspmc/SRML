@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace SRML.SR.Templates.Components;
-
-public class ActionOnAwake : MonoBehaviour
+namespace SRML.SR.Templates.Components
 {
-    public List<string> actions;
-
-    public void Awake()
+    public class ActionOnAwake : MonoBehaviour
     {
-        foreach (var action in actions)
-            TemplateActions.RunAction(action, gameObject);
+        public List<string> actions;
+
+        public void Awake()
+        {
+            foreach (string action in actions)
+                TemplateActions.RunAction(action, gameObject);
+        }
     }
 }

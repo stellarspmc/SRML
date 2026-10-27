@@ -7,22 +7,24 @@ using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Doorstop;
-
-internal static class Entrypoint {
-    private static readonly Assembly[] Resolve = [.. Directory.GetFiles(Path.GetFullPath(@"SRML\Libs"), "*.dll").Select(Assembly.LoadFrom)];
-
-    public static void Start() => new Task(() =>
+namespace Doorstop
+{
+    internal class Entrypoint
     {
-        // I really hope this number is large enough to load successfully on all PCs
-        // CompanyLogoScene spends 1.5s fading in, 1s hold, 1.5s fading out
-        // so this will theoretically load Doorstop as soon as the logo fades out
-        Task.Delay(2750);
-        Debug.Log("Doorstop has successfully hooked.");
+        public static Assembly[] resolve = Directory.GetFiles(Path.GetFullPath(@"SRML\Libs"), "*.dll").Select(x => Assembly.LoadFrom(x)).ToArray();
 
-        AppDomain.CurrentDomain.AssemblyResolve += (_, y) => Resolve.FirstOrDefault(z => z.GetName() == new AssemblyName(y.Name));
+        public static void Start() => new Task(() =>
+        {
+            // I really hope this number is large enough to load successfully on all PCs
+            // CompanyLogoScene spends 1.5s fading in, 1s hold, 1.5s fading out
+            // so this will theoretically load Doorstop as soon as the logo fades out
+            Task.Delay(2750);
+            Debug.Log("Doorstop has succesfully hooked.");
 
-        new Harmony("SRMLInitializer").Patch(AccessTools.Method(typeof(StandaloneStartScreen), "Update"),
-            new HarmonyMethod(typeof(Main), "InitializeSRMLThenBeginLoad"));
-    }).Start();
+            AppDomain.CurrentDomain.AssemblyResolve += (x, y) => resolve.FirstOrDefault(z => z.GetName() == new AssemblyName(y.Name));
+
+            new Harmony("SRMLInitializer").Patch(AccessTools.Method(typeof(StandaloneStartScreen), "Update"),
+                new HarmonyMethod(typeof(Main), "InitializeSRMLThenBeginLoad"));
+        }).Start();
+    }
 }

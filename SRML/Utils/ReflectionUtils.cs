@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace SRML.Utils
@@ -9,7 +11,7 @@ namespace SRML.Utils
 
         public static Assembly GetRelevantAssembly()
         {
-            var trace = new StackTrace();
+            StackTrace trace = new StackTrace();
 
             var frames = trace.GetFrames();
             try // TODO: Clean this up, choose a better solution (check for non mod or srml dlls)

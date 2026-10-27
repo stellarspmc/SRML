@@ -1,39 +1,42 @@
 ﻿using HarmonyLib;
 using MonomiPark.SlimeRancher.DataModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using System.Text;
 using UnityEngine;
 
-namespace SRML.SR.SaveSystem.Patches;
-
-[HarmonyPatch(typeof(GameModel))]
-[HarmonyPatch("RegisterLandPlot")]
-public static class GameModelRegisterLandPlotPatch
+namespace SRML.SR.SaveSystem.Patches
 {
-    public static  IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
+    [HarmonyPatch(typeof(GameModel))]
+    [HarmonyPatch("RegisterLandPlot")]
+    public static class GameModelRegisterLandPlotPatch
     {
-        foreach(var v in instr)
+        public static  IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            if (v.opcode == OpCodes.Newobj)
+            foreach(var v in instr)
             {
-                yield return new CodeInstruction(OpCodes.Ldarg_2);
-                yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GameModelRegisterLandPlotPatch), "Replacement"));
-            }
-            else yield return v;
-        }
-    }
-    public static LandPlotModel Replacement(GameObject obj)
-    {
-        var landplot = obj.GetComponentInChildren<LandPlot>(true);
-        if (landplot)
-        {
-            var potentialNew = DataModelRegistry.landPlotOverrides.FirstOrDefault(x => x.Key(landplot.typeId));
-            if (potentialNew.Value != null)
-            {
-                return potentialNew.Value();
+                if (v.opcode == OpCodes.Newobj)
+                {
+                    yield return new CodeInstruction(OpCodes.Ldarg_2);
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GameModelRegisterLandPlotPatch), "Replacement"));
+                }
+                else yield return v;
             }
         }
-        return new LandPlotModel();
+        public static LandPlotModel Replacement(GameObject obj)
+        {
+            var landplot = obj.GetComponentInChildren<LandPlot>(true);
+            if (landplot)
+            {
+                var potentialNew = DataModelRegistry.landPlotOverrides.FirstOrDefault(x => x.Key(landplot.typeId));
+                if (potentialNew.Value != null)
+                {
+                    return potentialNew.Value();
+                }
+            }
+            return new LandPlotModel();
+        }
     }
 }

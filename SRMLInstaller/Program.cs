@@ -6,8 +6,7 @@ using System.Reflection;
 using Mono.Cecil;
 
 namespace SRMLInstaller {
-    internal class Program
-    {
+    internal class Program {
         // ReSharper disable once InconsistentNaming
         private const string SRML = "SRML.dll";
         private const string EmbeddedResourcePath = "SRMLInstaller.Libs.";
@@ -36,7 +35,7 @@ namespace SRMLInstaller {
                         if (patcher.IsPatched()) {
                             patched = true;
                             if (!vortexMode) {
-                                Console.Write($"Game is already patched! Would you like to uninstall? (selecting n will instead trigger an update) (y/n): ");
+                                Console.Write("Game is already patched! Would you like to uninstall? (selecting n will instead trigger an update) (y/n): ");
 
                                 poll_user:
                                 var response = Console.ReadLine();
@@ -142,7 +141,7 @@ namespace SRMLInstaller {
             Console.ReadKey();
         }
 
-        static MethodReference GetOnLoad(string path) {
+        private static MethodReference GetOnLoad(string path) {
             AssemblyDefinition def;
             try {
                 def = AssemblyDefinition.ReadAssembly(path);

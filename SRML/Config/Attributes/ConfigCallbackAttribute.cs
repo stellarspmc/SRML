@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.Config.Attributes;
-
-public class ConfigCallbackAttribute : Attribute
+namespace SRML.Config.Attributes
 {
-    public string methodName;
-
-    public ConfigCallbackAttribute(string methodName)
+    public class ConfigCallbackAttribute : Attribute
     {
-        this.methodName = methodName;
+        public string methodName;
+
+        public ConfigCallbackAttribute(string methodName)
+        {
+            this.methodName = methodName;
+        }
     }
 }

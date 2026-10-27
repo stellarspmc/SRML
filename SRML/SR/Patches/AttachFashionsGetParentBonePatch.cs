@@ -1,19 +1,21 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using UnityEngine;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(AttachFashions), "GetParentForSlot")]
-internal static class AttachFashionsGetParentBonePatch
+namespace SRML.SR.Patches
 {
-    public static bool Prefix(AttachFashions __instance, Fashion.Slot slot, ref Transform __result)
+    [HarmonyPatch(typeof(AttachFashions), "GetParentForSlot")]
+    internal static class AttachFashionsGetParentBonePatch
     {
-        if (Identifiable.IsSlime(Identifiable.GetId(__instance.gameObject))) return true;
-        if (FashionRegistry.slotAttachPoints.ContainsKey(slot))
+        public static bool Prefix(AttachFashions __instance, Fashion.Slot slot, ref Transform __result)
         {
-            __result = __instance.transform.Find(FashionRegistry.slotAttachPoints[slot].Item1);
-            return false;
+            if (Identifiable.IsSlime(Identifiable.GetId(__instance.gameObject))) return true;
+            if (FashionRegistry.slotAttachPoints.ContainsKey(slot))
+            {
+                __result = __instance.transform.Find(FashionRegistry.slotAttachPoints[slot].Item1);
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 }

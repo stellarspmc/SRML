@@ -1,17 +1,22 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 using HarmonyLib;
-namespace SRML.Patches;
-
-[HarmonyPatch]
-[HarmonyPatch(typeof(AutoSaveDirector))]
-internal static class SaveGameLoadPatch
+namespace SRML.Patches
 {
-    static MethodBase TargetMethod()
+    [HarmonyPatch]
+    [HarmonyPatch(typeof(AutoSaveDirector))]
+    internal static class SaveGameLoadPatch
     {
-        return typeof(AutoSaveDirector).GetMethod("PushSavedGame", BindingFlags.NonPublic | BindingFlags.Instance);
-    }
-    static void PostFix(AutoSaveDirector __instance)
-    {
-        // do something on save game loads
+        static MethodBase TargetMethod()
+        {
+            return typeof(AutoSaveDirector).GetMethod("PushSavedGame", BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+        static void PostFix(AutoSaveDirector __instance)
+        {
+            // do something on save game loads
+        }
     }
 }

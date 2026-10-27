@@ -3,16 +3,17 @@ using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Regions;
 using UnityEngine;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(ActorModel), MethodType.Constructor, 
-    new[] { typeof(long), typeof(Identifiable.Id), typeof(RegionRegistry.RegionSetId), typeof(Transform) } )]
-internal static class ActorModelResetRegionSetIdPatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(ActorModel __instance)
+    [HarmonyPatch(typeof(ActorModel), MethodType.Constructor, 
+        new[] { typeof(long), typeof(Identifiable.Id), typeof(RegionRegistry.RegionSetId), typeof(Transform) } )]
+    internal static class ActorModelResetRegionSetIdPatch
     {
-        if (SceneContext.Instance && !SceneContext.Instance.RegionRegistry.regionsTrees.ContainsKey(__instance.currRegionSetId) &&
-            !RegionSetRegistry.customTrees.ContainsKey(__instance.currRegionSetId))
-            __instance.currRegionSetId = MonomiPark.SlimeRancher.Regions.RegionRegistry.RegionSetId.HOME;
+        public static void Postfix(ActorModel __instance)
+        {
+            if (SceneContext.Instance && !SceneContext.Instance.RegionRegistry.regionsTrees.ContainsKey(__instance.currRegionSetId) &&
+                !RegionSetRegistry.customTrees.ContainsKey(__instance.currRegionSetId))
+                __instance.currRegionSetId = MonomiPark.SlimeRancher.Regions.RegionRegistry.RegionSetId.HOME;
+        }
     }
 }

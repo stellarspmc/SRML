@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.Config.Attributes;
-
-public class ConfigReloadAttribute : Attribute
+namespace SRML.Config.Attributes
 {
-    public ReloadMode Mode;
-    public ConfigReloadAttribute(ReloadMode mode)
+    public class ConfigReloadAttribute : Attribute
     {
-        Mode = mode;
+        public ReloadMode Mode;
+        public ConfigReloadAttribute(ReloadMode mode)
+        {
+            Mode = mode;
+        }
     }
 }

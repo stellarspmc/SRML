@@ -1,14 +1,15 @@
-﻿namespace SRML.SR.Utils.Debug;
-
-public enum MarkerType
+﻿namespace SRML.SR.Utils.Debug
 {
-    None,
-    SpawnPoint,
-    CrateSpawnPoint,
-    AnimalSpawnPoint,
-    SlimeSpawnPoint,
-    ResourceSpawnPoint,
-    Plot,
-    GadgetLocation,
-    DroneNode
+    public enum MarkerType
+    {
+        None,
+        SpawnPoint,
+        CrateSpawnPoint,
+        AnimalSpawnPoint,
+        SlimeSpawnPoint,
+        ResourceSpawnPoint,
+        Plot,
+        GadgetLocation,
+        DroneNode
+    }
 }

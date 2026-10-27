@@ -1,18 +1,22 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(StorageTypeExtensions))]
-[HarmonyPatch("GetContents")]
-internal static class StorageTypeExtensionsGetContentsPatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(SiloStorage.StorageType type,HashSet<Identifiable.Id> __result)
+    [HarmonyPatch(typeof(StorageTypeExtensions))]
+    [HarmonyPatch("GetContents")]
+    internal static class StorageTypeExtensionsGetContentsPatch
     {
-        if (!AmmoRegistry.siloPrefabs.ContainsKey(type)) return;
-        foreach(var v in AmmoRegistry.siloPrefabs[type])
+        public static void Postfix(SiloStorage.StorageType type,HashSet<Identifiable.Id> __result)
         {
-            __result.Add(v);
-        }   
+            if (!AmmoRegistry.siloPrefabs.ContainsKey(type)) return;
+            foreach(var v in AmmoRegistry.siloPrefabs[type])
+            {
+                __result.Add(v);
+            }   
+        }
     }
 }

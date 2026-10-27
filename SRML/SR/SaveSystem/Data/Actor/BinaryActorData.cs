@@ -1,38 +1,39 @@
 ﻿using System.IO;
 using MonomiPark.SlimeRancher.DataModel;
 
-namespace SRML.SR.SaveSystem.Data.Actor;
-
-class BinaryActorData<T> : CustomActorData<T> where T : ActorModel, ISerializableModel
+namespace SRML.SR.SaveSystem.Data.Actor
 {
-    private byte[] data;
-
-    public override void PullCustomModel(T model)
+    class BinaryActorData<T> : CustomActorData<T> where T : ActorModel, ISerializableModel
     {
-        using (var stream = new MemoryStream())
+        private byte[] data;
+
+        public override void PullCustomModel(T model)
         {
-            model.WriteData(new BinaryWriter(stream));
-            data = stream.GetBuffer();
+            using (var stream = new MemoryStream())
+            {
+                model.WriteData(new BinaryWriter(stream));
+                data = stream.GetBuffer();
+            }
         }
-    }
 
-    public override void PushCustomModel(T model)
-    {
-        using (var reader = new BinaryReader(new MemoryStream(data)))
+        public override void PushCustomModel(T model)
         {
-            model.LoadData(reader);
+            using (var reader = new BinaryReader(new MemoryStream(data)))
+            {
+                model.LoadData(reader);
+            }
         }
-    }
 
-    public override void LoadCustomData(BinaryReader reader)
-    {
-        var byteLength = reader.ReadInt32();
-        data = reader.ReadBytes(byteLength);
-    }
+        public override void LoadCustomData(BinaryReader reader)
+        {
+            int byteLength = reader.ReadInt32();
+            data = reader.ReadBytes(byteLength);
+        }
 
-    public override void WriteCustomData(BinaryWriter writer)
-    {
-        writer.Write(data.Length);
-        writer.Write(data);
+        public override void WriteCustomData(BinaryWriter writer)
+        {
+            writer.Write(data.Length);
+            writer.Write(data);
+        }
     }
 }

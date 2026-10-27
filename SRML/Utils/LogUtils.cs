@@ -1,35 +1,39 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
-namespace SRML.Utils;
-
-public static class LogUtils
+namespace SRML.Utils
 {
-    private static StringBuilder currentBuilder;
-
-    public static void OpenLogSession()
+    public static class LogUtils
     {
-        currentBuilder = new StringBuilder();
-    }
+        private static StringBuilder currentBuilder;
 
-    public static void Log(object b)
-    {
-        if (currentBuilder != null)
+        public static void OpenLogSession()
         {
-            currentBuilder.AppendLine(b.ToString());
+            currentBuilder = new StringBuilder();
         }
-        else
-        {
-            Debug.Log(b);
-        }
-    }
 
-    public static void CloseLogSession()
-    {
-        if (currentBuilder != null)
+        public static void Log(object b)
         {
-            Debug.Log(currentBuilder.ToString());
-            currentBuilder = null;
+            if (currentBuilder != null)
+            {
+                currentBuilder.AppendLine(b.ToString());
+            }
+            else
+            {
+                Debug.Log(b);
+            }
         }
-    }
 
+        public static void CloseLogSession()
+        {
+            if (currentBuilder != null)
+            {
+                Debug.Log(currentBuilder.ToString());
+                currentBuilder = null;
+            }
+        }
+
+    }
 }

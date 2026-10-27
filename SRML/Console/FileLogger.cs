@@ -1,73 +1,75 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System.Text.RegularExpressions;
 
-namespace SRML;
-
-/// <summary>
-/// The logger for the log file
-/// </summary>
-public static class FileLogger
+namespace SRML
 {
-    // THE LOG FILE
-    internal static string srmlLogFile = Path.Combine(Main.StorageProvider.SavePath(), "SRML/srml.log");
-
     /// <summary>
-    /// Initializes the file logger (run this before Console.Init)
+    /// The logger for the log file
     /// </summary>
-    internal static void Init()
+    public static class FileLogger
     {
-        if (!Directory.Exists(Path.GetDirectoryName(srmlLogFile)))
-            Directory.CreateDirectory(Path.GetDirectoryName(srmlLogFile));
+        // THE LOG FILE
+        internal static string srmlLogFile = Path.Combine(Main.StorageProvider.SavePath(), "SRML/srml.log");
 
-        if (File.Exists(srmlLogFile))
-            File.Delete(srmlLogFile);
+        /// <summary>
+        /// Initializes the file logger (run this before Console.Init)
+        /// </summary>
+        internal static void Init()
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(srmlLogFile)))
+                Directory.CreateDirectory(Path.GetDirectoryName(srmlLogFile));
 
-        File.Create(srmlLogFile).Close();
-    }
+            if (File.Exists(srmlLogFile))
+                File.Delete(srmlLogFile);
 
-    /// <summary>
-    /// Logs a info message
-    /// </summary>
-    /// <param name="message">Message to log</param>
-    [Obsolete("Use ConsoleInstance.LogToFile instead!")]
-    public static void Log(string message)
-    {
-        LogEntry(LogType.Log, message, Console.Console.GetLogName());
-    }
+            File.Create(srmlLogFile).Close();
+        }
 
-    /// <summary>
-    /// Logs a warning message
-    /// </summary>
-    /// <param name="message">Message to log</param>
-    [Obsolete("Use ConsoleInstance.LogErrorToFile instead!")]
-    public static void LogWarning(string message)
-    {
-        LogEntry(LogType.Warning, message, Console.Console.GetLogName());
-    }
+        /// <summary>
+        /// Logs a info message
+        /// </summary>
+        /// <param name="message">Message to log</param>
+        [Obsolete("Use ConsoleInstance.LogToFile instead!")]
+        public static void Log(string message)
+        {
+            LogEntry(LogType.Log, message, Console.Console.GetLogName());
+        }
 
-    /// <summary>
-    /// Logs an error message
-    /// </summary>
-    /// <param name="message">Message to log</param>
-    [Obsolete("Use ConsoleInstance.LogErrorToFile instead!")]
-    public static void LogError(string message)
-    {
-        LogEntry(LogType.Error, message, Console.Console.GetLogName());
-    }
+        /// <summary>
+        /// Logs a warning message
+        /// </summary>
+        /// <param name="message">Message to log</param>
+        [Obsolete("Use ConsoleInstance.LogErrorToFile instead!")]
+        public static void LogWarning(string message)
+        {
+            LogEntry(LogType.Warning, message, Console.Console.GetLogName());
+        }
 
-    private static string TypeToText(LogType logType)
-    {
-        if (logType == LogType.Error || logType == LogType.Exception)
-            return "ERRO";
+        /// <summary>
+        /// Logs an error message
+        /// </summary>
+        /// <param name="message">Message to log</param>
+        [Obsolete("Use ConsoleInstance.LogErrorToFile instead!")]
+        public static void LogError(string message)
+        {
+            LogEntry(LogType.Error, message, Console.Console.GetLogName());
+        }
 
-        return logType == LogType.Warning ? "WARN" : "INFO";
-    }
+        private static string TypeToText(LogType logType)
+        {
+            if (logType == LogType.Error || logType == LogType.Exception)
+                return "ERRO";
 
-    internal static void LogEntry(LogType logType, string message, string name)
-    {
-        using (var writer = File.AppendText(srmlLogFile))
-            writer.WriteLine($"[{DateTime.Now.ToString("HH:mm:ss")}] [{name}] [{TypeToText(logType)}] {Regex.Replace(message, @"<material[^>]*>|<\/material>|<size[^>]*>|<\/size>|<quad[^>]*>|<b>|<\/b>|<color=[^>]*>|<\/color>|<i>|<\/i>", "")}");
+            return logType == LogType.Warning ? "WARN" : "INFO";
+        }
+
+        internal static void LogEntry(LogType logType, string message, string name)
+        {
+            using (StreamWriter writer = File.AppendText(srmlLogFile))
+                writer.WriteLine($"[{DateTime.Now.ToString("HH:mm:ss")}] [{name}] [{TypeToText(logType)}] {Regex.Replace(message, @"<material[^>]*>|<\/material>|<size[^>]*>|<\/size>|<quad[^>]*>|<b>|<\/b>|<color=[^>]*>|<\/color>|<i>|<\/i>", "")}");
+        }
     }
 }

@@ -1,17 +1,20 @@
 ﻿using HarmonyLib;
 using InControl;
 using MonomiPark.SlimeRancher;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(SavedProfile))]
-[HarmonyPatch("PullBindings")]
-internal static class SavedProfilePullBindingsPatch
+namespace SRML.SR.Patches
 {
-    public static void Prefix(ref IEnumerable<PlayerAction> actions)
+    [HarmonyPatch(typeof(SavedProfile))]
+    [HarmonyPatch("PullBindings")]
+    internal static class SavedProfilePullBindingsPatch
     {
-        actions = actions.Where(x => !BindingRegistry.IsModdedAction(x));
+        public static void Prefix(ref IEnumerable<PlayerAction> actions)
+        {
+            actions = actions.Where(x => !BindingRegistry.IsModdedAction(x));
+        }
     }
 }

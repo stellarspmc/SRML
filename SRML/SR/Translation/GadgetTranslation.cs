@@ -1,18 +1,24 @@
-﻿namespace SRML.SR.Translation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-public class GadgetTranslation : PediaTranslation<Gadget.Id>
+namespace SRML.SR.Translation
 {
-    public override string PediaType => "gadget";
-    public GadgetTranslation(Gadget.Id id)
+    public class GadgetTranslation : PediaTranslation<Gadget.Id>
     {
-        this.Key = id;
+        public override string PediaType => "gadget";
+        public GadgetTranslation(Gadget.Id id)
+        {
+            this.Key = id;
+        }
     }
-}
 
-public static class GadgetTranslationExtensions
-{
-    public static GadgetTranslation GetTranslation(this Gadget.Id id)
+    public static class GadgetTranslationExtensions
     {
-        return new GadgetTranslation(id);
+        public static GadgetTranslation GetTranslation(this Gadget.Id id)
+        {
+            return new GadgetTranslation(id);
+        }
     }
 }

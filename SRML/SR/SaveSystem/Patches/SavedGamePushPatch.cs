@@ -2,16 +2,20 @@
 using MonomiPark.SlimeRancher;
 using MonomiPark.SlimeRancher.DataModel;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.SaveSystem.Patches;
-
-[HarmonyPatch(typeof(SavedGame))]
-[HarmonyPatch("Push",new Type[]{typeof(GameModel)})]
-internal static class SavedGamePushPatch
+namespace SRML.SR.SaveSystem.Patches
 {
-    public static void Postfix(GameModel gameModel)
+    [HarmonyPatch(typeof(SavedGame))]
+    [HarmonyPatch("Push",new Type[]{typeof(GameModel)})]
+    internal static class SavedGamePushPatch
     {
-        //ExtendedData.CullIfNotValid(gameModel);
-        PersistentAmmoManager.SyncAll();
+        public static void Postfix(GameModel gameModel)
+        {
+            //ExtendedData.CullIfNotValid(gameModel);
+            PersistentAmmoManager.SyncAll();
+        }
     }
 }

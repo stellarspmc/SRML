@@ -3,7 +3,7 @@
     <AssemblyName>SampleMod</AssemblyName>
     <RootNamespace>SampleMod</RootNamespace>
     <Authors>Your_Name</Authors>
-    <TargetFramework>net4.7.2</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>1.0.0.0</Version>
   </PropertyGroup>
@@ -30,5 +30,10 @@
     <None Update="modinfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SRML.Editor\SRML.Editor.csproj" />
+    <ProjectReference Include="..\SRML\SRML.csproj" />
   </ItemGroup>
 </Project>

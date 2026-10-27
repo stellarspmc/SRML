@@ -1,8 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.SaveSystem.Data.Partial;
-
-interface IDictionaryProvider
+namespace SRML.SR.SaveSystem.Data.Partial
 {
-    IDictionary InternalDictionary { get; }
+    interface IDictionaryProvider
+    {
+        IDictionary InternalDictionary { get; }
+    }
 }

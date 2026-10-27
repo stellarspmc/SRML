@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.Config.Attributes;
-
-public class ConfigCommentAttribute : Attribute
+namespace SRML.Config.Attributes
 {
-    public string Comment;
-    public ConfigCommentAttribute(string comment)
+    public class ConfigCommentAttribute : Attribute
     {
-        Comment = comment;
+        public string Comment;
+        public ConfigCommentAttribute(string comment)
+        {
+            Comment = comment;
+        }
     }
 }

@@ -1,19 +1,25 @@
-﻿namespace SRML.SR.Translation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-public class PersonalUpgradeTranslation : UpgradeTranslation<PlayerState.Upgrade>
+namespace SRML.SR.Translation
 {
-    public override string UpgradeType => "personal";
-    public PersonalUpgradeTranslation(PlayerState.Upgrade upgrade)
+    public class PersonalUpgradeTranslation : UpgradeTranslation<PlayerState.Upgrade>
     {
-        this.Key = upgrade;
+        public override string UpgradeType => "personal";
+        public PersonalUpgradeTranslation(PlayerState.Upgrade upgrade)
+        {
+            this.Key = upgrade;
+        }
+
+
     }
-
-
-}
-public static class PersonalUpgradeExtension
-{
-    public static PersonalUpgradeTranslation GetTranslation(this PlayerState.Upgrade upgrade)
+    public static class PersonalUpgradeExtension
     {
-        return new PersonalUpgradeTranslation(upgrade);
+        public static PersonalUpgradeTranslation GetTranslation(this PlayerState.Upgrade upgrade)
+        {
+            return new PersonalUpgradeTranslation(upgrade);
+        }
     }
 }

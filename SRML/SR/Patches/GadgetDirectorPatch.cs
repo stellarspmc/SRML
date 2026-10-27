@@ -1,13 +1,18 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(GadgetDirector))]
-[HarmonyPatch("IsRefineryResource")]
-internal static class GadgetDirectorPatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(ref bool __result,Identifiable.Id id)
+    [HarmonyPatch(typeof(GadgetDirector))]
+    [HarmonyPatch("IsRefineryResource")]
+    internal static class GadgetDirectorPatch
     {
-        __result = __result || AmmoRegistry.customRefineryResources.Contains(id);
+        public static void Postfix(ref bool __result,Identifiable.Id id)
+        {
+            __result = __result || AmmoRegistry.customRefineryResources.Contains(id);
+        }
     }
 }

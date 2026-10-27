@@ -1,27 +1,29 @@
 ﻿using HarmonyLib;
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(CorporatePartnerUI), "BuyLevel")]
-internal static class CorporatePartnerBuyPatch
+namespace SRML.SR.Patches
 {
-    public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    [HarmonyPatch(typeof(CorporatePartnerUI), "BuyLevel")]
+    internal static class CorporatePartnerBuyPatch
     {
-        var code = new List<CodeInstruction>(instructions);
-        for (var i = 0; i < code.Count; i++)
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
-            if (code[i].opcode == OpCodes.Ldarg_2 && code[i + 1].opcode == OpCodes.Ldc_I4_5)
+            List<CodeInstruction> code = new List<CodeInstruction>(instructions);
+            for (int i = 0; i < code.Count; i++)
             {
-                code.InsertRange(i, new List<CodeInstruction>()
+                if (code[i].opcode == OpCodes.Ldarg_2 && code[i + 1].opcode == OpCodes.Ldc_I4_5)
                 {
-                    new CodeInstruction(OpCodes.Ldarg_1),
-                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(SRCallbacks), "OnCorporateLevelBoughtCallback"))
-                });
-                break;
+                    code.InsertRange(i, new List<CodeInstruction>()
+                    {
+                        new CodeInstruction(OpCodes.Ldarg_1),
+                        new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(SRCallbacks), "OnCorporateLevelBoughtCallback"))
+                    });
+                    break;
+                }
             }
+            return code;
         }
-        return code;
     }
 }

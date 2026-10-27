@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Reflection;
 
 /// <summary>
 /// Contains extension methods for <see cref="object"/>
@@ -37,7 +38,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var method = obj.GetType().GetInstanceMethod(name, list.Select(o => o.GetType()).ToArray());
+            MethodInfo method = obj.GetType().GetInstanceMethod(name, list.Select(o => o.GetType()).ToArray());
 
             if (method == null) return null;
 
@@ -62,7 +63,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var method = obj.GetType().GetInstanceMethod(name, list.Select(o => o.GetType()).ToArray());
+            MethodInfo method = obj.GetType().GetInstanceMethod(name, list.Select(o => o.GetType()).ToArray());
 
             if (method == null) return default;
 
@@ -80,9 +81,9 @@ public static class ObjectExtensions
     {
         if (e.Message.Contains(MIDDLE))
         {
-            var j = e.Message.Substring(15).Replace("'", "");
-            var p = j.Substring(0, j.Length - 1);
-            var i = p.IndexOf(MIDDLE);
+            string j = e.Message.Substring(15).Replace("'", "");
+            string p = j.Substring(0, j.Length - 1);
+            int i = p.IndexOf(MIDDLE);
             UnityEngine.Debug.LogWarning($"Cannot set {what} because the value ({p.Substring(0, i)}) cannot be converted to the {what} type ({p.Substring(i + MIDDLE.Length)}).");
         }
     }
@@ -97,7 +98,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var field = obj.GetType().GetInstanceField(name);
+            FieldInfo field = obj.GetType().GetInstanceField(name);
 
             if (field == null) return;
 
@@ -120,7 +121,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var field = obj.GetType().GetInstanceField(name);
+            FieldInfo field = obj.GetType().GetInstanceField(name);
 
             if (field == null) return;
 
@@ -145,7 +146,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var field = obj.GetType().GetInstanceField(name);
+            FieldInfo field = obj.GetType().GetInstanceField(name);
 
             if (field == null) return default;
 
@@ -169,7 +170,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var field = obj.GetType().GetInstanceField(name);
+            FieldInfo field = obj.GetType().GetInstanceField(name);
 
             if (field == null) return default;
 
@@ -194,7 +195,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var field = obj.GetType().GetInstanceProperty(name);
+            PropertyInfo field = obj.GetType().GetInstanceProperty(name);
 
             if (field == null) return;
 
@@ -224,7 +225,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var field = obj.GetType().GetInstanceProperty(name);
+            PropertyInfo field = obj.GetType().GetInstanceProperty(name);
 
             if (field == null) return;
 
@@ -253,7 +254,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var field = obj.GetType().GetInstanceProperty(name);
+            PropertyInfo field = obj.GetType().GetInstanceProperty(name);
 
             if (field == null) return default;
 
@@ -278,7 +279,7 @@ public static class ObjectExtensions
     {
         try
         {
-            var field = obj.GetType().GetInstanceProperty(name);
+            PropertyInfo field = obj.GetType().GetInstanceProperty(name);
 
             if (field == null) return default;
 
@@ -306,7 +307,7 @@ public static class UnityObjectExtensions
 {
     public static T Instantiate<T>(this T original, bool keepOriginalName = false) where T : UnityEngine.Object
     {
-        var clone = UnityEngine.Object.Instantiate(original);
+        T clone = UnityEngine.Object.Instantiate(original);
         if (keepOriginalName)
             clone.name = original.name;
         return clone;
@@ -314,7 +315,7 @@ public static class UnityObjectExtensions
 
     public static T Instantiate<T>(this T original, UnityEngine.Transform parent, bool keepOriginalName = false) where T : UnityEngine.Object
     {
-        var clone = UnityEngine.Object.Instantiate(original, parent);
+        T clone = UnityEngine.Object.Instantiate(original, parent);
         if (keepOriginalName)
             clone.name = original.name;
         return clone;
@@ -322,7 +323,7 @@ public static class UnityObjectExtensions
 
     public static T Instantiate<T>(this T original, UnityEngine.Transform parent, bool worldPositionStays, bool keepOriginalName = false) where T : UnityEngine.Object
     {
-        var clone = UnityEngine.Object.Instantiate(original, parent, worldPositionStays);
+        T clone = UnityEngine.Object.Instantiate(original, parent, worldPositionStays);
         if (keepOriginalName)
             clone.name = original.name;
         return clone;
@@ -330,7 +331,7 @@ public static class UnityObjectExtensions
 
     public static T Instantiate<T>(this T original, UnityEngine.Vector3 position, UnityEngine.Quaternion rotation, bool keepOriginalName = false) where T : UnityEngine.Object
     {
-        var clone = UnityEngine.Object.Instantiate(original, position, rotation);
+        T clone = UnityEngine.Object.Instantiate(original, position, rotation);
         if (keepOriginalName)
             clone.name = original.name;
         return clone;
@@ -338,7 +339,7 @@ public static class UnityObjectExtensions
 
     public static T Instantiate<T>(this T original, UnityEngine.Vector3 position, UnityEngine.Quaternion rotation, UnityEngine.Transform parent, bool keepOriginalName = false) where T : UnityEngine.Object
     {
-        var clone = UnityEngine.Object.Instantiate(original, position, rotation, parent);
+        T clone = UnityEngine.Object.Instantiate(original, position, rotation, parent);
         if (keepOriginalName)
             clone.name = original.name;
         return clone;
@@ -355,8 +356,8 @@ public static class UnityObjectExtensions
     /// </summary>
     public static T CloneInstance<T>(this T obj) where T : UnityEngine.ScriptableObject
     {
-        var newObj = UnityEngine.ScriptableObject.CreateInstance<T>();
-        foreach (var field in typeof(T).GetInstanceFields())
+        T newObj = UnityEngine.ScriptableObject.CreateInstance<T>();
+        foreach (FieldInfo field in typeof(T).GetInstanceFields())
             field.SetValue(newObj, field.GetValue(obj));
         return newObj;
     }

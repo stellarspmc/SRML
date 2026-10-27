@@ -1,14 +1,15 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SRML.Utils;
-
-public static class ScriptableObjectUtils
+namespace SRML.Utils
 {
-    public static T CreateScriptable<T>(Action<T> constructor = null) where T : ScriptableObject
+    public static class ScriptableObjectUtils
     {
-        var s = ScriptableObject.CreateInstance<T>();
-        constructor?.Invoke(s);
-        return s;
+        public static T CreateScriptable<T>(Action<T> constructor = null) where T : ScriptableObject
+        {
+            var s = ScriptableObject.CreateInstance<T>();
+            constructor?.Invoke(s);
+            return s;
+        }
     }
 }

@@ -1,25 +1,30 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.SaveSystem;
-
-public abstract class VersionedSerializable : IVersionedSerializable
+namespace SRML.SR.SaveSystem
 {
-    public abstract int LatestVersion { get; }
-
-    public int Version { get; protected set; }
-
-    public virtual void Read(BinaryReader reader)
+    public abstract class VersionedSerializable : IVersionedSerializable
     {
-        Version = reader.ReadInt32();
-        ReadData(reader);
-    }
+        public abstract int LatestVersion { get; }
 
-    public virtual void Write(BinaryWriter writer)
-    {
-        writer.Write(LatestVersion);
-        WriteData(writer);
-    }
+        public int Version { get; protected set; }
 
-    public abstract void ReadData(BinaryReader reader);
-    public abstract void WriteData(BinaryWriter writer);
+        public virtual void Read(BinaryReader reader)
+        {
+            Version = reader.ReadInt32();
+            ReadData(reader);
+        }
+
+        public virtual void Write(BinaryWriter writer)
+        {
+            writer.Write(LatestVersion);
+            WriteData(writer);
+        }
+
+        public abstract void ReadData(BinaryReader reader);
+        public abstract void WriteData(BinaryWriter writer);
+    }
 }

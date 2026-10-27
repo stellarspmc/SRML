@@ -1,19 +1,23 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(PlayerState))]
-[HarmonyPatch("Reset")]
-internal static class PlayerStateResetPatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(PlayerState __instance)
+    [HarmonyPatch(typeof(PlayerState))]
+    [HarmonyPatch("Reset")]
+    internal static class PlayerStateResetPatch
     {
-        foreach (var v in AmmoRegistry.inventoryPrefabsToPatch.Where(x => x.Key != PlayerState.AmmoMode.DEFAULT))
+        public static void Postfix(PlayerState __instance)
         {
-            foreach (var id in v.Value)
+            foreach (var v in AmmoRegistry.inventoryPrefabsToPatch.Where((x) => x.Key != PlayerState.AmmoMode.DEFAULT))
             {
-                __instance.ammoDict[v.Key].potentialAmmo.Add(id);
+                foreach (var id in v.Value)
+                {
+                    __instance.ammoDict[v.Key].potentialAmmo.Add(id);
+                }
             }
         }
     }

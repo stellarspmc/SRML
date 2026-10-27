@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace SRML.SR.Templates.Components;
-
-public class ActionOnStart : MonoBehaviour
+namespace SRML.SR.Templates.Components
 {
-    public List<string> actions;
-
-    public void Start()
+    public class ActionOnStart : MonoBehaviour
     {
-        foreach (var action in actions)
-            TemplateActions.RunAction(action, gameObject);
+        public List<string> actions;
+
+        public void Start()
+        {
+            foreach (string action in actions)
+                TemplateActions.RunAction(action, gameObject);
+        }
     }
 }

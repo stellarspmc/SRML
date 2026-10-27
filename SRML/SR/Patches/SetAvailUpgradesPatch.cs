@@ -1,17 +1,22 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using HarmonyLib;
 using MonomiPark.SlimeRancher.DataModel;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(PlayerModel))]
-[HarmonyPatch("SetAvailUpgrades")]
-internal static class SetAvailUpgradesPatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(PlayerModel __instance)
+    [HarmonyPatch(typeof(PlayerModel))]
+    [HarmonyPatch("SetAvailUpgrades")]
+    internal static class SetAvailUpgradesPatch
     {
-        foreach (var v in PersonalUpgradeRegistry.moddedLockers)
+        public static void Postfix(PlayerModel __instance)
         {
-            if (v.Value == null && !__instance.availUpgrades.Contains(v.Key)) __instance.availUpgrades.Add(v.Key);
+            foreach (var v in PersonalUpgradeRegistry.moddedLockers)
+            {
+                if (v.Value == null && !__instance.availUpgrades.Contains(v.Key)) __instance.availUpgrades.Add(v.Key);
+            }
         }
     }
 }

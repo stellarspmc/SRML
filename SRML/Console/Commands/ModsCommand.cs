@@ -1,27 +1,31 @@
-﻿namespace SRML.Console.Commands;
+﻿using System;
+using SRML.Console;
 
-/// <summary>
-/// A command to display all mods
-/// </summary>
-public class ModsCommand : ConsoleCommand
+namespace SRML.Console.Commands
 {
-	public override string ID { get; } = "mods";
-	public override string Usage { get; } = "mods";
-	public override string Description { get; } = "Displays all mods loaded";
-
-	public override bool Execute(string[] args)
+	/// <summary>
+	/// A command to display all mods
+	/// </summary>
+	public class ModsCommand : ConsoleCommand
 	{
-		if (args != null)
+		public override string ID { get; } = "mods";
+		public override string Usage { get; } = "mods";
+		public override string Description { get; } = "Displays all mods loaded";
+
+		public override bool Execute(string[] args)
 		{
-			Console.Instance.LogError($"The '<color=white>{ID}</color>' command takes no arguments");
-			return false;
+			if (args != null)
+			{
+				Console.Instance.LogError($"The '<color=white>{ID}</color>' command takes no arguments");
+				return false;
+			}
+
+			Console.Instance.Log("<color=cyan>List of Mods Loaded:</color>");
+
+			foreach (string line in ConsoleWindow.modsText.Split('\n'))
+				Console.Instance.Log(line);
+
+			return true;
 		}
-
-		Console.Instance.Log("<color=cyan>List of Mods Loaded:</color>");
-
-		foreach (var line in ConsoleWindow.modsText.Split('\n'))
-			Console.Instance.Log(line);
-
-		return true;
 	}
 }

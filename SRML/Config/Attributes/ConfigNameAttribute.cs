@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.Config.Attributes;
-
-public class ConfigNameAttribute : Attribute
+namespace SRML.Config.Attributes
 {
-    public string Name;
-    public ConfigNameAttribute(string name)
+    public class ConfigNameAttribute : Attribute
     {
-        Name = name;
+        public string Name;
+        public ConfigNameAttribute(string name)
+        {
+            Name = name;
+        }
     }
 }

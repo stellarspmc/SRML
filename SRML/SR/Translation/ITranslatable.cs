@@ -1,7 +1,13 @@
-﻿namespace SRML.SR.Translation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-interface ITranslatable<T>
+namespace SRML.SR.Translation
 {
-    T Key { get; }
-    string StringKey { get; }
+    interface ITranslatable<T>
+    {
+        T Key { get; }
+        string StringKey { get; }
+    }
 }

@@ -1,14 +1,15 @@
 ﻿using HarmonyLib;
 using SRML.SR.Utils;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(SlimeDiet), "RefreshEatMap")]
-internal class SlimeDietRefreshEatMapAddExtrasPatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(SlimeDiet __instance, SlimeDefinition definition)
+    [HarmonyPatch(typeof(SlimeDiet), "RefreshEatMap")]
+    internal class SlimeDietRefreshEatMapAddExtrasPatch
     {
-        if (SlimeExtensions.extraEatEntries.ContainsKey(definition.IdentifiableId))
-            __instance.EatMap.AddRange(SlimeExtensions.extraEatEntries[definition.IdentifiableId]);
+        public static void Postfix(SlimeDiet __instance, SlimeDefinition definition)
+        {
+            if (SlimeExtensions.extraEatEntries.ContainsKey(definition.IdentifiableId))
+                __instance.EatMap.AddRange(SlimeExtensions.extraEatEntries[definition.IdentifiableId]);
+        }
     }
 }

@@ -1,10 +1,18 @@
-﻿namespace SRML.SR.Patches;
+﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
 
-//[HarmonyPatch(typeof(SRInput), MethodType.Constructor)]
-internal static class SRInputConstructorPatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(SRInput __instance)
+    //[HarmonyPatch(typeof(SRInput), MethodType.Constructor)]
+    internal static class SRInputConstructorPatch
     {
-        //foreach (var v in BindingRegistry.precreators) v(__instance.actions);
+        public static void Postfix(SRInput __instance)
+        {
+            //foreach (var v in BindingRegistry.precreators) v(__instance.actions);
+        }
     }
 }

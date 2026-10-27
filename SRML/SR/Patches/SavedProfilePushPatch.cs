@@ -2,15 +2,20 @@
 using MonomiPark.SlimeRancher;
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(SavedProfile))]
-[HarmonyPatch("PushOptions")]
-internal static class SavedProfilePushPatch
+namespace SRML.SR.Patches
 {
-    public static void Prefix(OptionsV11 options)
+    [HarmonyPatch(typeof(SavedProfile))]
+    [HarmonyPatch("PushOptions")]
+    internal static class SavedProfilePushPatch
     {
-        OptionsHandler.Push(options);
+        public static void Prefix(OptionsV11 options)
+        {
+            OptionsHandler.Push(options);
+        }
     }
 }

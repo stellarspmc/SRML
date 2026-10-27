@@ -1,19 +1,25 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using HarmonyLib;
 using SRML.SR.SaveSystem.Data.Ammo;
+using UnityEngine;
 
-namespace SRML.SR.SaveSystem.Patches;
-
-[HarmonyPatch(typeof(Ammo))]
-[HarmonyPatch("DecrementSelectedAmmo")]
-internal static class DecrementSelectedAmmoPatch
+namespace SRML.SR.SaveSystem.Patches
 {
-    public static void Postfix(Ammo __instance, int amount)
+    [HarmonyPatch(typeof(Ammo))]
+    [HarmonyPatch("DecrementSelectedAmmo")]
+    internal static class DecrementSelectedAmmoPatch
     {
-        if (AmmoIdentifier.TryGetIdentifier(__instance, out var identifier))
+        public static void Postfix(Ammo __instance, int amount)
         {
-            if (PersistentAmmoManager.HasPersistentAmmo(identifier))
+            if (AmmoIdentifier.TryGetIdentifier(__instance, out var identifier))
             {
-                PersistentAmmoManager.OnAmmoDecrement(identifier,__instance.selectedAmmoIdx,amount);
+                if (PersistentAmmoManager.HasPersistentAmmo(identifier))
+                {
+                    PersistentAmmoManager.OnAmmoDecrement(identifier,__instance.selectedAmmoIdx,amount);
+                }
             }
         }
     }

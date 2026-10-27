@@ -18,15 +18,15 @@ public static class LookupDirectorExtension
 
 	public static GameObject GetLargoPrefab(this LookupDirector director, Identifiable.Id slimeA, Identifiable.Id slimeB)
 	{
-		var largo = Identifiable.Id.NONE;
+		Identifiable.Id largo = Identifiable.Id.NONE;
 
-		var nameA = slimeA.ToString().Replace("_SLIME", "");
-		var nameB = slimeB.ToString().Replace("_SLIME", "");
+		string nameA = slimeA.ToString().Replace("_SLIME", "");
+		string nameB = slimeB.ToString().Replace("_SLIME", "");
 
-		var largoA = $"{nameA}_{nameB}_LARGO";
-		var largoB = $"{nameB}_{nameA}_LARGO";
+		string largoA = $"{nameA}_{nameB}_LARGO";
+		string largoB = $"{nameB}_{nameA}_LARGO";
 
-		var result = Enum.Parse(typeof(Identifiable.Id), largoA) ?? Enum.Parse(typeof(Identifiable.Id), largoB);
+		object result = Enum.Parse(typeof(Identifiable.Id), largoA) ?? Enum.Parse(typeof(Identifiable.Id), largoB);
 
 		if (result != null)
 			largo = (Identifiable.Id)result;
@@ -43,8 +43,8 @@ public static class LookupDirectorExtension
 	// Get IDs Methods
 	public static List<Identifiable.Id> GetSlimeIDs(this LookupDirector director, params Identifiable.Id[] exclusions)
 	{
-		var result = new List<Identifiable.Id>();
-		var exclude = new List<Identifiable.Id>(exclusions);
+		List<Identifiable.Id> result = new List<Identifiable.Id>();
+		List<Identifiable.Id> exclude = new List<Identifiable.Id>(exclusions);
 
 		foreach (Identifiable.Id id in Enum.GetValues(typeof(Identifiable.Id)))
 		{
@@ -63,13 +63,13 @@ public static class LookupDirectorExtension
 	// Check Methods
 	public static bool LargoExists(this LookupDirector director, Identifiable.Id slimeA, Identifiable.Id slimeB)
 	{
-		var nameA = slimeA.ToString().Replace("_SLIME", "");
-		var nameB = slimeB.ToString().Replace("_SLIME", "");
+		string nameA = slimeA.ToString().Replace("_SLIME", "");
+		string nameB = slimeB.ToString().Replace("_SLIME", "");
 
-		var largoA = $"{nameA}_{nameB}_LARGO";
-		var largoB = $"{nameB}_{nameA}_LARGO";
+		string largoA = $"{nameA}_{nameB}_LARGO";
+		string largoB = $"{nameB}_{nameA}_LARGO";
 
-		var result = Enum.Parse(typeof(Identifiable.Id), largoA) ?? Enum.Parse(typeof(Identifiable.Id), largoB);
+		object result = Enum.Parse(typeof(Identifiable.Id), largoA) ?? Enum.Parse(typeof(Identifiable.Id), largoB);
 
 		return result != null;
 	}
@@ -77,12 +77,12 @@ public static class LookupDirectorExtension
 	// Largo Creation System
 	public static List<Identifiable.Id> MakeLargos(this LookupDirector director, Identifiable.Id slimeA, Action<SlimeDefinition> extraLargoBehaviour = null, Predicate<Identifiable.Id> canBeTarr = null, Predicate<Identifiable.Id> forceLargo = null)
 	{
-		var largoIDs = new List<Identifiable.Id>();
+		List<Identifiable.Id> largoIDs = new List<Identifiable.Id>();
 
-		foreach (var id in GameContext.Instance.LookupDirector.GetSlimeIDs(slimeA))
+		foreach (Identifiable.Id id in GameContext.Instance.LookupDirector.GetSlimeIDs(slimeA))
 			largoIDs.Add(director.CraftLargo(slimeA, id, extraLargoBehaviour, canBeTarr, forceLargo));
 
-		largoIDs.RemoveAll(id => id == Identifiable.Id.NONE);
+		largoIDs.RemoveAll((id) => id == Identifiable.Id.NONE);
 
 		return largoIDs;
 	}
@@ -92,28 +92,28 @@ public static class LookupDirectorExtension
 		if (director.LargoExists(slimeA, slimeB))
 			return Identifiable.Id.NONE;
 
-		var prefabName = "slime" +
+		string prefabName = "slime" +
 			slimeA.ToString().Replace("_SLIME", "").ToUpperInvariant()[0] + slimeA.ToString().Replace("_SLIME", "").ToLowerInvariant().Substring(1) +
 			slimeB.ToString().Replace("_SLIME", "").ToUpperInvariant()[0] + slimeB.ToString().Replace("_SLIME", "").ToLowerInvariant().Substring(1);
 
-		var name = slimeA.ToString().Replace("_SLIME", "") + slimeB.ToString().Replace("_SLIME", "") + "_LARGO";
-		var largoID = IdentifiableRegistry.CreateIdentifiableId(EnumPatcher.GetFirstFreeValue(typeof(Identifiable.Id)), name);
+		string name = slimeA.ToString().Replace("_SLIME", "") + slimeB.ToString().Replace("_SLIME", "") + "_LARGO";
+		Identifiable.Id largoID = IdentifiableRegistry.CreateIdentifiableId(EnumPatcher.GetFirstFreeValue(typeof(Identifiable.Id)), name);
 
-		var defs = GameContext.Instance.SlimeDefinitions;
+		SlimeDefinitions defs = GameContext.Instance.SlimeDefinitions;
 
-		var curr = defs.GetSlimeByIdentifiableId(slimeA);
-		var other = defs.GetSlimeByIdentifiableId(slimeB);
+		SlimeDefinition curr = defs.GetSlimeByIdentifiableId(slimeA);
+		SlimeDefinition other = defs.GetSlimeByIdentifiableId(slimeB);
 
-		var largofyState = curr.CanLargofy;
+		bool largofyState = curr.CanLargofy;
 		curr.CanLargofy = true;
 
 		if (!other.CanLargofy && !(forceLargo?.Invoke(slimeB) ?? false))
 			return Identifiable.Id.NONE;
 
-		var largofyStateB = other.CanLargofy;
+		bool largofyStateB = other.CanLargofy;
 		other.CanLargofy = true;
 
-		var largoDef = defs.GetLargoByBaseSlimes(curr, other);
+		SlimeDefinition largoDef = defs.GetLargoByBaseSlimes(curr, other);
 		largoDef.IdentifiableId = largoID;
 
 		curr.CanLargofy = largofyState;
@@ -121,14 +121,14 @@ public static class LookupDirectorExtension
 
 		if (!(canBeTarr?.Invoke(slimeB) ?? true))
 		{
-			largoDef.Diet.EatMap.RemoveAll(entry => entry.becomesId == Identifiable.Id.TARR_SLIME);
-			largoDef.Diet.EatMap.RemoveAll(entry => entry.becomesId == Identifiable.Id.GLITCH_TARR_SLIME);
+			largoDef.Diet.EatMap.RemoveAll((entry) => entry.becomesId == Identifiable.Id.TARR_SLIME);
+			largoDef.Diet.EatMap.RemoveAll((entry) => entry.becomesId == Identifiable.Id.GLITCH_TARR_SLIME);
 		}
 
 		extraLargoBehaviour?.Invoke(largoDef);
 
-		var largoTemplate = new SlimeTemplate(prefabName, largoDef).SetVacSize(Vacuumable.Size.LARGE)
-		                                                           .SetTranslation(curr.Name + " " + other.Name + " Largo").Create();
+		SlimeTemplate largoTemplate = new SlimeTemplate(prefabName, largoDef).SetVacSize(Vacuumable.Size.LARGE)
+			.SetTranslation(curr.Name + " " + other.Name + " Largo").Create();
 
 		LookupRegistry.RegisterIdentifiablePrefab(largoTemplate.ToPrefab());
 
@@ -138,7 +138,7 @@ public static class LookupDirectorExtension
 	// Gordo Creation System
 	public static SlimeTemplate MakeRoamingGordo(this LookupDirector director, string name, Identifiable.Id gordoID, SlimeDefinition definition)
 	{
-		var gordoDef = ScriptableObject.CreateInstance<SlimeDefinition>();
+		SlimeDefinition gordoDef = ScriptableObject.CreateInstance<SlimeDefinition>();
 		gordoDef.AppearancesDefault = definition.AppearancesDefault;
 		gordoDef.AppearancesDynamic = definition.AppearancesDynamic;
 		gordoDef.BaseModule = definition.BaseModule;
@@ -153,12 +153,12 @@ public static class LookupDirectorExtension
 		gordoDef.Sounds = definition.Sounds;
 		gordoDef.Name = "roamGordo." + definition.Name;
 
-		var prof = ScriptableObject.CreateInstance<FearProfile>();
+		FearProfile prof = ScriptableObject.CreateInstance<FearProfile>();
 		prof.threats = new List<FearProfile.ThreatEntry>();
 		prof.GetType().GetMethod("OnEnable", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(prof, new object[0]);
 
-		var gordo = new SlimeTemplate(name, gordoDef).SetVacSize(Vacuumable.Size.GIANT)
-		                                             .SetHealth(60).SetFeralState(false).SetGlitchState(false).SetFearProfile(prof).SetTranslation(definition.Name + " Gordo");
+		SlimeTemplate gordo = new SlimeTemplate(name, gordoDef).SetVacSize(Vacuumable.Size.GIANT)
+			.SetHealth(60).SetFeralState(false).SetGlitchState(false).SetFearProfile(prof).SetTranslation(definition.Name + " Gordo");
 
 		Identifiable.SLIME_CLASS.Add(gordoID);
 
@@ -174,10 +174,10 @@ public static class LookupDirectorExtension
 	internal static void InitExtension(this LookupDirector director)
 	{
 		// Required prefabs
-		var gingerSpawnResource = director.GetPrefab(Identifiable.Id.GINGER_VEGGIE).CreatePrefabCopy();
+		GameObject gingerSpawnResource = director.GetPrefab(Identifiable.Id.GINGER_VEGGIE).CreatePrefabCopy();
 		gingerSpawnResource.GetComponent<ResourceCycle>().unripeGameHours = 12;
 
-		var kookadobaSpawnResource = director.GetPrefab(Identifiable.Id.KOOKADOBA_FRUIT).CreatePrefabCopy();
+		GameObject kookadobaSpawnResource = director.GetPrefab(Identifiable.Id.KOOKADOBA_FRUIT).CreatePrefabCopy();
 		kookadobaSpawnResource.GetComponent<ResourceCycle>().unripeGameHours = 6;
 
 		// Load garden resources

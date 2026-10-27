@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using SRML.Utils;
 
 public static class StringExtensions
@@ -9,7 +12,7 @@ public static class StringExtensions
 
     public static string Pad(this int val, int numDigits)
     {
-        var str = string.Empty + (object)val;
+        string str = string.Empty + (object)val;
         while (str.Length < numDigits)
             str = "0" + str;
         return str;
@@ -48,7 +51,7 @@ public static class StringExtensions
     /// </summary>
     public static string Reverse(this string s)
     {
-        var charArray = s.ToCharArray();
+        char[] charArray = s.ToCharArray();
         Array.Reverse(charArray);
         return new string(charArray);
     }
@@ -135,7 +138,7 @@ public static class StringExtensions
     /// <param name="include">Whether to remove the <paramref name="value"/></param>
     public static string RemoveEverythingAfter(this string str, string value, bool include = false)
     {
-        var index = str.IndexOf(value);
+        int index = str.IndexOf(value);
         if (index >= 0)
             str = str.Substring(0, include ? index : (index + value.Length));
         return str;
@@ -148,7 +151,7 @@ public static class StringExtensions
     /// <param name="include">Whether to remove the <paramref name="value"/></param>
     public static string RemoveEverythingBefore(this string str, string value, bool include = false)
     {
-        var index = str.IndexOf(value);
+        int index = str.IndexOf(value);
         if (index >= 0)
             str = str.Substring(index);
         if (include)
@@ -160,9 +163,9 @@ public static class StringExtensions
     {
         if (str == null)
             str = "";
-        var str1 = "" + "\"";
-        foreach (var ch in str)
-            str1 = ch != '"' ? str1 + ch : str1 + "\\\"";
+        string str1 = "" + "\"";
+        foreach (char ch in str)
+            str1 = ch != '"' ? str1 + ch.ToString() : str1 + "\\\"";
         return str1 + "\"";
     }
 
@@ -170,10 +173,10 @@ public static class StringExtensions
     {
         if (str == null)
             str = "";
-        var str1 = "";
+        string str1 = "";
         str = str.Trim(' ', '"');
-        var flag = false;
-        foreach (var ch in str)
+        bool flag = false;
+        foreach (char ch in str)
         {
             if (!flag && ch == '\\')
                 flag = true;

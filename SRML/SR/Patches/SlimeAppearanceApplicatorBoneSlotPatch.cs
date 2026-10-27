@@ -1,18 +1,20 @@
-﻿using HarmonyLib;
+﻿using System;
+using HarmonyLib;
 using UnityEngine;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(SlimeAppearanceApplicator), "GetFashionParent")]
-internal static class SlimeAppearanceApplicatorBoneSlotPatch
+namespace SRML.SR.Patches
 {
-    public static bool Prefix(SlimeAppearanceApplicator __instance, Fashion.Slot fashionSlot, ref Transform __result)
+    [HarmonyPatch(typeof(SlimeAppearanceApplicator), "GetFashionParent")]
+    internal static class SlimeAppearanceApplicatorBoneSlotPatch
     {
-        if (FashionRegistry.slotAttachPoints.ContainsKey(fashionSlot))
+        public static bool Prefix(SlimeAppearanceApplicator __instance, Fashion.Slot fashionSlot, ref Transform __result)
         {
-            __result = __instance._boneLookup[FashionRegistry.slotAttachPoints[fashionSlot].Item2].transform;
-            return false;
+            if (FashionRegistry.slotAttachPoints.ContainsKey(fashionSlot))
+            {
+                __result = __instance._boneLookup[FashionRegistry.slotAttachPoints[fashionSlot].Item2].transform;
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 }

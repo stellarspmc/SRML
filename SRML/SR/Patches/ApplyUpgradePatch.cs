@@ -1,20 +1,25 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using MonomiPark.SlimeRancher.DataModel;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(PlayerModel))]
-[HarmonyPatch("ApplyUpgrade")]
-internal static class ApplyUpgradePatch
+namespace SRML.SR.Patches
 {
-    public static bool Prefix(PlayerModel __instance, PlayerState.Upgrade upgrade, bool isFirstTime)
+    [HarmonyPatch(typeof(PlayerModel))]
+    [HarmonyPatch("ApplyUpgrade")]
+    internal static class ApplyUpgradePatch
     {
-        if (PersonalUpgradeRegistry.upgradeCallbacks.TryGetValue(upgrade, out var callback))
+        public static bool Prefix(PlayerModel __instance, PlayerState.Upgrade upgrade, bool isFirstTime)
         {
-            callback(__instance, isFirstTime);
-            return false;
-        }
+            if (PersonalUpgradeRegistry.upgradeCallbacks.TryGetValue(upgrade, out var callback))
+            {
+                callback(__instance, isFirstTime);
+                return false;
+            }
 
-        return true;
+            return true;
+        }
     }
 }

@@ -1,13 +1,19 @@
-﻿namespace SRML.SR.Translation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-public abstract class UpgradeTranslation<T> : PediaTranslation<T>
+namespace SRML.SR.Translation
 {
-    public abstract string UpgradeType { get; }
+    public abstract class UpgradeTranslation<T> : PediaTranslation<T>
+    {
+        public abstract string UpgradeType { get; }
 
-    public override string NamePrefix => DefaultNamePrefix + UpgradeType + ".";
+        public override string NamePrefix => DefaultNamePrefix + UpgradeType + ".";
 
-    public override string DescriptionPrefix => DefaultDescriptionPrefix + UpgradeType +".";
+        public override string DescriptionPrefix => DefaultDescriptionPrefix + UpgradeType +".";
 
-    public override string PediaType => "upgrade";
+        public override string PediaType => "upgrade";
 
+    }
 }

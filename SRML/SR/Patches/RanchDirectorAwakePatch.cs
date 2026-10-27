@@ -1,13 +1,15 @@
 ﻿using HarmonyLib;
+using System.Linq;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(RanchDirector), "Awake")]
-internal static class RanchDirectorAwakePatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(RanchDirector __instance)
+    [HarmonyPatch(typeof(RanchDirector), "Awake")]
+    internal static class RanchDirectorAwakePatch
     {
-        foreach (var entry in ChromaRegistry.customPalettes)
-            __instance.RegisterPalette(entry);
+        public static void Postfix(RanchDirector __instance)
+        {
+            foreach (RanchDirector.PaletteEntry entry in ChromaRegistry.customPalettes)
+                __instance.RegisterPalette(entry);
+        }
     }
 }

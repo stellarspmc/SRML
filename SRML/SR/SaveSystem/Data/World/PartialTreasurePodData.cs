@@ -1,49 +1,53 @@
 ﻿using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data.Partial;
 using SRML.Utils;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
-namespace SRML.SR.SaveSystem.Data.World;
-
-internal class PartialTreasurePodData : PartialData<TreasurePodV01>
+namespace SRML.SR.SaveSystem.Data.World
 {
-    PartialCollection<Identifiable.Id> spawnQueue = new PartialCollection<Identifiable.Id>(ModdedIDRegistry.IsModdedID, SerializerPair.GetEnumSerializerPair<Identifiable.Id>());
-    public override void Pull(TreasurePodV01 data)
+    internal class PartialTreasurePodData : PartialData<TreasurePodV01>
     {
-        spawnQueue.Pull(data.spawnQueue);
+        PartialCollection<Identifiable.Id> spawnQueue = new PartialCollection<Identifiable.Id>(ModdedIDRegistry.IsModdedID, SerializerPair.GetEnumSerializerPair<Identifiable.Id>());
+        public override void Pull(TreasurePodV01 data)
+        {
+            spawnQueue.Pull(data.spawnQueue);
             
-    }
+        }
 
-    public override void Push(TreasurePodV01 data)
-    {
-        spawnQueue.Push(data.spawnQueue);
-        data.spawnQueue.RemoveAll(x => x == Identifiable.Id.NONE);
-    }
-
-    public override void Read(BinaryReader reader)
-    {
-        spawnQueue.Read(reader);
-    }
-
-    public override void Write(BinaryWriter writer)
-    {
-        spawnQueue.Write(writer);
-    }
-
-    static PartialTreasurePodData()
-    {
-        CustomChecker.RegisterCustomChecker<TreasurePodV01>(x =>
+        public override void Push(TreasurePodV01 data)
         {
-            if (x.spawnQueue.Any(ModdedIDRegistry.IsModdedID)) return CustomChecker.CustomLevel.PARTIAL;
-            return CustomChecker.CustomLevel.NONE;
-        });
+            spawnQueue.Push(data.spawnQueue);
+            data.spawnQueue.RemoveAll(x => x == Identifiable.Id.NONE);
+        }
 
-        EnumTranslator.RegisterEnumFixer<PartialTreasurePodData>((translator, mode, data) =>
+        public override void Read(BinaryReader reader)
         {
-            translator.FixEnumValues(mode, data.spawnQueue);
-        });
+            spawnQueue.Read(reader);
+        }
 
-        PartialData.RegisterPartialData(() => new PartialTreasurePodData());
+        public override void Write(BinaryWriter writer)
+        {
+            spawnQueue.Write(writer);
+        }
+
+        static PartialTreasurePodData()
+        {
+            CustomChecker.RegisterCustomChecker<TreasurePodV01>(x =>
+            {
+                if (x.spawnQueue.Any(ModdedIDRegistry.IsModdedID)) return CustomChecker.CustomLevel.PARTIAL;
+                return CustomChecker.CustomLevel.NONE;
+            });
+
+            EnumTranslator.RegisterEnumFixer<PartialTreasurePodData>((translator, mode, data) =>
+            {
+                translator.FixEnumValues(mode, data.spawnQueue);
+            });
+
+            PartialData.RegisterPartialData(() => new PartialTreasurePodData());
+        }
     }
 }

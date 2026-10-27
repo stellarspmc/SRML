@@ -4,6 +4,7 @@ using System.Linq;
 using MonomiPark.SlimeRancher.Persist;
 using SRML;
 using SRML.SR.SaveSystem;
+using UnityEngine;
 
 /// <summary>
 /// Handles identification of Modded ID's
@@ -27,7 +28,7 @@ static internal class ModdedIDRegistry
     public static bool IsModdedID(object id)
     {
         if (!id.GetType().IsEnum) throw new Exception(id.GetType() + " is not an enum!");
-        return moddedIdRegistries.Any(x => x.Key == id.GetType() && x.Value.IsModdedID(id));
+        return moddedIdRegistries.Any((x) => x.Key == id.GetType() && x.Value.IsModdedID(id));
     }
 
     public static bool IsModdedID<T>(T id)
@@ -50,6 +51,6 @@ static internal class ModdedIDRegistry
     {
         
         if (!IsModdedID(data)) return null;
-        return moddedIdRegistries.FirstOrDefault(x => x.Key == data.GetType()).Value?.GetModForID(data);
+        return moddedIdRegistries.FirstOrDefault((x) => x.Key == data.GetType()).Value?.GetModForID(data);
     }
 }

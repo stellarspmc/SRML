@@ -1,38 +1,44 @@
-﻿namespace SRML.Config.Parsing;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-static class StringUtils
+namespace SRML.Config.Parsing
 {
-    internal static string ToQuotedString(string str)
+    static class StringUtils
     {
-        if (str == null) str = "";
-        var newStr = "";
-        newStr += '\"';
-        foreach (var ch in str)
+        internal static string ToQuotedString(string str)
         {
-            if (ch == '\"') newStr += "\\\"";
-            else newStr += ch;
-        }
-        newStr += '\"';
-        return newStr;
-    }
-
-    internal static string FromQuotedString(string str)
-    {
-        if (str == null) str = "";
-        var newStr = "";
-        str = str.Trim(' ', '\"');
-        var isescaped = false;
-        foreach (var v in str)
-        {
-            if (!isescaped && v == '\\') isescaped = true;
-            else if (v == '\\') { newStr += '\\'; isescaped = false; }
-            else if (isescaped && v == '\"') { newStr += '\"'; isescaped = false; }
-            else
+            if (str == null) str = "";
+            string newStr = "";
+            newStr += '\"';
+            foreach (var ch in str)
             {
-                isescaped = false;
-                newStr += v;
+                if (ch == '\"') newStr += "\\\"";
+                else newStr += ch;
             }
+            newStr += '\"';
+            return newStr;
         }
-        return newStr;
+
+        internal static string FromQuotedString(string str)
+        {
+            if (str == null) str = "";
+            string newStr = "";
+            str = str.Trim(' ', '\"');
+            bool isescaped = false;
+            foreach (var v in str)
+            {
+                if (!isescaped && v == '\\') isescaped = true;
+                else if (v == '\\') { newStr += '\\'; isescaped = false; }
+                else if (isescaped && v == '\"') { newStr += '\"'; isescaped = false; }
+                else
+                {
+                    isescaped = false;
+                    newStr += v;
+                }
+            }
+            return newStr;
+        }
     }
 }

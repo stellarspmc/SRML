@@ -1,17 +1,22 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(DirectedActorSpawner))]
-[HarmonyPatch("Start")]
-
-internal static class DirectedActorSpawnerStartPatch
+namespace SRML.SR.Patches
 {
-    public static void Postfix(DirectedActorSpawner __instance)
+    [HarmonyPatch(typeof(DirectedActorSpawner))]
+    [HarmonyPatch("Start")]
+
+    internal static class DirectedActorSpawnerStartPatch
     {
-        foreach(var v in DirectedActorSpawnerRegistry.spawnerFixers)
+        public static void Postfix(DirectedActorSpawner __instance)
         {
-            if (v.Key(__instance)) v.Value(__instance);
+            foreach(var v in DirectedActorSpawnerRegistry.spawnerFixers)
+            {
+                if (v.Key(__instance)) v.Value(__instance);
+            }
         }
     }
 }

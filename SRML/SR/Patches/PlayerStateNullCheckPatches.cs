@@ -1,14 +1,19 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace SRML.SR.Patches;
-
-[HarmonyPatch(typeof(PlayerState))]
-[HarmonyPatch("CheckAllUpgradeLockers")]
-internal static class PlayerStateNullCheckPatches
+namespace SRML.SR.Patches
 {
-    public static bool Prefix(PlayerState __instance)
+    [HarmonyPatch(typeof(PlayerState))]
+    [HarmonyPatch("CheckAllUpgradeLockers")]
+    internal static class PlayerStateNullCheckPatches
     {
-        if (__instance.model == null) return false;
-        return true;
+        public static bool Prefix(PlayerState __instance)
+        {
+            if (__instance.model == null) return false;
+            return true;
+        }
     }
 }
