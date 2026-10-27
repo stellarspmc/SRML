@@ -25,8 +25,7 @@ namespace SRML.SR.SaveSystem
         public static CustomLevel GetCustomLevel(object b)
         {
             var currentLevel = CustomLevel.NONE;
-            foreach (var v in customCheckers.Where(x => x.Key.IsAssignableFrom(b.GetType())))
-            {
+            foreach (var v in customCheckers.Where(x => x.Key.IsAssignableFrom(b.GetType()))) {
                 var newLevel = v.Value(b);
                 if (newLevel > currentLevel) currentLevel = newLevel;
             }
@@ -34,14 +33,11 @@ namespace SRML.SR.SaveSystem
             return currentLevel;
         }
 
-        public enum CustomLevel
-        {
+        public enum CustomLevel {
             NONE,
             VANILLA,
             PARTIAL,
             FULL
         }
     }
-
-    
 }

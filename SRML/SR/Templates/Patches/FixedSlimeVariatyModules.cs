@@ -28,7 +28,7 @@ namespace SRML.SR.Templates.Patches
                     if (__instance.gameObject.transform.Find(gameObject.transform.GetChild(k).name) != null)
                         continue;
 
-                    var gameObject2 = UnityEngine.Object.Instantiate(gameObject.transform.GetChild(k).gameObject, __instance.transform);
+                    var gameObject2 = Object.Instantiate(gameObject.transform.GetChild(k).gameObject, __instance.transform);
                     gameObject2.transform.localPosition = gameObject.transform.GetChild(k).gameObject.transform.localPosition;
                     gameObject2.transform.localRotation = gameObject.transform.GetChild(k).gameObject.transform.localRotation;
                 }
@@ -50,7 +50,7 @@ namespace SRML.SR.Templates.Patches
                     if (__instance.gameObject.transform.Find(__instance.baseModule.transform.GetChild(k).name) != null)
                         continue;
 
-                    var gameObject = UnityEngine.Object.Instantiate(__instance.baseModule.transform.GetChild(k).gameObject, __instance.transform);
+                    var gameObject = Object.Instantiate(__instance.baseModule.transform.GetChild(k).gameObject, __instance.transform);
                     gameObject.transform.localPosition = __instance.baseModule.transform.GetChild(k).gameObject.transform.localPosition;
                     gameObject.transform.localRotation = __instance.baseModule.transform.GetChild(k).gameObject.transform.localRotation;
                 }

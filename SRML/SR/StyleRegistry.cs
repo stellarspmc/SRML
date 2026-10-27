@@ -12,14 +12,14 @@ namespace SRML.SR
         {
             SRCallbacks.OnGameContextReady += () =>
             {
-                GameContext.Instance.DLCDirector.onPackageInstalled += (s =>
+                GameContext.Instance.DLCDirector.onPackageInstalled += s =>
                 {
                     if (s == DLCPackage.Id.SECRET_STYLE)
                     {
                         foreach (var ss in secretStyles.Keys)
                             ss.SlimeDefinition.RegisterDynamicAppearance(ss.ExoticAppearance);
                     }
-                });
+                };
             };
         }
 
@@ -66,7 +66,7 @@ namespace SRML.SR
             public override bool Equals(object obj)
             {
                 if (obj is SecretStyle ss)
-                    return this.Equals(ss);
+                    return Equals(ss);
                 return base.Equals(obj);
             }
 
@@ -87,7 +87,7 @@ namespace SRML.SR
                 return stringBuilder.ToString();
             }
 
-            public bool Equals(SecretStyle ss) => this.SlimeDefinition == ss.SlimeDefinition;
+            public bool Equals(SecretStyle ss) => SlimeDefinition == ss.SlimeDefinition;
 
             public SecretStyle(SlimeDefinition definition, SlimeAppearance exoticAppearance)
             {

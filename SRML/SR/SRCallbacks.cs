@@ -6,7 +6,6 @@ namespace SRML.SR
 {
     public static class SRCallbacks
     {
-
         static SRCallbacks()
         {
             OnMainMenuLoaded += ModMenuUIHandler.OnMainMenuLoaded;
@@ -28,7 +27,7 @@ namespace SRML.SR
         public delegate void OnZoneEnteredDelegate(ZoneDirector.Zone zone, PlayerState playerState);
         public delegate void OnCorporateLevelBoughtDelegate(int level);
         internal delegate void OnGameContextReadyDelegate();
-            
+
         public static event OnSaveGameLoadedDelegate OnSaveGameLoaded;
         public static event OnSaveGameLoadedDelegate PreSaveGameLoaded;
         public static event OnSaveGameLoadedDelegate PreSaveGameLoad;

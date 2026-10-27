@@ -119,116 +119,116 @@ public static class CollectionExtensions
     public static void BasicSort(this short[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this int[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this long[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this ushort[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this uint[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this ulong[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this byte[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this sbyte[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this decimal[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this float[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this double[] array, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        array.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        array.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
 
     public static void BasicSort(this List<short> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<int> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<long> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<ushort> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<uint> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<ulong> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<byte> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<sbyte> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<decimal> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<float> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
     public static void BasicSort(this List<double> list, bool descending = false)
     {
         var one = descending ? -1 : 1;
-        list.Sort((a, b) => a == b ? 0 : (a < b ? -one : one));
+        list.Sort((a, b) => a == b ? 0 : a < b ? -one : one);
     }
 
-    public static List<T> IntToEnum<T>(this List<int> list) where T : System.Enum
+    public static List<T> IntToEnum<T>(this List<int> list) where T : Enum
     {
         list.BasicSort();
         var ts = new List<T>();
@@ -239,12 +239,12 @@ public static class CollectionExtensions
         return ts;
     }
 
-    public static List<int> EnumToInt<T>(this List<T> list) where T : System.Enum
+    public static List<int> EnumToInt<T>(this List<T> list) where T : Enum
     {
         var ts = new List<int>();
         foreach (var enu in list)
         {
-            ts.Add((int)System.Convert.ChangeType(enu, enu.GetTypeCode()));
+            ts.Add((int)Convert.ChangeType(enu, enu.GetTypeCode()));
         }
         ts.BasicSort();
         return ts;
@@ -253,7 +253,7 @@ public static class CollectionExtensions
     internal static IEnumerable<T> AddAndRemoveWhere<T>(
       this IEnumerable<T> list,
       T add,
-      System.Func<T, bool> cond)
+      Func<T, bool> cond)
     {
         var index = 0;
         var listToAdd = list.ToList<T>();
@@ -272,7 +272,7 @@ public static class CollectionExtensions
     internal static IEnumerable<T> AddRangeAndRemoveWhere<T>(
       this IEnumerable<T> list,
       List<T> add,
-      System.Func<T, bool> cond)
+      Func<T, bool> cond)
     {
         var index = 0;
         var listToAdd = list.ToList<T>();
@@ -522,7 +522,7 @@ public static class CollectionExtensions
     public static TValue GetOrDefault<TKey, TValue>(
         this IDictionary<TKey, TValue> source,
         TKey key,
-        TValue customDefault = default(TValue))
+        TValue customDefault = default)
     {
         if (!source.ContainsKey(key)) source[key] = customDefault;
         return source[key];
@@ -535,7 +535,7 @@ public static class CollectionExtensions
     public static TValue GetOrDefault<TKey, TValue>(
         this IDictionary<TKey, TValue> source,
         TKey key,
-        System.Func<TValue> customDefaultGenerator)
+        Func<TValue> customDefaultGenerator)
     {
         if (!source.ContainsKey(key)) source[key] = customDefaultGenerator();
         return source[key];
@@ -544,7 +544,7 @@ public static class CollectionExtensions
     /// <summary>
     /// Performs an action on each element of a collection.
     /// </summary>
-    public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, System.Action<T> action)
+    public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
     {
         if (source.IsNullOrEmpty())
         {
@@ -578,7 +578,7 @@ public static class CollectionExtensions
         if (source.IsNullOrEmpty())
         {
             Debug.LogError("MaxBy Caused: source collection is null or empty");
-            return default(T);
+            return default;
         }
         return source.Aggregate((e, n) => selector(e).CompareTo(selector(n)) > 0 ? e : n);
     }
@@ -592,7 +592,7 @@ public static class CollectionExtensions
         if (source.IsNullOrEmpty())
         {
             Debug.LogError("MinBy Caused: source collection is null or empty");
-            return default(T);
+            return default;
         }
         return source.Aggregate((e, n) => selector(e).CompareTo(selector(n)) < 0 ? e : n);
     }

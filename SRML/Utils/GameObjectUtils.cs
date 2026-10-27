@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Object = UnityEngine.Object;
+
 namespace SRML.Utils
 {
     public static class GameObjectUtils
@@ -56,7 +58,7 @@ namespace SRML.Utils
             }
 
             builder.AppendLine(indent + "children: ");
-           
+
             for (var i = 0; i < obj.transform.childCount; i++)
             {
                 PrintObjectTreeInternal(obj.transform.GetChild(i).gameObject, indent2, builder);
@@ -70,7 +72,7 @@ namespace SRML.Utils
 
         public static GameObject InstantiateInactive(GameObject original)
         {
-            var newObj = GameObject.Instantiate(original, Main.prefabParent, true);
+            var newObj = Object.Instantiate(original, Main.prefabParent, true);
             newObj.SetActive(false);
             newObj.transform.SetParent(null, false);
             return newObj;

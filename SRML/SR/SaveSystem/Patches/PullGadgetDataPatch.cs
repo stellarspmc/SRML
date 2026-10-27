@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
@@ -8,25 +7,16 @@ using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data.Gadget;
 using VanillaGadgetData = MonomiPark.SlimeRancher.Persist.PlacedGadgetV08;
-namespace SRML.SR.SaveSystem.Patches
-{
-    [HarmonyPatch(typeof(SavedGame))]
-    internal static class PullGadgetDataPatch
-    {
-        public static MethodInfo TargetMethod()
-        {
-            return AccessTools.Method(typeof(SavedGame), "Pull", new Type[] {typeof(GameModel), typeof(WorldV22)});
-        }
 
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
-        {
-            using (var code = instr.GetEnumerator())
-            {
-                while (code.MoveNext())
-                {
+namespace SRML.SR.SaveSystem.Patches {
+    [HarmonyPatch(typeof(SavedGame))]
+    internal static class PullGadgetDataPatch {
+        public static MethodInfo TargetMethod() => AccessTools.Method(typeof(SavedGame), "Pull", new[] {typeof(GameModel), typeof(WorldV22)});
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr) {
+            using (var code = instr.GetEnumerator()) {
+                while (code.MoveNext()) {
                     var cur = code.Current;
-                    if (cur.opcode == OpCodes.Callvirt && cur.operand is MethodInfo info && info.Name == "HasAttached")
-                    {
+                    if (cur != null && cur.opcode == OpCodes.Callvirt && cur.operand is MethodInfo info && info.Name == "HasAttached") {
                         yield return cur;
                         code.MoveNext();
                         yield return code.Current;
@@ -37,10 +27,7 @@ namespace SRML.SR.SaveSystem.Patches
                         yield return new CodeInstruction(OpCodes.Call,
                             AccessTools.Method(typeof(PullGadgetDataPatch), "CreateGadgetData"));
                     }
-                    else
-                    {
-                        yield return cur;
-                    }
+                    else yield return cur;
                 }
             }
         }
@@ -48,15 +35,11 @@ namespace SRML.SR.SaveSystem.Patches
         public static VanillaGadgetData CreateGadgetData(GadgetSiteModel model)
         {
             var mod = SaveRegistry.ModForModelType(model.attached.GetType());
-            if (mod != null)
-            {
-                var info = SaveRegistry.GetSaveInfo(mod).GetRegistryFor<CustomGadgetData>();
-                var newmodel = info.GetDataForID(info.GetIDForModel(model.attached.GetType()));
-                newmodel.PullCustomModel(model.attached);
-                return newmodel;
-            }
-            return new VanillaGadgetData();
-
+            if (mod == null) return new VanillaGadgetData();
+            var info = SaveRegistry.GetSaveInfo(mod).GetRegistryFor<CustomGadgetData>();
+            var newmodel = info.GetDataForID(info.GetIDForModel(model.attached.GetType()));
+            newmodel.PullCustomModel(model.attached);
+            return newmodel;
         }
     }
 }

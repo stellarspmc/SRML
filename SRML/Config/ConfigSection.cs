@@ -6,7 +6,6 @@ namespace SRML.Config
 {
     public class ConfigSection
     {
-        
         readonly Dictionary<string, ConfigElement> elementDict = new Dictionary<string, ConfigElement>();
 
         public IEnumerable<ConfigElement> Elements => elementDict.Values;
@@ -59,7 +58,5 @@ namespace SRML.Config
                 if (!keys.AddKey(keyData)) Debug.LogWarning($"Key {element.Key} already present in section!");
             }
         }
-
-       
     }
 }

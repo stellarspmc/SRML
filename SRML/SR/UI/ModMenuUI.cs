@@ -86,7 +86,7 @@ namespace SRML.SR.UI
                     foreach (var dep in info.Dependencies)
                     {
                         dependencies += $"{dep.Key} {dep.Value}";
-                        if ((i + 1) != info.Dependencies.Count) dependencies += ", ";
+                        if (i + 1 != info.Dependencies.Count) dependencies += ", ";
                         i++;
                     }
                 }

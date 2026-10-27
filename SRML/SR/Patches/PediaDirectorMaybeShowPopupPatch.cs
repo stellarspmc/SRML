@@ -4,7 +4,7 @@ using System;
 namespace SRML.SR.Patches
 {
     [HarmonyPatch(typeof(PediaDirector))]
-    [HarmonyPatch("MaybeShowPopup",new Type[] { typeof(PediaDirector.Id) })]
+    [HarmonyPatch("MaybeShowPopup",new[] { typeof(PediaDirector.Id) })]
     internal static class PediaDirectorMaybeShowPopupPatch
     {
         public static bool Prefix(PediaDirector __instance, PediaDirector.Id id)

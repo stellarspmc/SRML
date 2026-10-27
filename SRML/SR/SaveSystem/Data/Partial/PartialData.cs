@@ -119,7 +119,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public static void RegisterPartialData<T>(PartialDataCreatorGenericDelegate<T> creator)
         {
-            RegisterPartialData(typeof(T),()=>(PartialData)creator());
+            RegisterPartialData(typeof(T),()=>creator());
         }
 
         public static void RegisterPartialData<T>(Type type)
@@ -165,7 +165,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public static CompoundPartialData<T> CreateCompoundPartialData<T>()
         {
-            return new CompoundPartialData<T>(partialDataCreators.Where(x=>x.Key.IsAssignableFrom(typeof(T))).Select(x=>(PartialData)x.Value()));
+            return new CompoundPartialData<T>(partialDataCreators.Where(x=>x.Key.IsAssignableFrom(typeof(T))).Select(x=>x.Value()));
         }
 
         static PartialData()

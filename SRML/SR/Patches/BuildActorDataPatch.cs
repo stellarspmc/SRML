@@ -6,33 +6,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 
-namespace SRML.SR.Patches
-{
+namespace SRML.SR.Patches {
     [HarmonyPatch(typeof(SavedGame))]
     [HarmonyPatch("BuildActorData")]
-    internal static class BuildActorDataPatch
-    {
-
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
-        { 
-            foreach(var v in instr)
-            {
-                if (v.opcode == OpCodes.Ret)
-                { 
+    internal static class BuildActorDataPatch {
+        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr) {
+            foreach(var v in instr) {
+                if (v.opcode == OpCodes.Ret) {
                     yield return new CodeInstruction(OpCodes.Ldarg,4);
                     yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(BuildActorDataPatch), "Alternate"));
                     yield return new CodeInstruction(OpCodes.Ldloc_0);
-                    yield return v;
                 }
-                else yield return v;
+
+                yield return v;
             }
         }
-        public static void Alternate(ActorDataV09 data,ActorModel model)
-        {
-            foreach (var v in DataModelRegistry.actorSavers.Where(x => x.Key(model)))
-            {
-                v.Value(model, data);
-            }
+        public static void Alternate(ActorDataV09 data,ActorModel model) {
+            foreach (var v in DataModelRegistry.actorSavers.Where(x => x.Key(model))) v.Value(model, data);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SRML.Console.Commands
 		public override string Usage { get; } = "help [cmdName]";
 		public override string Description { get; } = "Displays all commands available, or an extended description of a command";
 
-		public override string ExtendedDescription => 
+		public override string ExtendedDescription =>
 			"<color=#77DDFF>[cmdName]</color> - The command you want to check the extended description for.\n" +
 			"Running without an argument shows all commands";
 

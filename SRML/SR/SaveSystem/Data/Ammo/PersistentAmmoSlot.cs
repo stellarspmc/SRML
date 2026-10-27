@@ -69,7 +69,6 @@ namespace SRML.SR.SaveSystem.Data.Ammo
             {
                 PopBottom();
             }
-
         }
 
         public bool HasNoData()
@@ -79,7 +78,6 @@ namespace SRML.SR.SaveSystem.Data.Ammo
                     return false;
             return true;
         }
-
 
         public void Read(BinaryReader reader)
         {
@@ -114,7 +112,5 @@ namespace SRML.SR.SaveSystem.Data.Ammo
                 }
             }
         }
-
-        
     }
 }

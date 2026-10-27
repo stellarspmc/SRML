@@ -31,10 +31,9 @@ namespace SRML.Console.Commands
                 return false;
             }
 
-
             KeyBindManager.RemoveBinding(key);
             KeyBindManager.SaveBinds();
-            
+
             return true;
         }
 

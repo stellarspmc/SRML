@@ -7,6 +7,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using static SRML.SR.PediaRegistry.PediaTab;
+using Object = UnityEngine.Object;
 
 namespace SRML.SR
 {
@@ -235,7 +236,7 @@ namespace SRML.SR
 
             void IPediaRenderer.OnListingDeselected(GameObject panelObj)
             {
-                if (createdObject) GameObject.Destroy(createdObject);
+                if (createdObject) Object.Destroy(createdObject);
             }
         }
 

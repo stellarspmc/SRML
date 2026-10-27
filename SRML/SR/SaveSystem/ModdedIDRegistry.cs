@@ -37,7 +37,7 @@ static internal class ModdedIDRegistry
 
     public static bool IsNullID(object id)
     {
-        return id.GetType().IsEnum && ((int) id) == 0;
+        return id.GetType().IsEnum && (int) id == 0;
         
     }
 

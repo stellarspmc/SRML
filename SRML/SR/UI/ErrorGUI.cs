@@ -80,7 +80,7 @@ namespace SRML.SR.UI
             var title = panel.Find("Title").gameObject;
             var g = Instantiate(title);
             g.name = "ErrorText";
-            MonoBehaviour.Destroy(g.GetComponent<XlateText>());
+            Destroy(g.GetComponent<XlateText>());
             g.GetComponent<TMP_Text>().text = error;
             g.GetComponent<TMP_Text>().alignment = TextAlignmentOptions.Top;
             g.GetComponent<TMP_Text>().fontSize *= .8f;
@@ -88,7 +88,7 @@ namespace SRML.SR.UI
 
             if (doAbort)
             {
-                var h = GameObject.Instantiate(title);
+                var h = Instantiate(title);
                 h.name = "AbortText";
 
                 h.GetComponent<XlateText>().SetKey("t.srml_error.abort");

@@ -863,7 +863,7 @@ public static class VectorExtensions
         var x = b.x - a.x;
         var y = b.y - a.y;
         var z = b.z - a.z;
-        return ((x * x) + (y * y) + (z * z));
+        return x * x + y * y + z * z;
     }
 
     /// <summary>
@@ -924,7 +924,7 @@ public static class VectorExtensions
     {
         var x = b.x - a.x;
         var y = b.y - a.y;
-        return ((x * x) + (y * y));
+        return x * x + y * y;
     }
 
     /// <summary>

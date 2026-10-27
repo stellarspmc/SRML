@@ -44,7 +44,7 @@ namespace SRML.SR.SaveSystem.Patches
     }
 
     [HarmonyPatch(typeof(Ammo))]
-    [HarmonyPatch("MaybeAddToSpecificSlot", new Type[]
+    [HarmonyPatch("MaybeAddToSpecificSlot", new[]
         {typeof(Identifiable.Id), typeof(Identifiable), typeof(int), typeof(int), typeof(bool)})]
     internal static class AmmoMaybeAddToSpecificSlotPatch
     {

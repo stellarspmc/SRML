@@ -35,19 +35,19 @@ public static class TransformExtensions
 
     public static void SetLeftBottomPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x + trans.pivot.x * trans.rect.width, newPos.y + trans.pivot.y * trans.rect.height, trans.localPosition.z);
     }
     public static void SetLeftTopPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x + (trans.pivot.x * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x + trans.pivot.x * trans.rect.width, newPos.y - (1f - trans.pivot.y) * trans.rect.height, trans.localPosition.z);
     }
     public static void SetRightBottomPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y + (trans.pivot.y * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x - (1f - trans.pivot.x) * trans.rect.width, newPos.y + trans.pivot.y * trans.rect.height, trans.localPosition.z);
     }
     public static void SetRightTopPosition(this RectTransform trans, Vector2 newPos)
     {
-        trans.localPosition = new Vector3(newPos.x - ((1f - trans.pivot.x) * trans.rect.width), newPos.y - ((1f - trans.pivot.y) * trans.rect.height), trans.localPosition.z);
+        trans.localPosition = new Vector3(newPos.x - (1f - trans.pivot.x) * trans.rect.width, newPos.y - (1f - trans.pivot.y) * trans.rect.height, trans.localPosition.z);
     }
 
     public static void SetSize(this RectTransform trans, Vector2 newSize)
@@ -119,8 +119,8 @@ public static class TransformExtensions
     {
         var size = Vector2.Scale(transform.rect.size, transform.lossyScale);
         var rect = new Rect(transform.position.x, Screen.height - transform.position.y, size.x, size.y);
-        rect.x -= (transform.pivot.x * size.x);
-        rect.y -= ((1.0f - transform.pivot.y) * size.y);
+        rect.x -= transform.pivot.x * size.x;
+        rect.y -= (1.0f - transform.pivot.y) * size.y;
         return rect;
     }
 
@@ -166,7 +166,7 @@ public static class TransformExtensions
         {
             if (child == transform || child == null) continue;
             if (activeOnly && !child.gameObject.activeSelf) continue;
-            UnityEngine.Object.DestroyImmediate(child.gameObject);
+            Object.DestroyImmediate(child.gameObject);
         }
         return transform;
     }
@@ -199,7 +199,7 @@ public static class TransformExtensions
             yield return current;
     }
 
-    public static List<T> ChildComponentsToList<T>(this Transform t) where T : Component => ((IEnumerable<T>)t.GetComponentsInChildren<T>()).ToList<T>();
+    public static List<T> ChildComponentsToList<T>(this Transform t) where T : Component => t.GetComponentsInChildren<T>().ToList<T>();
 
     public static bool IsDescendant(this Transform potentialAncestor, Transform descendant)
     {

@@ -92,7 +92,7 @@ namespace SRML.SR.SaveSystem.Utils
                     gadget.Value.ammo = new List<VanillaAmmoData>();
                     return () => gadget.Value.ammo = data;
                 }
-                else if (data.Count>0 && object.ReferenceEquals(data[0], gadget.Value.drone?.drone?.ammo))
+                else if (data.Count>0 && ReferenceEquals(data[0], gadget.Value.drone?.drone?.ammo))
                 {
                     gadget.Value.drone.drone.ammo = new VanillaAmmoData() { emotionData = new SlimeEmotionDataV02() { emotionData = new Dictionary<SlimeEmotions.Emotion, float>() } };
                     var original = data[0];
@@ -101,10 +101,10 @@ namespace SRML.SR.SaveSystem.Utils
             }
             return () => throw new Exception();
         }
-        
+
         static AmmoDataUtils()
         {
-            
+
         }
     }
 }

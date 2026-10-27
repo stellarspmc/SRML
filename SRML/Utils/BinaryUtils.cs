@@ -37,7 +37,7 @@ namespace SRML.Utils
 
         public static void WriteMeshWithBones(BinaryWriter writer, SkinnedMeshRenderer rend)
         {
-            WriteArray(writer, rend.bones, (x, y) => WriteTransform(x, (Transform)y));
+            WriteArray(writer, rend.bones, (x, y) => WriteTransform(x, y));
             WriteMesh(writer, rend.sharedMesh);
         }
 
@@ -53,14 +53,14 @@ namespace SRML.Utils
         }
         public static void WriteMesh(BinaryWriter writer, Mesh mesh)
         {
-            WriteArray(writer,mesh.vertices, (x, y) => WriteVector3(x, (Vector3) y));
-            WriteArray(writer,mesh.triangles,(x,y)=>x.Write((int)y));
-            WriteArray(writer,mesh.normals,(x,y)=>WriteVector3(x,(Vector3)y));
-            WriteArray(writer,mesh.colors, (x, y) => WriteColor(x, (Color)y));
-            WriteArray(writer,mesh.uv, (x, y) => WriteVector2(x, (Vector2) y));
-            WriteArray(writer,mesh.tangents,(x,y)=>WriteVector4(x,(Vector4)y));
-            WriteArray(writer,mesh.bindposes,(x,y)=>WriteMatrix4(x,(Matrix4x4)y));
-            WriteArray(writer,mesh.boneWeights,(x,y)=>WriteBoneWeight(x,(BoneWeight)y));
+            WriteArray(writer,mesh.vertices, (x, y) => WriteVector3(x, y));
+            WriteArray(writer,mesh.triangles,(x,y)=>x.Write(y));
+            WriteArray(writer,mesh.normals,(x,y)=>WriteVector3(x,y));
+            WriteArray(writer,mesh.colors, (x, y) => WriteColor(x, y));
+            WriteArray(writer,mesh.uv, (x, y) => WriteVector2(x, y));
+            WriteArray(writer,mesh.tangents,(x,y)=>WriteVector4(x,y));
+            WriteArray(writer,mesh.bindposes,(x,y)=>WriteMatrix4(x,y));
+            WriteArray(writer,mesh.boneWeights,(x,y)=>WriteBoneWeight(x,y));
 
 
         }
@@ -295,8 +295,8 @@ namespace SRML.Utils
         public SerializerPair(BinarySerializer<T> serializer,
             BinaryDeserializer<T> deserializer)
         {
-            this.serializerFunc = serializer;
-            this.deserializerFunc = deserializer;
+            serializerFunc = serializer;
+            deserializerFunc = deserializer;
         }
 
 
@@ -315,7 +315,7 @@ namespace SRML.Utils
         public static SerializerPair<K> GetEnumSerializerPair<K>()
         {
             return new SerializerPair<K>((writer, obj) => writer.Write((int)(object)obj),
-                (reader => (K)(object)reader.ReadInt32()));
+                reader => (K)(object)reader.ReadInt32());
         }
     }
 }

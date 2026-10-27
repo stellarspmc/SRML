@@ -97,11 +97,11 @@ namespace SRML
         public int TranslateTo(object val)
         {
             var type = val.GetType();
-            if (!MappedValues.ContainsKey(type)) return ((int) val);
+            if (!MappedValues.ContainsKey(type)) return (int) val;
             if (!EnumMinCache.ContainsKey(type)) EnumMinCache[type] = ((int[])Enum.GetValues(type)).Min();
 
             var potential = MappedValues[type].FirstOrDefault(x => Enum.GetName(type, val) == x.Value);
-            return potential.Key < EnumMinCache[type] ? potential.Key : ((int)val);
+            return potential.Key < EnumMinCache[type] ? potential.Key : (int)val;
         }
 
         public T TranslateFrom<T>(int val)
@@ -312,7 +312,7 @@ namespace SRML
         /// <param name="del"></param>
         public static void RegisterEnumFixer<T>(EnumFixerGenericDelegate<T> del)
         {
-            RegisterEnumFixer(typeof(T),((EnumTranslator translator,TranslationMode mode, object fix) => del(translator,mode,(T)fix)));
+            RegisterEnumFixer(typeof(T),(EnumTranslator translator,TranslationMode mode, object fix) => del(translator,mode,(T)fix));
         }
 
         public static void RegisterFallbackHandler(MissingTranslationDelegate del)
@@ -399,9 +399,9 @@ namespace SRML
 
         public static object TranslateEnum(Type enumType, EnumTranslator translator, TranslationMode mode, object id)
         {
-            return (mode == TranslationMode.TOTRANSLATED
+            return mode == TranslationMode.TOTRANSLATED
                 ? Enum.ToObject(enumType,translator.TranslateTo(id))
-                : translator.TranslateFrom(enumType,(int)id));
+                : translator.TranslateFrom(enumType,(int)id);
         }
 
         public enum TranslationMode

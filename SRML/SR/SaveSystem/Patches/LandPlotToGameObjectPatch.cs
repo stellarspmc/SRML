@@ -20,8 +20,7 @@ namespace SRML.SR.SaveSystem.Patches
             foreach (var v in instr)
             {
                 if (v.opcode == OpCodes.Callvirt && v.operand is MethodInfo info && info.Name == "Remove")
-                { 
-
+                {
                     flag = true;
                     yield return v;
                     yield return new CodeInstruction(OpCodes.Pop);
@@ -64,6 +63,4 @@ namespace SRML.SR.SaveSystem.Patches
             }
         }
     }
-
-  
 }

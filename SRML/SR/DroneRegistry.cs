@@ -26,7 +26,7 @@ namespace SRML.SR
             switch (SRModLoader.CurrentLoadingStep)
             {
                 case SRModLoader.LoadingStep.PRELOAD:
-                    context = GameObject.FindObjectOfType<GameContext>();
+                    context = Object.FindObjectOfType<GameContext>();
                     break;
                 default:
                     context = GameContext.Instance;

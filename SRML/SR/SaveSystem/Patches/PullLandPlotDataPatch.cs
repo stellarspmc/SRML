@@ -16,13 +16,13 @@ namespace SRML.SR.SaveSystem.Patches
     {
         public static MethodInfo TargetMethod()
         {
-            return AccessTools.Method(typeof(SavedGame), "Pull", new Type[] { typeof(GameModel), typeof(RanchV07) });
+            return AccessTools.Method(typeof(SavedGame), "Pull", new[] { typeof(GameModel), typeof(RanchV07) });
         }
 
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
             var instrList = instr.ToList();
-            foreach (var v in instrList)    
+            foreach (var v in instrList)
             {
                 if (v.opcode == OpCodes.Newobj && v.operand is ConstructorInfo con &&
                     con.DeclaringType == typeof(VanillaLandPlotData))

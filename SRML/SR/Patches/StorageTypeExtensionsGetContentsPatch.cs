@@ -13,7 +13,7 @@ namespace SRML.SR.Patches
             foreach(var v in AmmoRegistry.siloPrefabs[type])
             {
                 __result.Add(v);
-            }   
+            }
         }
     }
 }

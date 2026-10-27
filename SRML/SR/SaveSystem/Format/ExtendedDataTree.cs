@@ -2,23 +2,18 @@
 using System;
 using System.IO;
 
-namespace SRML.SR.SaveSystem.Format
-{
-    internal class ExtendedDataTree : VersionedSerializable
-    {
+namespace SRML.SR.SaveSystem.Format {
+    internal class ExtendedDataTree : VersionedSerializable {
         public IdentifierType idType;
         public long longIdentifier;
-        public string stringIdentifier="";
+        public string stringIdentifier = "";
         public CompoundDataPiece dataPiece;
 
         public override int LatestVersion => 0;
 
-
-
-        public override void ReadData(BinaryReader reader)
-        {
-            var isOld = ModdedSaveData.LATEST_READ_VERSION<4;
-            var number =  reader.ReadInt32();
+        public override void ReadData(BinaryReader reader) {
+            var isOld = ModdedSaveData.LATEST_READ_VERSION < 4;
+            var number = reader.ReadInt32();
             if (number >= 3) isOld = false;
 
             if (number >= 3) number -= 3;
@@ -30,9 +25,7 @@ namespace SRML.SR.SaveSystem.Format
             if (dataPiece == null) throw new Exception("Invalid top level datapiece!");
         }
 
-        public override void WriteData(BinaryWriter writer)
-        {
-            
+        public override void WriteData(BinaryWriter writer) {
             writer.Write((int)idType);
             writer.Write(Version);
             writer.Write(longIdentifier);
@@ -40,35 +33,25 @@ namespace SRML.SR.SaveSystem.Format
             DataPiece.Serialize(writer, dataPiece);
         }
 
-        
 
-        public override void Read(BinaryReader reader)
-        {
+        public override void Read(BinaryReader reader) {
             ReadData(reader);
         }
 
-        public override void Write(BinaryWriter writer)
-        {
+        public override void Write(BinaryWriter writer) {
             WriteData(writer);
         }
 
-        static ExtendedDataTree()
-        {
-            EnumTranslator.RegisterEnumFixer<ExtendedDataTree>((translator, mode, piece) => 
-            {
-                if(piece.dataPiece!=null) translator.FixEnumValues(mode, piece.dataPiece);
+        static ExtendedDataTree() {
+            EnumTranslator.RegisterEnumFixer<ExtendedDataTree>((translator, mode, piece) => {
+                if (piece.dataPiece != null) translator.FixEnumValues(mode, piece.dataPiece);
             });
         }
 
-        internal enum IdentifierType
-        {
+        internal enum IdentifierType {
             ACTOR,
             GADGET,
             LANDPLOT,
         }
     }
-
-    
-
-    
 }

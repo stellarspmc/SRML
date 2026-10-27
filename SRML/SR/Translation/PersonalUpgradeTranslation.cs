@@ -5,7 +5,7 @@
         public override string UpgradeType => "personal";
         public PersonalUpgradeTranslation(PlayerState.Upgrade upgrade)
         {
-            this.Key = upgrade;
+            Key = upgrade;
         }
 
 

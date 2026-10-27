@@ -13,7 +13,7 @@ namespace SRML.SR.SaveSystem.Patches
         {
             if (!__result) return;
 
-            if((new StackFrame(2)).GetMethod().DeclaringType==typeof(VacColorAnimator)) return;
+            if(new StackFrame(2).GetMethod().DeclaringType==typeof(VacColorAnimator)) return;
 
             if (AmmoIdentifier.TryGetIdentifier(__instance,out var identifier))
             {

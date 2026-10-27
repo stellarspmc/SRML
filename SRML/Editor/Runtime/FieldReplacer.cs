@@ -5,7 +5,7 @@ namespace SRML.Editor.Runtime
     public class FieldReplacer : IFieldReplacer
     {
         public IInstanceInfo InstanceInfo { get; private set; }
-    
+
 
         public bool ReplaceInChildren { get; private set; }
 
@@ -17,7 +17,7 @@ namespace SRML.Editor.Runtime
 
         public FieldReplacer(IInstanceInfo rinfo, bool replaceInChildren, params IFieldReplacement[] replacements)
         {
-            this.InstanceInfo = rinfo;
+            InstanceInfo = rinfo;
             this.replacements.AddRange(replacements);
         }
     }

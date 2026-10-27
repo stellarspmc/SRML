@@ -49,7 +49,7 @@ namespace SRML.SR
                     cost = entry.cost,
                     plotPrefab = SRSingleton<GameContext>.Instance.LookupDirector.GetPlotPrefab(entry.plot)
                 });
-            }, entry.isUnlocked ?? (() => true), (() => true), null, null, null, null));
+            }, entry.isUnlocked ?? (() => true), () => true, null, null, null, null));
         }
 
         public struct LandPlotShopEntry

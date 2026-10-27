@@ -8,7 +8,7 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(PediaUI __instance)
         {
-            PediaRegistry.activeRenderer = null; 
+            PediaRegistry.activeRenderer = null;
             foreach(var v in PediaRegistry.customTabs)
             {
                 if(v.Key.IsVisible?.Invoke()??true) v.Key.InitForPediaAwake(__instance);

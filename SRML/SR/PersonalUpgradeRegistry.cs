@@ -15,10 +15,7 @@ namespace SRML.SR
         internal static Dictionary<PlayerState.Upgrade, CreateUpgradeLockerDelegate> moddedLockers =
             new Dictionary<PlayerState.Upgrade, CreateUpgradeLockerDelegate>();
 
-        static PersonalUpgradeRegistry()
-        {
-            ModdedIDRegistry.RegisterIDRegistry(moddedUpgrades);
-        }
+        static PersonalUpgradeRegistry() => ModdedIDRegistry.RegisterIDRegistry(moddedUpgrades);
 
         /// <summary>
         /// Creates a <see cref="PlayerState.Upgrade"/>.
@@ -27,11 +24,8 @@ namespace SRML.SR
         /// <param name="name">The name of the <see cref="PlayerState.Upgrade"/>.</param>
         /// <returns>The created <see cref="PlayerState.Upgrade"/>.</returns>
         /// <exception cref="Exception">Throws if ran outside of PreLoad</exception>
-        public static PlayerState.Upgrade CreatePersonalUpgrade(object value, string name)
-        {
-            if (SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD)
-                throw new Exception("Can't register upgrades outside of the PreLoad step");
-            return moddedUpgrades.RegisterValueWithEnum((PlayerState.Upgrade) value, name);
+        public static PlayerState.Upgrade CreatePersonalUpgrade(object value, string name) {
+            return SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD ? throw new Exception("Can't register upgrades outside of the PreLoad step") : moddedUpgrades.RegisterValueWithEnum((PlayerState.Upgrade) value, name);
         }
 
         /// <summary>
@@ -46,12 +40,9 @@ namespace SRML.SR
         /// </summary>
         /// <param name="upgrade">The <see cref="PlayerState.Upgrade"/> that calls the callback.</param>
         /// <param name="callback">The callback to be called.</param>
-        public static void RegisterUpgradeCallback(PlayerState.Upgrade upgrade, ApplyUpgradeDelegate callback)
-        {
-            if (upgradeCallbacks.ContainsKey(upgrade))
-                upgradeCallbacks[upgrade] += callback;
-            else
-                upgradeCallbacks[upgrade] = callback;
+        public static void RegisterUpgradeCallback(PlayerState.Upgrade upgrade, ApplyUpgradeDelegate callback) {
+            if (upgradeCallbacks.ContainsKey(upgrade)) upgradeCallbacks[upgrade] += callback;
+            else upgradeCallbacks[upgrade] = callback;
         }
 
         /// <summary>

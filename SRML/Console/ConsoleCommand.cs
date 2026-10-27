@@ -56,25 +56,19 @@ namespace SRML.Console
 		/// <summary>
 		/// The arguments are out of bounds (either too many or too little)
 		/// </summary>
-		/// <param name="min">Amount of arguments</param>
-		/// <param name="min">Minimun amount</param>
-		/// <param name="max">Maximun amount</param>
+		/// <param name="argCount">Amount of arguments</param>
+		/// <param name="min">Minimum amount</param>
+		/// <param name="max">Maximum amount</param>
 		/// <returns>True if arguments are out of bounds, false otherwise</returns>
-		protected virtual bool ArgsOutOfBounds(int argCount, int min = -1, int max = -1)
-		{
-			if (argCount < min && min > -1)
-			{
+		protected virtual bool ArgsOutOfBounds(int argCount, int min = -1, int max = -1) {
+			if (argCount < min && min > -1) {
 				Console.Instance.LogError($"The '{ID}' command got less arguments then expected (Had: {argCount}; Min: {min})");
 				return true;
 			}
 
-			if (argCount > max && max > -1)
-			{
-				Console.Instance.LogError($"The '{ID}' command got more arguments then expected (Had: {argCount}; Max: {max})");
-				return true;
-			}
-
-			return false;
+			if (argCount <= max || max <= -1) return false;
+			Console.Instance.LogError($"The '{ID}' command got more arguments then expected (Had: {argCount}; Max: {max})");
+			return true;
 		}
 	}
 }

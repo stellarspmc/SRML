@@ -36,7 +36,7 @@ namespace SRML.Console.Commands
             if (args.Length != 2 || !Int32.TryParse(args[1], out count)) count = 1;
 
             for (var i = 0; i < count; i++) SceneContext.Instance.PlayerState?.Ammo.MaybeAddToSlot(id, null);
-            return true; 
+            return true;
         }
 
         public override List<string> GetAutoComplete(int argIndex, string argText)

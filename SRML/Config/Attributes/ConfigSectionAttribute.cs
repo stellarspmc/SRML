@@ -11,7 +11,7 @@ namespace SRML.Config.Attributes
 
         public ConfigSectionAttribute(string sectionname)
         {
-            this.SectionName = sectionname;
+            SectionName = sectionname;
         }
     }
 }

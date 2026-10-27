@@ -9,7 +9,7 @@ namespace SRML.SR.SaveSystem.Utils
         {
             return SRModLoader.GetModForAssembly(p.GetType().Assembly);
         }
-        
+
         public static SRMod GetModForParticipant(ExtendedData.TransformableParticipant p)
         {
             return SRModLoader.GetModForAssembly(p.GetType().Assembly);

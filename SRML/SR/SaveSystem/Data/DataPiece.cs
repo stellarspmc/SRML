@@ -81,7 +81,7 @@ namespace SRML.SR.SaveSystem.Data
                     {
                             intSerializer.Serialize(x,(int)y.GetValue(i));
                     }
-                    
+
                 }
             },
             x =>
@@ -139,7 +139,7 @@ namespace SRML.SR.SaveSystem.Data
             {
 
                 if (piece.dataFixer != null) piece.dataFixer.Invoke(translator, mode, piece.data); else if (piece.typeId == DataType.ENUM) piece.data = translator.TranslateEnum(piece.data.GetType(), mode, piece.data); else translator.FixEnumValues(mode, piece.data);
-                
+
             });
         }
 
@@ -152,7 +152,7 @@ namespace SRML.SR.SaveSystem.Data
 
         public override string ToString()
         {
-            return $"{typeId} {key} = {data.ToString()};";
+            return $"{typeId} {key} = {data};";
         }
 
         internal static DataPiece Deserialize(BinaryReader reader)
@@ -187,7 +187,7 @@ namespace SRML.SR.SaveSystem.Data
 
         public DataPiece(string key, object value) : this(key, value.GetType())
         {
-            this.data = value;
+            data = value;
         }
 
         public object GetValue()
@@ -206,21 +206,21 @@ namespace SRML.SR.SaveSystem.Data
         {
             if (typeId != GetTypeID(b))
                 throw new Exception($"Tried to set data piece to a value invalid for its type ID");
-            this.data = b;
+            data = b;
         }
 
         public void SetValue<T>(T b)
         {
             if (typeId != GetTypeID(typeof(T)))
                 throw new Exception($"Tried to set data piece to a value invalid for its type ID");
-            this.data = b;
+            data = b;
         }
 
 
         public DataPiece(string key, Type valueType)
         {
             this.key = key;
-            this.typeId = GetTypeID(valueType);
+            typeId = GetTypeID(valueType);
         }
 
         public static DataType GetTypeID(Type type)
@@ -255,7 +255,7 @@ namespace SRML.SR.SaveSystem.Data
 
         public virtual void SetEnumTranslator(EnumTranslator.EnumFixerDelegate del)
         {
-            dataFixer = del;   
+            dataFixer = del;
         }
 
     }

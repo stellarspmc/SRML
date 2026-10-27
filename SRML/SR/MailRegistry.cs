@@ -25,7 +25,7 @@ namespace SRML.SR
 
             public MailEntry(string mailKey)
             {
-                this.MailKey = mailKey;
+                MailKey = mailKey;
             }
 
             public string FromKey => MAIL_FROM_PREFIX + MailKey;

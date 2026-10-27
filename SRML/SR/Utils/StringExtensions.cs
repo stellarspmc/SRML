@@ -9,7 +9,7 @@ public static class StringExtensions
 
     public static string Pad(this int val, int numDigits)
     {
-        var str = string.Empty + (object)val;
+        var str = string.Empty + val;
         while (str.Length < numDigits)
             str = "0" + str;
         return str;
@@ -137,7 +137,7 @@ public static class StringExtensions
     {
         var index = str.IndexOf(value);
         if (index >= 0)
-            str = str.Substring(0, include ? index : (index + value.Length));
+            str = str.Substring(0, include ? index : index + value.Length);
         return str;
     }
 
@@ -162,7 +162,7 @@ public static class StringExtensions
             str = "";
         var str1 = "" + "\"";
         foreach (var ch in str)
-            str1 = ch != '"' ? str1 + ch.ToString() : str1 + "\\\"";
+            str1 = ch != '"' ? str1 + ch : str1 + "\\\"";
         return str1 + "\"";
     }
 

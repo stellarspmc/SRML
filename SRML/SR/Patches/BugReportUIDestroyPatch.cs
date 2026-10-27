@@ -10,7 +10,7 @@ namespace SRML.SR.Patches
         {
             if (__instance is BugReportUI)
             {
-                GameObject.Destroy(__instance.gameObject);
+                Object.Destroy(__instance.gameObject);
                 GameContext.Instance.UITemplates.CreateErrorDialog("Bug reports are disabled when SRML is installed!").AddComponent<UIInputLocker>();
             }
         }

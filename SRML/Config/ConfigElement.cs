@@ -38,13 +38,13 @@ namespace SRML.Config
             };
         }
 
-        public FieldBackedConfigElement(FieldInfo field) : base(GenerateAttributesOptions(field)) 
+        public FieldBackedConfigElement(FieldInfo field) : base(GenerateAttributesOptions(field))
         {
             this.field = field;
             Options.DefaultValue = Value;
             if (Value is IStringParserProvider val) Options.Parser = val.GetParser();
             if (Options.Parser == null) throw new Exception(field.FieldType.ToString());
-            if (GetAttributeOfType<ConfigCallbackAttribute>(field,out var attribute)) OnValueChanged += x => AccessTools.Method(field.DeclaringType, attribute.methodName).Invoke(null, new object[] { Value, x }); ;
+            if (GetAttributeOfType<ConfigCallbackAttribute>(field,out var attribute)) OnValueChanged += x => AccessTools.Method(field.DeclaringType, attribute.methodName).Invoke(null, new[] { Value, x }); ;
         }
     }
     public class ConfigElement<T> : ConfigElement
@@ -77,8 +77,8 @@ namespace SRML.Config
 
         public ConfigElement(ConfigElementOptions options)
         {
-            this.Options = options;
-            
+            Options = options;
+
         }
 
         public void SetValue<T>(T value)

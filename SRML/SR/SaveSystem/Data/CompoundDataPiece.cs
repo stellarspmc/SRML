@@ -9,8 +9,8 @@ namespace SRML.SR.SaveSystem.Data
     {
         public CompoundDataPiece(string key)
         {
-            this.typeId = DataType.COMPOUND;
-            this.data = new HashSet<DataPiece>();
+            typeId = DataType.COMPOUND;
+            data = new HashSet<DataPiece>();
             this.key = key;
         }
 
@@ -64,7 +64,6 @@ namespace SRML.SR.SaveSystem.Data
             }
         }
 
-        
 
         public DataPiece this[string index]
         {
@@ -136,7 +135,6 @@ namespace SRML.SR.SaveSystem.Data
 
             return build.ToString();
 
-            
         }
         void Stringify(StringBuilder builder, Action<String> adder = null)
         {

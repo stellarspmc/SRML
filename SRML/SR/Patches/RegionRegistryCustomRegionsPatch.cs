@@ -9,7 +9,7 @@ namespace SRML.SR.Patches
     {
         public static void Prefix(RegionRegistry __instance)
         {
-            if (RegionSetRegistry.customTrees.Count() == 0 || __instance.regionsTrees.ContainsKey(RegionSetRegistry.customTrees.First().Key)) 
+            if (RegionSetRegistry.customTrees.Count() == 0 || __instance.regionsTrees.ContainsKey(RegionSetRegistry.customTrees.First().Key))
                 return;
 
             __instance.regionsTrees = __instance.regionsTrees.Union(RegionSetRegistry.customTrees).ToDictionary(x => x.Key, y => y.Value);

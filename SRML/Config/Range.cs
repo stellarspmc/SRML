@@ -66,7 +66,7 @@ namespace SRML.Config
 
             public string GetUsageString()
             {
-                return typeof(TType) + " in range of " + range.Min.ToString() + " to " + range.Max.ToString();
+                return typeof(TType) + " in range of " + range.Min + " to " + range.Max;
             }
 
             public object ParseObject(string str)

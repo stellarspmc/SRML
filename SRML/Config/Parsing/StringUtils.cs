@@ -5,7 +5,7 @@
         internal static string ToQuotedString(string str)
         {
             if (str == null) str = "";
-            string newStr = "";
+            var newStr = "";
             newStr += '\"';
             foreach (var ch in str)
             {
@@ -19,9 +19,9 @@
         internal static string FromQuotedString(string str)
         {
             if (str == null) str = "";
-            string newStr = "";
+            var newStr = "";
             str = str.Trim(' ', '\"');
-            bool isescaped = false;
+            var isescaped = false;
             foreach (var v in str)
             {
                 if (!isescaped && v == '\\') isescaped = true;

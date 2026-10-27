@@ -5,11 +5,12 @@ using SRML.SR.Utils.BaseObjects;
 using SRML.SR.Utils.Debug;
 using SRML.Utils;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public static class GameObjectExtensions
 {
 	// INITIALIZE STUFF
-	public static T Initialize<T>(this T obj, Action<T> action) where T : UnityEngine.Object
+	public static T Initialize<T>(this T obj, Action<T> action) where T : Object
 	{
 		action(obj);
 		return obj;
@@ -160,16 +161,16 @@ public static class GameObjectExtensions
 	// COPY STUFF
 	public static GameObject CreatePrefabCopy(this GameObject obj)
 	{
-		return SRML.Utils.PrefabUtils.CopyPrefab(obj);
+		return PrefabUtils.CopyPrefab(obj);
 	}
 
-	public static void RemoveComponent<T>(this GameObject go) where T : Component => GameObject.Destroy(go.GetComponent<T>());
-	public static void RemoveComponent(this GameObject go, Type type) => GameObject.Destroy(go.GetComponent(type));
-	public static void RemoveComponent(this GameObject go, string name) => GameObject.Destroy(go.GetComponent(name));
+	public static void RemoveComponent<T>(this GameObject go) where T : Component => Object.Destroy(go.GetComponent<T>());
+	public static void RemoveComponent(this GameObject go, Type type) => Object.Destroy(go.GetComponent(type));
+	public static void RemoveComponent(this GameObject go, string name) => Object.Destroy(go.GetComponent(name));
 
-	public static void RemoveComponentImmediate<T>(this GameObject go) where T : Component => GameObject.DestroyImmediate(go.GetComponent<T>());
-	public static void RemoveComponentImmediate(this GameObject go, Type type) => GameObject.DestroyImmediate(go.GetComponent(type));
-	public static void RemoveComponentImmediate(this GameObject go, string name) => GameObject.DestroyImmediate(go.GetComponent(name));
+	public static void RemoveComponentImmediate<T>(this GameObject go) where T : Component => Object.DestroyImmediate(go.GetComponent<T>());
+	public static void RemoveComponentImmediate(this GameObject go, Type type) => Object.DestroyImmediate(go.GetComponent(type));
+	public static void RemoveComponentImmediate(this GameObject go, string name) => Object.DestroyImmediate(go.GetComponent(name));
 
 	public static T GetOrAddComponent<T>(this GameObject go) where T : Component => go.GetComponent<T>() == null ? go.AddComponent<T>() : go.GetComponent<T>();
 	public static Component GetOrAddComponent(this GameObject go, Type type) => go.GetComponent(type) == null ? go.AddComponent(type) : go.GetComponent(type);

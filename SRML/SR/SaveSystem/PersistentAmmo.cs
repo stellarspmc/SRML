@@ -13,8 +13,8 @@ namespace SRML.SR.SaveSystem
 
         public PersistentAmmo(AmmoIdentifier identifier, PersistentAmmoModel model)
         {
-            this.Identifier = identifier;
-            this.DataModel = model;
+            Identifier = identifier;
+            DataModel = model;
         }
 
         public void Sync(bool log = false)

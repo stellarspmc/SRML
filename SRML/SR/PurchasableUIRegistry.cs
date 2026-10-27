@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SRML.SR
 {
@@ -103,7 +104,7 @@ namespace SRML.SR
         }
 
         public static void RegisterManipulator(Type t, PurchasableManipulatorDelegate man)
-        {   
+        {
             if (!typeof(BaseUI).IsAssignableFrom(t)) throw new Exception($"{t} does not extend BaseUI!");
             RegisterManipulator((otherType, x) => t.IsAssignableFrom(otherType), man);
         }
@@ -130,6 +131,5 @@ namespace SRML.SR
                 manipulator((T)x, ref array);
             };
         }
-
     }
 }

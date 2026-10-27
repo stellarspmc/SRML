@@ -50,7 +50,6 @@ namespace SRML.Utils {
                     yield return v;
                 }
             }
-
         }
 
         public static void PatchAll()
@@ -60,7 +59,7 @@ namespace SRML.Utils {
                 HarmonyPatcher.Instance.Patch(v.Key, transpiler: new HarmonyMethod(AccessTools.Method(typeof(HarmonyOverrideHandler), "Transpiler")));
             }
         }
-        
+
         public static void LoadOverrides(Module module)
         {
             foreach(var v in module.GetTypes().SelectMany(x => x.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)))
@@ -83,10 +82,8 @@ namespace SRML.Utils {
                         methodsToPatch[info] = a;
                     }
                     a.Add(v);
-                    
                 }
             }
-
         }
     }
 }

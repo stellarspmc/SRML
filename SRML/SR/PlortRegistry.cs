@@ -19,7 +19,7 @@ namespace SRML.SR
         /// </summary>
         /// <param name="plortid">The <see cref="Identifiable.Id"/> belonging to the plort.</param>
         /// <param name="progressRequired">The progress required to show the plort as unlocked.</param>
-        public static void AddPlortEntry(Identifiable.Id plortid, ProgressDirector.ProgressType[] progressRequired) => 
+        public static void AddPlortEntry(Identifiable.Id plortid, ProgressDirector.ProgressType[] progressRequired) =>
             AddPlortEntry(new MarketUI.PlortEntry() { id = plortid, toUnlock = progressRequired });
 
         /// <summary>

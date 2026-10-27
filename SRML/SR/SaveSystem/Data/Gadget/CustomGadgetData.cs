@@ -23,12 +23,12 @@ namespace SRML.SR.SaveSystem.Data.Gadget
 
         public sealed override void PushCustomModel(GadgetModel model)
         {
-            this.PushCustomModel((T)model);
+            PushCustomModel((T)model);
         }
 
         public sealed override void PullCustomModel(GadgetModel model)
         {
-            this.PullCustomModel((T)model);
+            PullCustomModel((T)model);
         }
 
         public sealed override void Load(Stream stream, bool skipPayloadEnd)

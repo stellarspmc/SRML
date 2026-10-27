@@ -12,7 +12,7 @@ namespace SRML.SR.SaveSystem.Data.Appearances
     {
         static SerializerPair<AppearanceSaveSet> saveSetPair = SerializerPair.GetEnumSerializerPair<AppearanceSaveSet>();
         static SerializerPair<Identifiable.Id> identifiablePair = SerializerPair.GetEnumSerializerPair<Identifiable.Id>();
-        PartialDictionary<Identifiable.Id, List<SlimeAppearance.AppearanceSaveSet>> unlocksCustom = new PartialDictionary<Identifiable.Id, List<AppearanceSaveSet>>(x => ModdedIDRegistry.IsModdedID(x.Key), identifiablePair, new SerializerPair<List<AppearanceSaveSet>>((x, y) => BinaryUtils.WriteList(x, y, saveSetPair.SerializeGeneric), x =>
+        PartialDictionary<Identifiable.Id, List<AppearanceSaveSet>> unlocksCustom = new PartialDictionary<Identifiable.Id, List<AppearanceSaveSet>>(x => ModdedIDRegistry.IsModdedID(x.Key), identifiablePair, new SerializerPair<List<AppearanceSaveSet>>((x, y) => BinaryUtils.WriteList(x, y, saveSetPair.SerializeGeneric), x =>
         {
             var list = new List<AppearanceSaveSet>();
             BinaryUtils.ReadList(x, list, saveSetPair.DeserializeGeneric);
@@ -51,7 +51,7 @@ namespace SRML.SR.SaveSystem.Data.Appearances
 
         public override void Push(AppearancesV01 data)
         {
-            
+
             unlocksCustom.Push(data.unlocks);
 
 
@@ -103,7 +103,7 @@ namespace SRML.SR.SaveSystem.Data.Appearances
 
         static PartialAppearancesData()
         {
-            PartialData.RegisterPartialData<AppearancesV01>(typeof(PartialAppearancesData));
+            RegisterPartialData<AppearancesV01>(typeof(PartialAppearancesData));
             EnumTranslator.RegisterEnumFixer<PartialAppearancesData>((x, y, z) =>
             {
                 EnumTranslator.FixEnumValues(x, y, z.unlocksCustom);

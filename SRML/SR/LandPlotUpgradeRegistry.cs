@@ -57,8 +57,8 @@ namespace SRML.SR
             PurchasableUIRegistry.RegisterPurchasable((PurchasableUIRegistry.PurchasableCreatorDelegateGeneric<T>)(x =>
             new PurchaseUI.Purchasable(entry.NameKey, entry.icon, entry.mainImg, entry.DescKey, entry.cost, entry.landplotPediaId,
                 () => x.Upgrade(entry.upgrade, entry.cost), entry.isUnlocked != null ? () => entry.isUnlocked(x.activator) : (Func<bool>)(() => true),
-                entry.isAvailable != null ? () => entry.isAvailable(x.activator) : (System.Func<bool>)(() => !x.activator.HasUpgrade(entry.upgrade)),
-                warning: (entry.warning ?? null), requireHoldToPurchase: entry.holdtopurchase)));
+                entry.isAvailable != null ? () => entry.isAvailable(x.activator) : (Func<bool>)(() => !x.activator.HasUpgrade(entry.upgrade)),
+                warning: entry.warning ?? null, requireHoldToPurchase: entry.holdtopurchase)));
 
         /// <summary>
         /// Registers a <see cref="PlotUpgrader"/> to a land plot.
@@ -91,8 +91,8 @@ namespace SRML.SR
             public Sprite mainImg;
             public int cost;
             public PediaDirector.Id landplotPediaId;
-            public System.Func<LandPlot, bool> isUnlocked;
-            public System.Func<LandPlot, bool> isAvailable;
+            public Func<LandPlot, bool> isUnlocked;
+            public Func<LandPlot, bool> isAvailable;
             public string warning;
             public bool holdtopurchase;
             private string landplotName;

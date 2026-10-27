@@ -48,7 +48,7 @@ namespace SRML.SR.SaveSystem.Data
             return new DataIdentifier
             {
                 Type = type,
-                longID = longID,    
+                longID = longID,
                 stringID = stringID
             };
         }
@@ -71,7 +71,7 @@ namespace SRML.SR.SaveSystem.Data
         }
 
         public static bool operator ==(DataIdentifier me, DataIdentifier other) => me.Equals(other);
-        public static bool operator !=(DataIdentifier me, DataIdentifier other) => !me.Equals(other); 
+        public static bool operator !=(DataIdentifier me, DataIdentifier other) => !me.Equals(other);
     }
     public enum IdentifierType
     {

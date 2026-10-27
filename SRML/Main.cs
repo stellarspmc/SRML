@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
@@ -14,10 +13,8 @@ using SRML.Utils;
 using TMPro;
 using UnityEngine;
 
-namespace SRML
-{
-    internal static class Main
-    {
+namespace SRML {
+    internal static class Main {
         public const string VERSION_STRING = "0.3.0";
 
         private static bool isInitialized;
@@ -33,20 +30,17 @@ namespace SRML
         internal static ConfigFile config;
         internal static AssetBundle uiBundle;
 
-        internal static bool InitializeSRMLThenBeginLoad(StandaloneStartScreen __instance)
-        {
+        internal static bool InitializeSRMLThenBeginLoad(StandaloneStartScreen __instance) {
             // run after first frame, but before loading commences
             if (isInitialized || !__instance.pastFirstFrame || __instance.isLoading)
                 return moveForwardAfterInit;
 
-            Main.Initialize();
+            Initialize();
             return false;
         }
 
-        internal static void Initialize()
-        {
-            if (isInitialized)
-                return;
+        internal static void Initialize() {
+            if (isInitialized) return;
             isInitialized = true;
 
             Debug.Log("SRML has successfully invaded the game!");
@@ -54,8 +48,7 @@ namespace SRML
             // Sentry SDK reports errors to Monomi. we don't want to flood them with BS mod errors
             // vital to be done before Anything
             var sentrySdk = UnityEngine.Object.FindObjectOfType<SentrySdk>();
-            if (sentrySdk != null)
-            {
+            if (sentrySdk != null) {
                 sentrySdk.Dsn = string.Empty;
                 var field = sentrySdk.GetType().GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
                 if (field != null) field.SetValue(null, null);
@@ -90,17 +83,12 @@ namespace SRML
             var ui2 = ErrorGUI.initErrorUI.GetComponent<ErrorGUI>();
 
             // assetbundles don't serialize TMP_Text alignment for some reason
-            foreach (var text in ui.GetComponentsInChildren<TMP_Text>(true))
-                text.alignment = TextAlignmentOptions.Midline;
-            foreach (var text in ui2.GetComponentsInChildren<TMP_Text>(true))
-                text.alignment = TextAlignmentOptions.Midline;
-            foreach (var text in ui.errorInfo.GetComponentsInChildren<TMP_Text>(true))
-                text.alignment = TextAlignmentOptions.MidlineLeft;
-            foreach (var text in ui2.errorInfo.GetComponentsInChildren<TMP_Text>(true))
-                text.alignment = TextAlignmentOptions.MidlineLeft;
+            foreach (var text in ui.GetComponentsInChildren<TMP_Text>(true)) text.alignment = TextAlignmentOptions.Midline;
+            foreach (var text in ui2.GetComponentsInChildren<TMP_Text>(true)) text.alignment = TextAlignmentOptions.Midline;
+            foreach (var text in ui.errorInfo.GetComponentsInChildren<TMP_Text>(true)) text.alignment = TextAlignmentOptions.MidlineLeft;
+            foreach (var text in ui2.errorInfo.GetComponentsInChildren<TMP_Text>(true)) text.alignment = TextAlignmentOptions.MidlineLeft;
 
-            foreach (var c in ui2.GetComponentsInChildren(typeof(Component)))
-            {
+            foreach (var c in ui2.GetComponentsInChildren(typeof(Component))) {
                 if (c.GetType().Name.Contains("Styler"))
                     UnityEngine.Object.DestroyImmediate(c);
             }
@@ -120,8 +108,7 @@ namespace SRML
 
             // this patch ensures that steam doesn't try to add modded achievements, because it wouldn't like that
             var sm = typeof(GameContext).Assembly.GetType("SteamManager", false, true);
-            if (sm != null)
-            {
+            if (sm != null) {
                 HarmonyPatcher.Instance.Patch(sm.GetMethod("AddAchievement"),
                     prefix: new HarmonyMethod(typeof(AchievementRegistry).GetMethod("ModdedAchievementPatch", BindingFlags.NonPublic | BindingFlags.Static)));
             }
@@ -131,21 +118,19 @@ namespace SRML
             HarmonyOverrideHandler.PatchAll(); // I Don't know what this is; as far as I can tell, it's a system that was never finished and does Nothing
 
             var erroring = SRModLoader.Mods.Values.Where(x => x.ModInfo.EncounteredError);
-            foreach (var mod in erroring)
+            var srMods = erroring.ToList();
+            foreach (var mod in srMods)
                 Debug.LogError(mod.exception);
 
-            moveForwardAfterInit = erroring.Count() <= 0;
-            if (!moveForwardAfterInit && !ErrorGUI.TryCreateExtendedError(null, ErrorGUI.initErrorUI, erroring, false))
-                Application.Quit();
+            moveForwardAfterInit = srMods.Count <= 0;
+            if (!moveForwardAfterInit && !ErrorGUI.TryCreateExtendedError(null, ErrorGUI.initErrorUI, srMods, false)) Application.Quit();
         }
 
         /// <summary>
         /// Called before GameContext.Awake()
         /// </summary>
-        internal static void PreLoad()
-        {
-            if (isPreLoaded)
-                return;
+        internal static void PreLoad() {
+            if (isPreLoaded) return;
             isPreLoaded = true;
 
             SRModLoader.PreLoadMods();
@@ -157,10 +142,8 @@ namespace SRML
         /// <summary>
         /// Called before GameContext.Start()
         /// </summary>
-        internal static void Load()
-        {
-            if (isLoaded)
-                return;
+        internal static void Load() {
+            if (isLoaded) return;
             isLoaded = true;
 
             BaseObjects.Populate();
@@ -178,84 +161,58 @@ namespace SRML
         /// <summary>
         /// Called after Load
         /// </summary>
-        internal static void PostLoad()
-        {
-            if (isPostLoaded)
-                return;
+        internal static void PostLoad() {
+            if (isPostLoaded) return;
             isPostLoaded = true;
 
             SRModLoader.PostLoadMods();
         }
 
-        internal static void Reload()
-        {
-            try
-            {
+        internal static void Reload() {
+            try {
                 SRModLoader.ReloadMods();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Debug.LogError(e);
             }
         }
 
-        internal static void Unload()
-        {
-            try
-            {
+        internal static void Unload() {
+            try {
                 SRModLoader.UnloadMods();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Debug.LogError(e);
             }
         }
 
-        internal static void Update()
-        {
-            try
-            {
+        internal static void Update() {
+            try {
                 SRModLoader.UpdateMods();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Debug.LogError(e);
             }
         }
 
-        internal static void FixedUpdate()
-        {
-            try
-            {
+        internal static void FixedUpdate() {
+            try {
                 SRModLoader.UpdateModsFixed();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Debug.LogError(e);
             }
         }
 
-        internal static void LateUpdate()
-        {
-            try
-            {
+        internal static void LateUpdate() {
+            try {
                 SRModLoader.UpdateModsLate();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Debug.LogError(e);
             }
         }
     }
 
-    internal class ModManager : MonoBehaviour
-    {
+    internal class ModManager : MonoBehaviour {
         void Update() => Main.Update();
-
         void FixedUpdate() => Main.FixedUpdate();
-
         void LateUpdate() => Main.LateUpdate();
-
         void OnApplicationQuit() => Main.Unload();
     }
 }

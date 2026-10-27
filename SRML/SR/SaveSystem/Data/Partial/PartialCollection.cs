@@ -17,7 +17,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
         {
             this.hoistCondition = hoistCondition;
             this.serializer = serializer;
-            this.forbiddenValueTester = valueFilter ?? (x => true);
+            forbiddenValueTester = valueFilter ?? (x => true);
         }
 
         public IList InternalList => hoistedValues;

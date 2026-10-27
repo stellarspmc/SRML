@@ -141,7 +141,7 @@ namespace SRML
             /// Corresponds to <see cref="IModEntryPoint.PostLoad"/>.
             /// </summary>
             POSTLOADED = 3,
-            
+
             /// <summary>
             /// Generic error. This will likely never appear.
             /// </summary>
@@ -168,7 +168,7 @@ namespace SRML
     /// <summary>
     /// Actual internal implementation of a mod
     /// </summary>
-    internal class SRMod 
+    internal class SRMod
     {
         /// <summary>
         /// Mods associated SRModInfo object
@@ -192,7 +192,7 @@ namespace SRML
         public Exception exception;
 
         /// <summary>
-        /// Gets the current executing mod as an SRMod instance 
+        /// Gets the current executing mod as an SRMod instance
         /// </summary>
         /// <returns>The current executing mod</returns>
         public static SRMod GetCurrentMod()
@@ -202,7 +202,7 @@ namespace SRML
         }
 
         /// <summary>
-        /// Forces a certain mod to be returned from <see cref="SRMod.GetCurrentMod"/> 
+        /// Forces a certain mod to be returned from <see cref="SRMod.GetCurrentMod"/>
         /// </summary>
         /// <param name="mod">The mod to be forced</param>
         internal static void ForceModContext(SRMod mod)
@@ -243,11 +243,11 @@ namespace SRML
 
         public SRMod(SRModInfo info, IModEntryPoint entryPoint)
         {
-            this.ModInfo = info;
+            ModInfo = info;
 
             if (entryPoint != null)
             {
-                this.EntryType = entryPoint.GetType();
+                EntryType = entryPoint.GetType();
                 if (entryPoint is ModEntryPoint)
                 {
                     entryPoint2 = (ModEntryPoint)entryPoint;
@@ -259,7 +259,7 @@ namespace SRML
 
         public SRMod(SRModInfo info, IModEntryPoint entryPoint, string path) : this(info, entryPoint)
         {
-            this.Path = path;
+            Path = path;
         }
 
         public void PreLoad()
@@ -303,7 +303,7 @@ namespace SRML
             if (useNewEntry)
                 entryPoint2.FixedUpdate();
         }
-        
+
         public void LateUpdate()
         {
             if (useNewEntry)

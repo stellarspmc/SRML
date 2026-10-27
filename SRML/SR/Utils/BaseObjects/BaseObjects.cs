@@ -226,7 +226,7 @@ namespace SRML.SR.Utils.BaseObjects
 				// Obtains objects loaded into the game that might be useful
 				foreach (var mesh in Resources.FindObjectsOfTypeAll<Mesh>())
 				{
-					if (!mesh.name.Equals(string.Empty) && !originMesh.ContainsKey(mesh.name.Replace("(Instance)", "")) && 
+					if (!mesh.name.Equals(string.Empty) && !originMesh.ContainsKey(mesh.name.Replace("(Instance)", "")) &&
 						!(!mesh.name.EndsWith("(Instance)") && Regex.IsMatch(mesh.name, @".*\(.*\)")))
 						originMesh.Add(mesh.name.Replace("(Instance)", ""), mesh);
 				}

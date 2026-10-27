@@ -57,7 +57,7 @@ namespace SRML.Console
 		{
 			if (!Console.cmdButtons.ContainsKey("user." + id))
 				return false;
-				
+
 			Console.cmdButtons.Remove("user." + id);
 			File.WriteAllText(bindFile, Regex.Replace(File.ReadAllText(bindFile), $@"{id}:.+\n", ""));
 			return true;

@@ -12,7 +12,7 @@ namespace SRML.SR.SaveSystem.Data.World
         public override void Pull(TreasurePodV01 data)
         {
             spawnQueue.Pull(data.spawnQueue);
-            
+
         }
 
         public override void Push(TreasurePodV01 data)
@@ -44,7 +44,7 @@ namespace SRML.SR.SaveSystem.Data.World
                 translator.FixEnumValues(mode, data.spawnQueue);
             });
 
-            PartialData.RegisterPartialData(() => new PartialTreasurePodData());
+            RegisterPartialData(() => new PartialTreasurePodData());
         }
     }
 }

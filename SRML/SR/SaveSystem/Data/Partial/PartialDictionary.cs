@@ -16,7 +16,6 @@ namespace SRML.SR.SaveSystem.Data.Partial
         private SerializerPair<K> keySerializer;
         private SerializerPair<V> valueSerializer;
 
-  
 
         public PartialDictionary(Predicate<KeyValuePair<K,V>> hoistPredicate,SerializerPair<K> keySerializer,SerializerPair<V> valueSerializer,Func<KeyValuePair<K,V>,KeyValuePair<K,V>?> filler=null)
         {
@@ -24,7 +23,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
             this.keySerializer = keySerializer;
             this.valueSerializer = valueSerializer;
             if (filler == null) filler = x => null;
-            this.hoistFiller = filler;
+            hoistFiller = filler;
         }
 
         public IDictionary InternalDictionary => hoistedValues;
@@ -50,7 +49,6 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public override void Push(IDictionary<K, V> data)
         {
-
             foreach(var v in hoistedValues) data[v.Key]=v.Value;
         }
 

@@ -6,7 +6,7 @@ public static class TypeExtensions
 {
     private const string MIDDLE = " cannot be converted to type ";
 
-    private static void LogConvert(System.ArgumentException e, string what = "field")
+    private static void LogConvert(ArgumentException e, string what = "field")
     {
         if (e.Message.Contains(MIDDLE))
         {
@@ -82,7 +82,7 @@ public static class TypeExtensions
 
             field?.SetValue(null, value);
         }
-        catch (System.ArgumentException e)
+        catch (ArgumentException e)
         {
             LogConvert(e);
         }
@@ -109,7 +109,7 @@ public static class TypeExtensions
 
             field?.SetValue(null, value);
         }
-        catch (System.ArgumentException e)
+        catch (ArgumentException e)
         {
             LogConvert(e);
         }
@@ -185,7 +185,7 @@ public static class TypeExtensions
             else
                 type.SetField($"<{name}>k__BackingField", value);
         }
-        catch (System.ArgumentException e)
+        catch (ArgumentException e)
         {
             LogConvert(e, "property");
         }
@@ -215,7 +215,7 @@ public static class TypeExtensions
             else
                 type.SetField<T>($"<{name}>k__BackingField", value);
         }
-        catch (System.ArgumentException e)
+        catch (ArgumentException e)
         {
             LogConvert(e, "property");
         }
@@ -280,7 +280,7 @@ public static class TypeExtensions
             return false;
         for (var index = 0; index < types.Length; ++index)
         {
-            if (types[index] == (Type)null)
+            if (types[index] == null)
                 throw new ArgumentNullException(nameof(types));
             if (parameters[index].ParameterType != types[index])
                 return false;

@@ -15,7 +15,7 @@ namespace SRML.SR
         /// <param name="ach">The id of the achievement to register.</param>
         /// <param name="track">The tracker to track achievement progress.</param>
         /// <param name="tier">The tier the achievement goes into.</param>
-        public static void RegisterModdedAchievement(AchievementsDirector.Achievement ach, AchievementsDirector.Tracker track, Tier tier) => 
+        public static void RegisterModdedAchievement(AchievementsDirector.Achievement ach, AchievementsDirector.Tracker track, Tier tier) =>
             moddedAchievements.Add(ach, (track, tier));
 
         /// <summary>

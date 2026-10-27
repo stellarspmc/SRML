@@ -5,7 +5,7 @@
         public override string PediaType => "gadget";
         public GadgetTranslation(Gadget.Id id)
         {
-            this.Key = id;
+            Key = id;
         }
     }
 

@@ -29,7 +29,7 @@ namespace SRML.Console
         {
 
             Actions = new ConsoleActions();
-            
+
             var path = Path.Combine(FileSystem.GetMyConfigPath(), FILENAME);
             if (!File.Exists(path)) return;
             customKeyBinds.Clear();
@@ -96,7 +96,7 @@ namespace SRML.Console
 
             public static PlayerAction GetEphemeralPlayerAction()
             {
-                var action = new PlayerAction(PREFIX+latestID++, KeyBindManager.Actions);
+                var action = new PlayerAction(PREFIX+latestID++, Actions);
                 BindingRegistry.ephemeralActions.Add(action);
                 return action;
             }
@@ -105,7 +105,7 @@ namespace SRML.Console
             {
                 var binding = new BindingV01();
                 binding.Load(reader.BaseStream);
-                var action = new PlayerAction(binding.action, KeyBindManager.Actions);
+                var action = new PlayerAction(binding.action, Actions);
                 BindingRegistry.ephemeralActions.Add(action);
                 if (int.TryParse(binding.action.Substring(PREFIX.Length), out var val) && val >= latestID) latestID = val+1;
                 SRInput.AddOrReplaceBinding(action, binding);

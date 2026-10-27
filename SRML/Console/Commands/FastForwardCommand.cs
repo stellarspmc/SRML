@@ -10,7 +10,7 @@
 
         public override bool Execute(string[] args)
         {
-            double timeToFastForwardTo = SceneContext.Instance.TimeDirector.GetNextDawn();
+            var timeToFastForwardTo = SceneContext.Instance.TimeDirector.GetNextDawn();
             if((args?.Length ?? 0) == 1)
             {
                 if(float.TryParse(args[0],out var amount))

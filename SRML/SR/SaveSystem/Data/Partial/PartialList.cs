@@ -17,7 +17,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
         public PartialList(Predicate<T> hoistCondition, SerializerPair<T> serializer, Func<T> emptyValueCreator=null)
         {
             this.hoistCondition = hoistCondition;
-            if (emptyValueCreator == null) emptyValueCreator = () => default(T);
+            if (emptyValueCreator == null) emptyValueCreator = () => default;
             this.emptyValueCreator = emptyValueCreator;
             this.serializer = serializer;
         }

@@ -17,7 +17,7 @@ namespace SRML.Console.Commands
             var noclipState = SceneContext.Instance.Player.GetComponentInChildren<vp_FPController>().MotorFreeFly;
             SceneContext.Instance.Player.GetComponentInChildren<vp_FPController>().MotorFreeFly = !noclipState;
             if (!noclipState) originalLayer = SceneContext.Instance.Player.layer;
-            SceneContext.Instance.Player.layer = noclipState ? (originalLayer) : LayerMask.NameToLayer("RaycastOnly");
+            SceneContext.Instance.Player.layer = noclipState ? originalLayer : LayerMask.NameToLayer("RaycastOnly");
             return true;
         }
     }

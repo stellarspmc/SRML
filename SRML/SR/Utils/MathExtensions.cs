@@ -14,7 +14,7 @@ public static class MathExtensions
     {
         var unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         var unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
-        return new DateTime(unixStart.Ticks + unixTimeStampInTicks, System.DateTimeKind.Utc);
+        return new DateTime(unixStart.Ticks + unixTimeStampInTicks, DateTimeKind.Utc);
     }
 
     /// <summary>
@@ -30,45 +30,45 @@ public static class MathExtensions
     }
     #endregion
 
-    public static float Abs(this float value) => (double)value < 0.0 ? -value : value;
+    public static float Abs(this float value) => value < 0.0 ? -value : value;
 
     public static bool Approx(this float v1, float v2)
     {
         var num = v1 - v2;
-        return (double)num >= -1.0000000116861E-07 && (double)num <= 1.0000000116861E-07;
+        return num >= -1.0000000116861E-07 && num <= 1.0000000116861E-07;
     }
 
-    public static bool IsNotZero(this float value) => (double)value < -1.0000000116861E-07 || (double)value > 1.0000000116861E-07;
+    public static bool IsNotZero(this float value) => value < -1.0000000116861E-07 || value > 1.0000000116861E-07;
 
-    public static bool IsZero(this float value) => (double)value >= -1.0000000116861E-07 && (double)value <= 1.0000000116861E-07;
+    public static bool IsZero(this float value) => value >= -1.0000000116861E-07 && value <= 1.0000000116861E-07;
 
-    public static bool AbsoluteIsOverThreshold(this float value, float threshold) => (double)value < -(double)threshold || (double)value > (double)threshold;
+    public static bool AbsoluteIsOverThreshold(this float value, float threshold) => value < -(double)threshold || value > (double)threshold;
 
     public static float NormalizeAngle(this float angle)
     {
-        while ((double)angle < 0.0)
+        while (angle < 0.0)
             angle += 360f;
-        while ((double)angle > 360.0)
+        while (angle > 360.0)
             angle -= 360f;
         return angle;
     }
 
-    public static float Min(this float v0, float v1) => (double)v0 >= (double)v1 ? v1 : v0;
+    public static float Min(this float v0, float v1) => v0 >= (double)v1 ? v1 : v0;
 
-    public static float Max(this float v0, float v1) => (double)v0 <= (double)v1 ? v1 : v0;
+    public static float Max(this float v0, float v1) => v0 <= (double)v1 ? v1 : v0;
 
     public static float Min(this float v0, float v1, float v2, float v3)
     {
-        var num1 = (double)v0 < (double)v1 ? v0 : v1;
-        var num2 = (double)v2 < (double)v3 ? v2 : v3;
-        return (double)num1 >= (double)num2 ? num2 : num1;
+        var num1 = v0 < (double)v1 ? v0 : v1;
+        var num2 = v2 < (double)v3 ? v2 : v3;
+        return num1 >= (double)num2 ? num2 : num1;
     }
 
     public static float Max(this float v0, float v1, float v2, float v3)
     {
-        var num1 = (double)v0 > (double)v1 ? v0 : v1;
-        var num2 = (double)v2 > (double)v3 ? v2 : v3;
-        return (double)num1 <= (double)num2 ? num2 : num1;
+        var num1 = v0 > (double)v1 ? v0 : v1;
+        var num2 = v2 > (double)v3 ? v2 : v3;
+        return num1 <= (double)num2 ? num2 : num1;
     }
 
     internal static float ValueFromSides(this float negativeSide, float positiveSide)
@@ -77,7 +77,7 @@ public static class MathExtensions
         var v2 = positiveSide.Abs();
         if (v1.Approx(v2))
             return 0.0f;
-        return (double)v1 > (double)v2 ? -v1 : v2;
+        return v1 > (double)v2 ? -v1 : v2;
     }
 
     internal static float ValueFromSides(this float negativeSide, float positiveSide, bool invertSides) => invertSides ? positiveSide.ValueFromSides(negativeSide) : negativeSide.ValueFromSides(positiveSide);
@@ -171,7 +171,7 @@ public static class MathExtensions
     /// <summary>
     /// Snap to grid of "round" size
     /// </summary>
-    public static float Snap(this float val, float round) => (float)Snap((double)val, (double)round);
+    public static float Snap(this float val, float round) => (float)Snap(val, (double)round);
 
     /// <summary>
     /// Returns the sign 1/-1 evaluated at the given value.
@@ -242,6 +242,6 @@ public static class MathExtensions
 
         var middle = (pointB - pointA) / 2;
         var withOffset = num.NotInRange(pointA, pointB) + middle;
-        return (withOffset >= pointB) ? pointB : pointA;
+        return withOffset >= pointB ? pointB : pointA;
     }
 }

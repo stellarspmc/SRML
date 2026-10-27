@@ -8,7 +8,7 @@ namespace SRML.SR.Patches
     {
         public static void Prefix(RanchModel __instance, RanchDirector.PaletteType type, ref RanchDirector.Palette pal)
         {
-            if (!((RanchDirector)__instance.participant).paletteDict.ContainsKey(pal)) 
+            if (!((RanchDirector)__instance.participant).paletteDict.ContainsKey(pal))
                 pal = ChromaRegistry.GetDefaultPaletteForType(type);
         }
     }

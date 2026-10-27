@@ -34,7 +34,7 @@ namespace SRML.SR.Patches
                     new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(CorporatePartnerRebuildDynamicPatch), "RefreshRewardsFancily"))
                 });
             }
-            
+
             return instructions;
         }
 

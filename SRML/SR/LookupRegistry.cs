@@ -48,7 +48,7 @@ namespace SRML.SR
         /// </summary>
         /// <param name="b">The <see cref="Identifiable"/> belonging to the prefab to register.</param>
         public static void RegisterIdentifiablePrefab(Identifiable b)
-        {   
+        {
             RegisterIdentifiablePrefab(b.gameObject);
         }
 
@@ -58,7 +58,7 @@ namespace SRML.SR
         /// <param name="entry"></param>
         public static void RegisterVacEntry(VacItemDefinition entry)
         {
-            
+
             switch (CurrentLoadingStep)
             {
                 case LoadingStep.PRELOAD:
@@ -105,9 +105,9 @@ namespace SRML.SR
             }
         }
         /// <summary>
-        /// Register a vacuumable item into the <see cref=""/>
+        /// Register a vacuumable item
         /// </summary>
-        /// <param name="id">Id of the vacuumable item</param>
+        /// <param name="id">id of the vacuumable item</param>
         /// <param name="color">Color of the background of the inventory slot</param>
         /// <param name="icon">Icon that will be used for the item in inventory</param>
         public static void RegisterVacEntry(Identifiable.Id id, Color color, Sprite icon)
@@ -159,7 +159,7 @@ namespace SRML.SR
         /// <param name="b"></param>
         public static void RegisterSpawnResource(GameObject b)
         {
-            switch (SRModLoader.CurrentLoadingStep)
+            switch (CurrentLoadingStep)
             {
                 case LoadingStep.PRELOAD:
                     resourceSpawnersToPatch.Add(b);
@@ -177,7 +177,7 @@ namespace SRML.SR
         /// <param name="gordo"></param>
         public static void RegisterGordo(GameObject gordo)
         {
-            switch (SRModLoader.CurrentLoadingStep)
+            switch (CurrentLoadingStep)
             {
                 case LoadingStep.PRELOAD:
                     gordosToPatch.Add(gordo);
@@ -195,7 +195,7 @@ namespace SRML.SR
         /// <param name="liquid">Liquid to register</param>
         public static void RegisterLiquid(LiquidDefinition liquid)
         {
-            switch (SRModLoader.CurrentLoadingStep)
+            switch (CurrentLoadingStep)
             {
                 case LoadingStep.PRELOAD:
                     liquidsToPatch.Add(liquid);
@@ -213,7 +213,7 @@ namespace SRML.SR
         /// <param name="entry">Entry to register</param>
         public static void RegisterToy(ToyDefinition entry)
         {
-            switch (SRModLoader.CurrentLoadingStep)
+            switch (CurrentLoadingStep)
             {
                 case LoadingStep.PRELOAD:
                     toysToPatch.Add(entry);

@@ -21,7 +21,6 @@ namespace SRML.SR.SaveSystem.Registry
 
         public readonly HashSet<DataRegistry> Registries = new HashSet<DataRegistry>();
 
-
         public delegate void ExtendedActorDataLoaded(ActorModel actor, GameObject obj, CompoundDataPiece data);
 
         public ExtendedActorDataLoaded onExtendedActorDataLoaded;
@@ -31,7 +30,6 @@ namespace SRML.SR.SaveSystem.Registry
             onExtendedActorDataLoaded?.Invoke(model, obj, piece);
         }
 
-        
 
         internal WorldDataPreLoadDelegate OnDataPreload;
         internal WorldDataLoadDelegate OnDataLoad;
@@ -49,12 +47,12 @@ namespace SRML.SR.SaveSystem.Registry
 
         public bool BelongsToMe(object b)
         {
-            return Registries.Any(x => x.BelongsToMe(b));
+            return Registries.Any((x) => x.BelongsToMe(b));
         }
 
         public bool IsModelRegistered(Type model)
         {
-            return Registries.Any(x => x.IsModelRegistered(model));
+            return Registries.Any((x) => x.IsModelRegistered(model));
         }
 
         public DataRegistry<T> GetRegistryFor<T>() where T : IDataRegistryMember

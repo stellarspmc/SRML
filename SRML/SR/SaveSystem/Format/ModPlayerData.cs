@@ -8,19 +8,18 @@ namespace SRML.SR.SaveSystem.Format
 {
     internal class ModPlayerData : VersionedSerializable
     {
-
         public List<PlayerState.Upgrade> upgrades = new List<PlayerState.Upgrade>();
         public List<PlayerState.Upgrade> availUpgrades = new List<PlayerState.Upgrade>();
         public Dictionary<PlayerState.Upgrade,PlayerState.UpgradeLockData> upgradeLocks=new Dictionary<PlayerState.Upgrade, PlayerState.UpgradeLockData>();
 
         public Dictionary<ProgressDirector.ProgressType, int> progress =
             new Dictionary<ProgressDirector.ProgressType, int>();
-        public Dictionary<ProgressDirector.ProgressTrackerId, double> delayedProgress = new Dictionary<ProgressDirector.ProgressTrackerId, double>(); 
+        public Dictionary<ProgressDirector.ProgressTrackerId, double> delayedProgress = new Dictionary<ProgressDirector.ProgressTrackerId, double>();
 
         public List<Gadget.Id> blueprints = new List<Gadget.Id>();
         public List<Gadget.Id> availBlueprints = new List<Gadget.Id>();
         public Dictionary<Gadget.Id,GadgetDirector.BlueprintLockData> blueprintLocks = new Dictionary<Gadget.Id, GadgetDirector.BlueprintLockData>();
-        
+
         public Dictionary<Gadget.Id,int> gadgets = new Dictionary<Gadget.Id, int>();
 
         public Dictionary<Identifiable.Id,int> craftMatCounts = new Dictionary<Identifiable.Id, int>();
@@ -36,7 +35,6 @@ namespace SRML.SR.SaveSystem.Format
             EnumTranslator.RegisterEnumFixer(
                 (EnumTranslator translator, EnumTranslator.TranslationMode mode, ModPlayerData data) =>
                 {
-
                     EnumTranslator.FixEnumValues(translator,mode,data.upgrades);
                     EnumTranslator.FixEnumValues(translator, mode,data.availBlueprints);
                     EnumTranslator.FixEnumValues(translator, mode, data.blueprints);
@@ -56,7 +54,6 @@ namespace SRML.SR.SaveSystem.Format
                     data.mailType=EnumTranslator.TranslateEnum(translator, mode, data.mailType);
                 }
             );
-
         }
 
         public override void WriteData(BinaryWriter writer)
@@ -67,7 +64,7 @@ namespace SRML.SR.SaveSystem.Format
 
             BinaryUtils.WriteDictionary(writer,progress,(x,y)=>x.Write((int)y),(x,y)=>x.Write(y));
             BinaryUtils.WriteDictionary(writer, delayedProgress, (x, y) => x.Write((int)y), (x, y) => x.Write(y));
-                
+
             BinaryUtils.WriteList(writer, blueprints,(x,y)=>x.Write((int)y));
             BinaryUtils.WriteList(writer, availBlueprints, (x, y) => x.Write((int)y));
             BinaryUtils.WriteDictionary(writer, blueprintLocks, (x, y) => x.Write((int)y), (x, y) => { x.Write(y.timedLock); x.Write(y.lockedUntil); });
@@ -111,7 +108,6 @@ namespace SRML.SR.SaveSystem.Format
             BinaryUtils.ReadList(reader,unlockedZoneMaps,x=>(ZoneDirector.Zone)enumser.Deserialize(x));
         }
 
-        
 
         public void Pull(PlayerV14 player,SRMod ourMod)
         {
@@ -149,7 +145,7 @@ namespace SRML.SR.SaveSystem.Format
             AddRange(player.blueprintLocks,blueprintLocks.Where(x => ModdedIDRegistry.IsValidID(x.Key)));
 
             AddRange(player.gadgets,gadgets.Where(x => ModdedIDRegistry.IsValidID(x.Key)));
-            
+
             AddRange(player.craftMatCounts,craftMatCounts.Where(x => ModdedIDRegistry.IsValidID(x.Key)));
             player.unlockedZoneMaps.AddRange(unlockedZoneMaps.Where(x=>ModdedIDRegistry.IsValidID(unlockedZoneMaps)));
             player.mail.AddRange(mail.Where(x=>MailRegistry.GetModForMail(x.messageKey)!=null));

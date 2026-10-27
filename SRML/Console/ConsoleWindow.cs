@@ -41,7 +41,7 @@ namespace SRML.Console
         // STYLE CONTROL
         private static GUIStyle textArea;
         private static GUIStyle window;
-        private static readonly Font consoleFont = Font.CreateDynamicFontFromOSFont(new string[] { "Lucida Console", "Monaco" }, 13);
+        private static readonly Font consoleFont = Font.CreateDynamicFontFromOSFont(new[] { "Lucida Console", "Monaco" }, 13);
 
         // DESIGN VARIABLES
         private static Vector2 oldRes = new Vector2(Screen.width, Screen.height);
@@ -56,7 +56,7 @@ namespace SRML.Console
         private static float cmdLineY = leftGroup.height - 25;
         private static Rect cmdRect = new Rect(0, cmdLineY, leftGroup.width, 20);
 
-        private static GUIContent FullContent => new GUIContent(fullText.ToString());
+        private static GUIContent FullContent => new GUIContent(fullText);
         private static Vector2 TextSize => textArea?.CalcSize(FullContent) ?? Vector2.zero;
 
         private static Rect oRect = new Rect(0, 0, leftGroup.width, cmdLineY - 5);
@@ -69,7 +69,7 @@ namespace SRML.Console
         private static readonly Rect cmRect = new Rect(10, 7, rightGroupB.width - 20, 25);
 
         private static Rect csRect = new Rect(10, 37, rightGroupB.width - 15, rightGroupB.height - 45);
-        private static Rect caRect = new Rect(0, 0, csRect.width - 20, (30 * Console.cmdButtons.Count) + 5);
+        private static Rect caRect = new Rect(0, 0, csRect.width - 20, 30 * Console.cmdButtons.Count + 5);
 
         private static Rect btnRect = new Rect(0, 5, caRect.width - 5, 25);
 
@@ -145,7 +145,7 @@ namespace SRML.Console
                 sRect = new Rect(5, 7, oRect.width - 15, cmdLineY - 20);
 
                 csRect = new Rect(10, 37, rightGroupB.width - 15, rightGroupB.height - 45);
-                caRect = new Rect(0, 0, csRect.width - 20, (30 * Console.cmdButtons.Count) + 5);
+                caRect = new Rect(0, 0, csRect.width - 20, 30 * Console.cmdButtons.Count + 5);
             }
         }
 
@@ -320,7 +320,7 @@ namespace SRML.Console
                     if (completeIndex < 0)
                         completeIndex = cachedAC.Count - 1;
 
-                    aCompleteScroll.y = (25 * completeIndex) + 5;
+                    aCompleteScroll.y = 25 * completeIndex + 5;
 
                     Event.current.Use();
                     return;
@@ -331,7 +331,7 @@ namespace SRML.Console
                 {
                     if (currHistory != -1)
                     {
-                        if (currHistory < (Console.history.Count - 1))
+                        if (currHistory < Console.history.Count - 1)
                         {
                             cmdText = Console.history[currHistory + 1];
                             currHistory += 1;
@@ -354,7 +354,7 @@ namespace SRML.Console
                     if (completeIndex > cachedAC.Count - 1)
                         completeIndex = 0;
 
-                    aCompleteScroll.y = (25 * completeIndex) + 5;
+                    aCompleteScroll.y = 25 * completeIndex + 5;
 
                     Event.current.Use();
                     return;
@@ -370,7 +370,7 @@ namespace SRML.Console
                 }
 
                 // FIXES SPACE && BACKSPACE
-                if (autoAC && (Event.current.keyCode == KeyCode.Space) && Event.current.modifiers == EventModifiers.None)
+                if (autoAC && Event.current.keyCode == KeyCode.Space && Event.current.modifiers == EventModifiers.None)
                 {
                     if (Regex.Matches(cmdText, "\"").Count % 2 == 0)
                         forceClose = false;
@@ -451,7 +451,7 @@ namespace SRML.Console
             GUI.Label(cmRect, commands);
             GUI.skin.label.alignment = TextAnchor.MiddleLeft;
 
-            caRect.height = (30 * Console.cmdButtons.Count) + 5;
+            caRect.height = 30 * Console.cmdButtons.Count + 5;
             commandScroll = GUI.BeginScrollView(csRect, commandScroll, caRect, false, true);
             GUI.BeginGroup(caRect);
 
@@ -516,7 +516,7 @@ namespace SRML.Console
             if (txt.hasSelection)
                 command = string.Empty;
 
-            intRect.height = (25 * cachedAC.Count) + 5;
+            intRect.height = 25 * cachedAC.Count + 5;
             aCompleteScroll = GUI.BeginScrollView(acsRect, aCompleteScroll, intRect, false, true);
             GUI.BeginGroup(intRect);
 

@@ -90,7 +90,7 @@ namespace SRML.SR.SaveSystem.Data.Ammo
         public void Read(BinaryReader reader)
         {
             var count = reader.ReadInt32();
-            this.slots = new PersistentAmmoSlot[count];
+            slots = new PersistentAmmoSlot[count];
 
             for (var i = 0; i < count; i++)
             {

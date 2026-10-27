@@ -33,7 +33,7 @@ namespace SRML.SR.SaveSystem.Patches
                     yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(targetType, "saveName"));
                     yield return new CodeInstruction(OpCodes.Call,
                         AccessTools.Method(typeof(LoadSavePatch), "LoadModSave"));
-                }   
+                }
                 else
                 {
                     yield return v;

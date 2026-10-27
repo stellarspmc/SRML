@@ -11,7 +11,6 @@ namespace SRML.SR.SaveSystem.Format
 {
     class ModdedSaveData
     {
-
         public const int DATA_VERSION = 4;
         public int version;
         internal static int LATEST_READ_VERSION;
@@ -29,7 +28,6 @@ namespace SRML.SR.SaveSystem.Format
         {
             version = reader.ReadInt32();
             LATEST_READ_VERSION = version;
-
         }
 
         public void WriteHeader(BinaryWriter writer)
@@ -57,7 +55,7 @@ namespace SRML.SR.SaveSystem.Format
 
                 ammoDataEntries.Add(newEntry);
             }
-            
+
             segments.Clear();
             count = reader.ReadInt32();
             for (var i = 0; i < count; i++)
@@ -98,7 +96,6 @@ namespace SRML.SR.SaveSystem.Format
                     if (version >= 3) appearancesData.Read(reader);
                 }
             }
-          
         }
 
         public void WriteData(BinaryWriter writer)
@@ -176,7 +173,6 @@ namespace SRML.SR.SaveSystem.Format
             {
                 v.FixAllValues(enumTranslator,mode);
             }
-            
         }
     }
 }

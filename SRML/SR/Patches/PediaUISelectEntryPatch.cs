@@ -19,18 +19,18 @@ namespace SRML.SR.Patches
         public static bool CheckIfHasCustomRenderer(PediaUI ui, PediaDirector.Id id)
         {
             var panel = GetPanel(ui);
-            if (PediaRegistry.activeRenderer != null)
+            if (activeRenderer != null)
             {
-                if (PediaRegistry.activeRenderer is IReusablePediaRenderer r) r.CurrentID = id;
-                PediaRegistry.activeRenderer.OnListingDeselected(panel);
-                PediaRegistry.activeRenderer = null;
+                if (activeRenderer is IReusablePediaRenderer r) r.CurrentID = id;
+                activeRenderer.OnListingDeselected(panel);
+                activeRenderer = null;
             }
 
-            var renderer = PediaRegistry.GetRenderer(id);
+            var renderer = GetRenderer(id);
             if (renderer == null) return false;
             if (renderer is IReusablePediaRenderer R) R.CurrentID = id;
             renderer.OnListingSelected(panel);
-            PediaRegistry.activeRenderer = renderer;
+            activeRenderer = renderer;
             return true;
         }
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
@@ -46,7 +46,7 @@ namespace SRML.SR.Patches
             }
             using (var codes = list.GetEnumerator())
             {
-                
+
                 while (codes.MoveNext())
                 {
                     var current = codes.Current;

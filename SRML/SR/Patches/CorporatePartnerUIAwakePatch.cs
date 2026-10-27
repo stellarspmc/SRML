@@ -32,7 +32,7 @@ namespace SRML.SR.Patches
             }
 
             EnhancedCorporatePartnerHandler.rewardEntry = PrefabUtils.CopyPrefab(__instance.rewardObjects[0]);
-            var newUI = GameObject.Instantiate(Main.uiBundle.LoadAsset<GameObject>("RewardsPanel"), __instance.rewardObjects[0].transform.parent.parent, false);
+            var newUI = Object.Instantiate(Main.uiBundle.LoadAsset<GameObject>("RewardsPanel"), __instance.rewardObjects[0].transform.parent.parent, false);
             EnhancedCorporatePartnerHandler.content = newUI.transform.GetChild(0).GetChild(0);
             var text = __instance.rewardObjects[0].transform.parent.GetChild(0);
             text.SetParent(newUI.transform.parent);

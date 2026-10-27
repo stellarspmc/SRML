@@ -12,7 +12,7 @@ namespace SRML.SR.UI
             MainMenuUtils.AddMainMenuButtonWithTranslation(ui, "ModsButton", "b.mods", () =>
             {
                 var g = MainMenuUtils.DisplayBlankPanelWithTranslation<BaseUI>(ui, "ModsUI", "b.mods");
-                GameObject.Instantiate(mainMenuUIPrefab).transform.SetParent(g.transform.GetChild(0), false);
+                Object.Instantiate(mainMenuUIPrefab).transform.SetParent(g.transform.GetChild(0), false);
                 
             }).transform.SetSiblingIndex(5);
 

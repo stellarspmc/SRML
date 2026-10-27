@@ -23,12 +23,12 @@ namespace SRML.SR.SaveSystem.Data.Actor
 
         public sealed override void PushCustomModel(ActorModel model)
         {
-            this.PushCustomModel((T) model);
+            PushCustomModel((T) model);
         }
 
         public sealed override void PullCustomModel(ActorModel model)
         {
-            this.PullCustomModel((T) model);
+            PullCustomModel((T) model);
         }
 
         public sealed override void Load(Stream stream, bool skipPayloadEnd)
@@ -67,7 +67,7 @@ namespace SRML.SR.SaveSystem.Data.Actor
         {
             EnumTranslator.RegisterEnumFixer((EnumTranslator translator, EnumTranslator.TranslationMode mode, VanillaActorData v) =>
             {
-                v.typeId = (int)translator.TranslateEnum(mode, ((Identifiable.Id)v.typeId));
+                v.typeId = (int)translator.TranslateEnum(mode, (Identifiable.Id)v.typeId);
                 translator.FixEnumValues(mode, v.fashions);
                 v.fashions.RemoveAll(x => x == Identifiable.Id.NONE);
                 translator.FixEnumValues(mode, v.emotions.emotionData);

@@ -10,7 +10,7 @@ namespace SRML.SR.Translation
 
         public PediaEntryTranslation(PediaDirector.Id id)
         {
-            this.Key = id;
+            Key = id;
         }
 
         public string TitleKey => TITLE_PREFIX + StringKey;

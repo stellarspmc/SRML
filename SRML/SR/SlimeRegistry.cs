@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace SRML.SR
 {
@@ -42,34 +43,28 @@ namespace SRML.SR
         /// </summary>
         /// <param name="definition">Slime definition to register</param>
         /// <param name="refreshEatMaps">Whether or not to refresh the EatMaps of the slime and its bases.</param>
-        public static void RegisterSlimeDefinition(SlimeDefinition definition, bool refreshEatMaps = true)
-        {
+        public static void RegisterSlimeDefinition(SlimeDefinition definition, bool refreshEatMaps = true) {
             slimeDefinitions[definition] = SRMod.GetCurrentMod();
             SlimeDefinitions definitions;
-            switch (SRModLoader.CurrentLoadingStep)
-            {
+            switch (SRModLoader.CurrentLoadingStep) {
                 case SRModLoader.LoadingStep.PRELOAD:
-                    definitions = UnityEngine.Object.FindObjectOfType<GameContext>().SlimeDefinitions;
+                    definitions = Object.FindObjectOfType<GameContext>().SlimeDefinitions;
                     break;
                 default:
                     definitions = GameContext.Instance.SlimeDefinitions;
                     break;
             }
 
-            if (definition.IsLargo && definition.BaseSlimes != null && definition.BaseSlimes.Length > 1)
-            {
+            if (definition.IsLargo && definition.BaseSlimes != null && definition.BaseSlimes.Length > 1) {
                 if (definition.BaseSlimes[0].Diet.ProducePlorts() && definition.BaseSlimes[1].Diet.ProducePlorts())
                     definitions.largoDefinitionByBasePlorts.AddOrChange(new SlimeDefinitions.PlortPair(definition.BaseSlimes[0].Diet.Produces[0], definition.BaseSlimes[1].Diet.Produces[0]), definition);
                 definitions.largoDefinitionByBaseDefinitions.AddOrChange(new SlimeDefinitions.SlimeDefinitionPair(definition.BaseSlimes[0], definition.BaseSlimes[1]), definition);
             }
             definitions.slimeDefinitionsByIdentifiable.AddOrChange(definition.IdentifiableId, definition);
             definitions.Slimes = definitions.Slimes.Where(x => x.IdentifiableId != definition.IdentifiableId).AddItem(definition).ToArray();
-            if (refreshEatMaps)
-            {
+            if (refreshEatMaps) {
                 definition.Diet.RefreshEatMap(definitions, definition);
-                if (definition.BaseSlimes != null)
-                    foreach (var child in definition.BaseSlimes)
-                        child.Diet.RefreshEatMap(definitions, child);
+                if (definition.BaseSlimes != null) foreach (var child in definition.BaseSlimes) child.Diet.RefreshEatMap(definitions, child);
             }
         }
 
@@ -78,15 +73,13 @@ namespace SRML.SR
         /// </summary>
         /// <param name="def">The <see cref="SlimeDefinition"/> that the <see cref="SlimeAppearance"/> is assigned to.</param>
         /// <param name="app">The <see cref="SlimeAppearance"/> to be registered.</param>
-        public static void RegisterAppearance(SlimeDefinition def, SlimeAppearance app)
-        {
+        public static void RegisterAppearance(SlimeDefinition def, SlimeAppearance app) {
             SceneContext.Instance.SlimeAppearanceDirector.RegisterDependentAppearances(def, app);
             SceneContext.Instance.SlimeAppearanceDirector.UpdateChosenSlimeAppearance(def, app);
         }
 
         [Flags]
-        public enum LargoProps
-        {
+        public enum LargoProps {
             NONE = 0,
             SWAP_EYES = 1,
             SWAP_MOUTH = 2,
@@ -117,8 +110,7 @@ namespace SRML.SR
         /// <param name="props">The properties controlling the way the <see cref="SlimeAppearance"/>s are combined.</param>
         /// <param name="stripeShader">The stripe shader to be used, if any.</param>
         /// <returns>The created <see cref="SlimeAppearance"/>.</returns>
-        public static SlimeAppearance CombineAppearances(SlimeAppearance slime1, SlimeAppearance slime2, SlimeAppearance.AppearanceSaveSet set, LargoProps props, Shader stripeShader = null)
-        {
+        public static SlimeAppearance CombineAppearances(SlimeAppearance slime1, SlimeAppearance slime2, SlimeAppearance.AppearanceSaveSet set, LargoProps props, Shader stripeShader = null) {
             var appearance = ScriptableObject.CreateInstance<SlimeAppearance>();
             appearance.name = slime1.name + slime2.name;
             appearance.AnimatorOverride = slime1.AnimatorOverride ?? slime2.AnimatorOverride;
@@ -129,8 +121,8 @@ namespace SRML.SR
             {
                 var face = new SlimeExpressionFace();
                 face.SlimeExpression = kvp.Key;
-                face.Eyes = (props & (LargoProps.SWAP_EYES)) != 0 ? slime2.Face._expressionToFaceLookup[kvp.Key].Eyes : slime1.Face._expressionToFaceLookup[kvp.Key].Eyes;
-                face.Mouth = (props & (LargoProps.SWAP_MOUTH)) != 0 ? slime2.Face._expressionToFaceLookup[kvp.Key].Mouth : slime1.Face._expressionToFaceLookup[kvp.Key].Mouth;
+                face.Eyes = (props & LargoProps.SWAP_EYES) != 0 ? slime2.Face._expressionToFaceLookup[kvp.Key].Eyes : slime1.Face._expressionToFaceLookup[kvp.Key].Eyes;
+                face.Mouth = (props & LargoProps.SWAP_MOUTH) != 0 ? slime2.Face._expressionToFaceLookup[kvp.Key].Mouth : slime1.Face._expressionToFaceLookup[kvp.Key].Mouth;
                 appearance.Face._expressionToFaceLookup.Add(kvp.Key, face);
             }
             appearance.Face.ExpressionFaces = appearance.Face._expressionToFaceLookup.Values.ToArray();
@@ -141,19 +133,19 @@ namespace SRML.SR
             var base2 = slime2.Structures.IndexOfItem(slime2.Structures.FirstOrDefault(x => x.Element.Name.Contains("Body")));
             base1 = base1 == -1 ? 0 : base1;
             base2 = base2 == -1 ? 0 : base2;
-            structures.Add((props & (LargoProps.SWAP_BASE)) != 0 ? slime2.Structures[base2].Clone() : slime1.Structures[base1].Clone());
-            ReplaceRecolorStructureMats((props & (LargoProps.REPLACE_BASE_MAT_AS_SLIME1)) != 0, false, structures[0], slime1.Structures[0]);
-            ReplaceRecolorStructureMats((props & (LargoProps.REPLACE_BASE_MAT_AS_SLIME2)) != 0, false, structures[0], slime2.Structures[0]);
-            ReplaceRecolorStructureMats(false, (props & (LargoProps.RECOLOR_BASE_MAT_AS_SLIME1)) != 0, structures[0], slime1.Structures[0]);
-            ReplaceRecolorStructureMats(false, (props & (LargoProps.RECOLOR_BASE_MAT_AS_SLIME2)) != 0, structures[0], slime2.Structures[0]);
-            if ((props & (LargoProps.INHERIT_STRIPE_FROM_SLIME1)) != 0) structures[0].DefaultMaterials[0].InheritStripe(slime1.Structures[0].DefaultMaterials[0], stripeShader);
-            if ((props & (LargoProps.INHERIT_STRIPE_FROM_SLIME2)) != 0) structures[0].DefaultMaterials[0].InheritStripe(slime2.Structures[0].DefaultMaterials[0], stripeShader);
+            structures.Add((props & LargoProps.SWAP_BASE) != 0 ? slime2.Structures[base2].Clone() : slime1.Structures[base1].Clone());
+            ReplaceRecolorStructureMats((props & LargoProps.REPLACE_BASE_MAT_AS_SLIME1) != 0, false, structures[0], slime1.Structures[0]);
+            ReplaceRecolorStructureMats((props & LargoProps.REPLACE_BASE_MAT_AS_SLIME2) != 0, false, structures[0], slime2.Structures[0]);
+            ReplaceRecolorStructureMats(false, (props & LargoProps.RECOLOR_BASE_MAT_AS_SLIME1) != 0, structures[0], slime1.Structures[0]);
+            ReplaceRecolorStructureMats(false, (props & LargoProps.RECOLOR_BASE_MAT_AS_SLIME2) != 0, structures[0], slime2.Structures[0]);
+            if ((props & LargoProps.INHERIT_STRIPE_FROM_SLIME1) != 0) structures[0].DefaultMaterials[0].InheritStripe(slime1.Structures[0].DefaultMaterials[0], stripeShader);
+            if ((props & LargoProps.INHERIT_STRIPE_FROM_SLIME2) != 0) structures[0].DefaultMaterials[0].InheritStripe(slime2.Structures[0].DefaultMaterials[0], stripeShader);
             for (var i = 0; i < slime1.Structures.Length; i++)
             {
                 if (i == base1) continue;
                 var structure = slime1.Structures[i].Clone();
                 if (replaceElements.ContainsKey(structure.Element.Name)) structure.Element = replaceElements[structure.Element.Name];
-                ReplaceRecolorStructureMats((props & (LargoProps.REPLACE_SLIME1_ADDON_MATS)) != 0, (props & (LargoProps.RECOLOR_SLIME1_ADDON_MATS)) != 0, structure, structures[0]);
+                ReplaceRecolorStructureMats((props & LargoProps.REPLACE_SLIME1_ADDON_MATS) != 0, (props & LargoProps.RECOLOR_SLIME1_ADDON_MATS) != 0, structure, structures[0]);
                 structures.Add(structure);
             }
             for (var i = 0; i < slime2.Structures.Length; i++)
@@ -161,7 +153,7 @@ namespace SRML.SR
                 if (i == base2) continue;
                 var structure = slime2.Structures[i].Clone();
                 if (replaceElements.ContainsKey(structure.Element.Name)) structure.Element = replaceElements[structure.Element.Name];
-                ReplaceRecolorStructureMats((props & (LargoProps.REPLACE_SLIME2_ADDON_MATS)) != 0, (props & (LargoProps.RECOLOR_SLIME2_ADDON_MATS)) != 0, structure, structures[0]);
+                ReplaceRecolorStructureMats((props & LargoProps.REPLACE_SLIME2_ADDON_MATS) != 0, (props & LargoProps.RECOLOR_SLIME2_ADDON_MATS) != 0, structure, structures[0]);
                 structures.Add(structure);
             }
             appearance.Structures = structures.ToArray();
@@ -177,7 +169,7 @@ namespace SRML.SR
             {
                 var qubit = (SlimeAppearance)PrefabUtils.DeepCopyObject(appearance);
                 var qStructures = qubit.Structures.Where(x => x.DefaultMaterials != null && x.DefaultMaterials.Length > 0 && x.DefaultMaterials[0].HasProperty("_TopColor")).ToList();
-                var mat = Material.Instantiate(quantumMat);
+                var mat = Object.Instantiate(quantumMat);
                 mat.SetFloat("_GhostToggle", 1f);
                 for (var i = 0; i < qStructures.Count; i++)
                 {
@@ -205,14 +197,14 @@ namespace SRML.SR
         {
             var slimeDefinition = ScriptableObject.CreateInstance<SlimeDefinition>();
 
-            slimeDefinition.BaseSlimes = new SlimeDefinition[] { slime1, slime2 };
+            slimeDefinition.BaseSlimes = new[] { slime1, slime2 };
             slimeDefinition.CanLargofy = false;
             slimeDefinition.IdentifiableId = id;
             slimeDefinition.IsLargo = true;
             slimeDefinition.name = $"{slime1.Name}{slime2.Name}";
             slimeDefinition.Name = $"{slime1.Name} {slime2.Name}";
             slimeDefinition.PrefabScale = 2;
-            slimeDefinition.Sounds = ((props & (LargoProps.SWAP_SOUNDS)) != 0) ? slime2.Sounds : slime1.Sounds;
+            slimeDefinition.Sounds = (props & LargoProps.SWAP_SOUNDS) != 0 ? slime2.Sounds : slime1.Sounds;
 
             slimeDefinition.LoadLargoDiet();
 
@@ -222,9 +214,9 @@ namespace SRML.SR
             if (slime2.FavoriteToys != null)
                 slimeDefinition.FavoriteToys = slimeDefinition.FavoriteToys.Union(slime2.FavoriteToys).ToArray();
 
-            if ((props & (LargoProps.PREVENT_SLIME1_EATMAP_TRANSFORM)) != 0)
+            if ((props & LargoProps.PREVENT_SLIME1_EATMAP_TRANSFORM) != 0)
                 preventLargoTransforms.Add(new KeyValuePair<Identifiable.Id, Identifiable.Id>(slime1.IdentifiableId, id));
-            if ((props & (LargoProps.PREVENT_SLIME2_EATMAP_TRANSFORM)) != 0)
+            if ((props & LargoProps.PREVENT_SLIME2_EATMAP_TRANSFORM) != 0)
                 preventLargoTransforms.Add(new KeyValuePair<Identifiable.Id, Identifiable.Id>(slime2.IdentifiableId, id));
 
             return slimeDefinition;
@@ -247,7 +239,7 @@ namespace SRML.SR
             largoPrefab.GetComponent<Identifiable>().id = def.IdentifiableId;
             largoPrefab.GetComponent<Vacuumable>().size = Vacuumable.Size.LARGE;
             largoPrefab.GetComponent<Rigidbody>().mass += slime2Prefab.GetComponent<Rigidbody>().mass;
-            GameObject.Destroy(largoPrefab.GetComponent<AweTowardsLargos>());
+            Object.Destroy(largoPrefab.GetComponent<AweTowardsLargos>());
 
             if (largoPrefab.HasComponent<PlayWithToys>())
                 largoPrefab.GetComponent<PlayWithToys>().slimeDefinition = def;
@@ -336,10 +328,10 @@ namespace SRML.SR
 
             processApperances?.Invoke(app);
 
-            if ((props & (LargoProps.GENERATE_NAME)) != 0)
+            if ((props & LargoProps.GENERATE_NAME) != 0)
                 TranslationPatcher.AddActorTranslation("l." + largoId.ToString().ToLowerInvariant(), GenerateLargoName(largoId));
 
-            if ((props & (LargoProps.GENERATE_SECRET_STYLES)) != 0)
+            if ((props & LargoProps.GENERATE_SECRET_STYLES) != 0)
             {
                 GameContext.Instance.DLCDirector.onPackageInstalled += x =>
                 {
@@ -390,7 +382,7 @@ namespace SRML.SR
             }
             else
             {
-                mat.shader = shader == null ? (mat.shader.name == "SR/AMP/Slime/Body/Default" ? Shader.Find("SR/AMP/Slime/Body/Stripe") : Shader.Find(mat.shader.name + " Stripe")) : shader;
+                mat.shader = shader == null ? mat.shader.name == "SR/AMP/Slime/Body/Default" ? Shader.Find("SR/AMP/Slime/Body/Stripe") : Shader.Find(mat.shader.name + " Stripe") : shader;
                 mat.SetTexture("_StripeTexture", inherited.GetTexture("_StripeTexture"));
                 mat.SetFloat("_StripeUV1", inherited.GetFloat("_StripeUV1"));
             }
@@ -427,7 +419,7 @@ namespace SRML.SR
                     if (!structure.DefaultMaterials[i].HasProperty("_TopColor"))
                         continue;
 
-                    var m = structure.DefaultMaterials[i] = UnityEngine.Object.Instantiate(structure.DefaultMaterials[i]);
+                    var m = structure.DefaultMaterials[i] = Object.Instantiate(structure.DefaultMaterials[i]);
                     m.SetColor("_TopColor", refMat.GetColor("_TopColor"));
                     m.SetColor("_MiddleColor", refMat.GetColor("_MiddleColor"));
                     m.SetColor("_BottomColor", refMat.GetColor("_BottomColor"));

@@ -77,7 +77,7 @@ namespace SRML.SR
         /// </summary>
         /// <param name="entry"></param>
         public static void RegisterProgressOffer(ExchangeDirector.ProgressOfferEntry entry) => customProgressOffers.Add(entry, SRMod.GetCurrentMod());
-        
+
         /// <summary>
         /// Checks if a rancher or offer ID is modded.
         /// </summary>

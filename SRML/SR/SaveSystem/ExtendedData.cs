@@ -6,27 +6,23 @@ using SRML.SR.SaveSystem.Format;
 using SRML.SR.SaveSystem.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace SRML.SR.SaveSystem
-{
+namespace SRML.SR.SaveSystem {
     /// <summary>
     /// Class allowing for the addition of arbitrary data to Actors, similar to Minecraft's NBT system
     /// </summary>
-    public static class ExtendedData
-    {
+    public static class ExtendedData {
         internal static Dictionary<DataIdentifier, PreparedData> preparedData = new Dictionary<DataIdentifier, PreparedData>();
 
         internal static Dictionary<SRMod, CompoundDataPiece> worldSaveData = new Dictionary<SRMod, CompoundDataPiece>();
 
-        internal static void Pull(ModdedSaveData data)
-        {
+        internal static void Pull(ModdedSaveData data) {
             Clear();
-            foreach (var mod in data.segments)
-            {
+            foreach (var mod in data.segments) {
                 Debug.Log($"mod {mod.modid} has {mod.extendedData.Count} extended actor datas");
-                foreach (var extendedDataTree in mod.extendedData)
-                {
+                foreach (var extendedDataTree in mod.extendedData) {
                     switch (extendedDataTree.idType)
                     {
                         case ExtendedDataTree.IdentifierType.ACTOR:
@@ -48,24 +44,17 @@ namespace SRML.SR.SaveSystem
                 worldSaveData.Add(actualMod, mod.extendedWorldData);
                 SaveRegistry.GetSaveInfo(actualMod).WorldDataPreLoad(mod.extendedWorldData);
             }
-            foreach (var v in SRModLoader.GetMods())
-            {
-                if (!worldSaveData.ContainsKey(v))
-                {
-                    var newData = new CompoundDataPiece("root");
-                    worldSaveData.Add(v, newData);
-                    SaveRegistry.GetSaveInfo(v).WorldDataPreLoad(newData);
-                }
+            foreach (var v in SRModLoader.GetMods()) {
+                if (worldSaveData.ContainsKey(v)) continue;
+                var newData = new CompoundDataPiece("root");
+                worldSaveData.Add(v, newData);
+                SaveRegistry.GetSaveInfo(v).WorldDataPreLoad(newData);
             }
         }
 
-        public static CompoundDataPiece GetWorldSaveData()
-        {
-            return worldSaveData.Get(SRMod.GetCurrentMod());
-        }
+        public static CompoundDataPiece GetWorldSaveData() => worldSaveData.Get(SRMod.GetCurrentMod());
 
-        internal static void Clear()
-        {
+        internal static void Clear() {
             preparedData.Clear();
             worldSaveData.Clear();
         }
@@ -79,32 +68,20 @@ namespace SRML.SR.SaveSystem
         /// <param name="rot"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static GameObject InstantiateActorWithData(GameObject prefab, RegionRegistry.RegionSetId id, Vector3 pos, Quaternion rot,
-            CompoundDataPiece data)
-        {
+        public static GameObject InstantiateActorWithData(GameObject prefab, RegionRegistry.RegionSetId id, Vector3 pos, Quaternion rot, CompoundDataPiece data) {
             long actorId;
             SceneContext.Instance.GameModel.nextActorId = (actorId = SceneContext.Instance.GameModel.nextActorId) + 1L;
             return InstantiateActorWithData(actorId, prefab, id, pos, rot, data);
         }
 
-        public static GameObject InstantiateActorWithData(long actorId, GameObject prefab, RegionRegistry.RegionSetId id, Vector3 pos, Quaternion rot, CompoundDataPiece data)
-        {
+        public static GameObject InstantiateActorWithData(long actorId, GameObject prefab, RegionRegistry.RegionSetId id, Vector3 pos, Quaternion rot, CompoundDataPiece data) {
             preparedData.Add(DataIdentifier.GetActorIdentifier(actorId), new PreparedData() { Data = data, SourceType = PreparedData.PreparationSource.SPAWN });
             return SceneContext.Instance.GameModel.InstantiateActor(actorId, prefab, id, pos, rot, false, false);
         }
 
-        internal static void CullMissingModsFromData(CompoundDataPiece piece)
-        {
-            var toRemove = new List<DataPiece>();
-            foreach (var v in piece.DataList)
-            {
-                if (SRModLoader.GetMod(v.key) == null) toRemove.Add(v);
-            }
-
-            foreach (var v in toRemove)
-            {
-                piece.DataList.Remove(v);
-            }
+        internal static void CullMissingModsFromData(CompoundDataPiece piece) {
+            var toRemove = piece.DataList.Where(v => SRModLoader.GetMod(v.key) == null).ToList();
+            foreach (var v in toRemove) piece.DataList.Remove(v);
         }
 
         internal static void OnRegisterActor(GameModel model, long actorId, GameObject gameObject, bool skipNotify)
@@ -124,27 +101,21 @@ namespace SRML.SR.SaveSystem
             }
         }
 
-        public static bool HasExtendedData(GameObject obj) => obj.GetComponents<ExtendedData.Participant>().Length > 0 || obj.GetComponents<ExtendedData.TransformableParticipant>().Length > 0;
-        
+        public static bool HasExtendedData(GameObject obj) => obj.GetComponents<Participant>().Length > 0 || obj.GetComponents<TransformableParticipant>().Length > 0;
+
         internal static void Push(ModdedSaveData data)
         {
             foreach (var p in SRModLoader.Mods)
-                if (SaveRegistry.GetSaveInfo(p.Value).OnWorldSave != null && !ExtendedData.worldSaveData.ContainsKey(p.Value))
-                    ExtendedData.worldSaveData.Add(p.Value, new CompoundDataPiece(p.Key));
+                if (SaveRegistry.GetSaveInfo(p.Value).OnWorldSave != null && !worldSaveData.ContainsKey(p.Value))
+                    worldSaveData.Add(p.Value, new CompoundDataPiece(p.Key));
 
-            foreach (var actorData in GetAllData(SceneContext.Instance.GameModel))
-            {
-                foreach (CompoundDataPiece modPiece in actorData.Value.DataList)
-                {
+            foreach (var actorData in GetAllData(SceneContext.Instance.GameModel)) {
+                foreach (CompoundDataPiece modPiece in actorData.Value.DataList) {
                     var mod = SRModLoader.GetMod(modPiece.key);
                     var seg = data.GetSegmentForMod(mod);
                     var newCompound = new CompoundDataPiece("root");
-                    foreach (var dat in modPiece.DataList)
-                    {
-                        newCompound.DataList.Add(dat);
-                    }
-                    seg.extendedData.Add(new ExtendedDataTree()
-                    {
+                    foreach (var dat in modPiece.DataList) newCompound.DataList.Add(dat);
+                    seg.extendedData.Add(new ExtendedDataTree() {
                         dataPiece = newCompound,
                         longIdentifier = actorData.Key.longID,
                         stringIdentifier = actorData.Key.stringID ?? "",
@@ -152,32 +123,19 @@ namespace SRML.SR.SaveSystem
                     });
                 }
             }
-            foreach(var pair in worldSaveData)
-            {
+            foreach(var pair in worldSaveData) {
                 SaveRegistry.GetSaveInfo(pair.Key).WorldDataSave(pair.Value);
-                if (pair.Value.DataList.Count > 0)
-                {
-
-                    data.GetSegmentForMod(pair.Key).extendedWorldData = pair.Value;
-                }   
+                if (pair.Value.DataList.Count > 0) data.GetSegmentForMod(pair.Key).extendedWorldData = pair.Value;
             }
         }
 
-        internal static CompoundDataPiece GetDataForCurrentMod(CompoundDataPiece piece)
-        {
+        internal static CompoundDataPiece GetDataForCurrentMod(CompoundDataPiece piece) {
             var strin = SRMod.GetCurrentMod().ModInfo.Id;
             return ExtendedDataUtils.GetPieceForMod(strin, piece);
         }
 
-        static CompoundDataPiece GetDataForActor(long actorId)
-        {
-            return SceneContext.Instance.GameModel.actors.TryGetValue(actorId, out var model) ? ReadDataFromGameObject(model.transform.gameObject) : null;
-        }
-
-        static bool IsValid(long actorId)
-        {
-            return SceneContext.Instance.GameModel.actors.ContainsKey(actorId);
-        }
+        static CompoundDataPiece GetDataForActor(long actorId) => SceneContext.Instance.GameModel.actors.TryGetValue(actorId, out var model) ? ReadDataFromGameObject(model.transform.gameObject) : null;
+        static bool IsValid(long actorId) => SceneContext.Instance.GameModel.actors.ContainsKey(actorId);
 
         static ExtendedData()
         {
@@ -201,7 +159,7 @@ namespace SRML.SR.SaveSystem
             var modid = ExtendedDataUtils.GetModForParticipant(p)?.ModInfo.Id ?? "srml";
             return piece.HasPiece(modid) && piece.GetCompoundPiece(modid).HasPiece(ExtendedDataUtils.GetParticipantName(p));
         }
-            
+
         public static void ApplyDataToGameObject(GameObject obj, CompoundDataPiece piece)
         {
             foreach(var participant in obj.GetComponents<Participant>())
@@ -249,13 +207,11 @@ namespace SRML.SR.SaveSystem
             bool CopyCondition();
         }
 
-        internal struct PreparedData
-        {
+        internal struct PreparedData {
             public CompoundDataPiece Data;
             public PreparationSource SourceType;
             public object Source;
-            public enum PreparationSource
-            {
+            public enum PreparationSource {
                 UNKNOWN,
                 AMMO,
                 SPAWN

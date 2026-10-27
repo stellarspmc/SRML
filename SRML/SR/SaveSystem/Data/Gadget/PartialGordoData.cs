@@ -39,13 +39,13 @@ namespace SRML.SR.SaveSystem.Data.Gadget
             {
                 translator.FixEnumValues(mode, data.fashions);
             });
-                
+
             CustomChecker.RegisterCustomChecker<GordoV01>(x =>
             {
                 if (x.fashions.Any(ModdedIDRegistry.IsModdedID)) return CustomChecker.CustomLevel.PARTIAL;
                 return CustomChecker.CustomLevel.NONE;
             });
-            PartialData.RegisterPartialData(() => new PartialGordoData());
+            RegisterPartialData(() => new PartialGordoData());
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// Adds more methods to <see cref="SiloStorage"/> to allow for more flexable addition 
+/// Adds more methods to <see cref="SiloStorage"/> to allow for more flexable addition
 /// </summary>
 public static class SiloStorageExtensions
 {
