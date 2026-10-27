@@ -5,7 +5,7 @@
     <Authors>SlimeRancherModding</Authors>
     <Description>Mod Loader for the game Slime Rancher</Description>
     <Version>0.3.0.0</Version>
-    <TargetFramework>net4.7.2</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -27,24 +27,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lib.Harmony" Version="2.3.6" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.3" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Krafs.Publicizer" Version="2.3.0" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="Roslynator.Analyzers" Version="4.12.11" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.12.11" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="4.12.11" PrivateAssets="all" ExcludeAssets="runtime" />
-  </ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Krafs.Publicizer" Version="2.3.2" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Roslynator.Analyzers" Version="5.0.1" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="5.0.1" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="5.0.1" PrivateAssets="all" ExcludeAssets="runtime" />
 
-  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
     <Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
-  </ItemGroup>
 
-  <ItemGroup>
     <EmbeddedResource Include="srml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SRML.Editor\SRML.Editor.csproj" />
   </ItemGroup>
+
+  <Target Name="AutoCopyOutputsToInstaller" AfterTargets="Build">
+    <ItemGroup>
+      <FilesToCopy Include="$(TargetDir)*.dll" />
+      <FilesToCopy Include="$(TargetDir)*.xml" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FilesToCopy)"
+          DestinationFolder="$(SolutionDir)SRMLInstaller\Libs"
+          SkipUnchangedFiles="true" />
+  </Target>
 </Project>

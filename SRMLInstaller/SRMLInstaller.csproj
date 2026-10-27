@@ -19,21 +19,7 @@
     <AssemblyAttribute Include="System.Runtime.InteropServices.GuidAttribute">
       <_Parameter1>6f065c56-9575-45ca-846d-9660a0f80f79</_Parameter1>
     </AssemblyAttribute>
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- Mono.Cecil is kept; .NET single-file will bundle it automatically -->
     <PackageReference Include="Mono.Cecil" Version="0.11.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Libs\0Harmony.dll" />
-    <EmbeddedResource Include="Libs\INIFileParser.dll" />
-    <EmbeddedResource Include="Libs\Newtonsoft.Json.dll" />
-    <EmbeddedResource Include="Libs\SRML.dll" />
-    <EmbeddedResource Include="Libs\SRML.Editor.dll" />
-    <EmbeddedResource Include="Libs\System.Runtime.Serialization.dll" />
-    <EmbeddedResource Include="Libs\SRML.xml" />
   </ItemGroup>
 
   <Target Name="CopyPayloadLibs" BeforeTargets="BeforeBuild">
@@ -47,7 +33,6 @@
       <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\0Harmony.dll" />
       <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\SRML.Editor.dll" />
       <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\INIFileParser.dll" />
-      <FilesToEmbed Include="$(SolutionDir)Libs\System.Runtime.Serialization.dll" />
     </ItemGroup>
     <Copy SourceFiles="@(FilesToEmbed)" DestinationFolder="$(ProjectDir)Libs" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
   </Target>
