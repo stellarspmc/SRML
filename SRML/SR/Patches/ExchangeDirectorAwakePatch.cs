@@ -10,6 +10,8 @@ namespace SRML.SR.Patches
     {
         public static void Prefix(ExchangeDirector __instance)
         {
+            foreach (ExchangeDirector.ProgressOfferEntry progressOffer in ExchangeOfferRegistry.customProgressOffers.Keys)
+                __instance.progressOffers = __instance.progressOffers.AddToArray(progressOffer);
             foreach (ExchangeDirector.Rancher rancher in ExchangeOfferRegistry.customRanchers.Keys)
             {
                 ExchangeDirector.Rancher modified = rancher;
