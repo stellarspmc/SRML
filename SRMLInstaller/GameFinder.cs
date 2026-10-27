@@ -1,99 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
+using Microsoft.Win32;
 
-namespace SRMLInstaller;
-
-static class GameFinder
-{
-    private const String gameDLL = "Assembly-CSharp.dll";
-
-    private const String gameName = "SlimeRancher";
-
-    private const String gameNameWithSpace = "Slime Rancher";
-
-    private static String dataFolder = gameName + "_Data";
-
-    private const String epicPath = "C:/Program Files/Epic Games/";
-
-    private const String steamPath32 = "C:/Program Files (x86)/Steam/steamapps/common/";
-
-    private const String steamPath64 = "C:/Program Files/Steam/steamapps/common/";
-
-    private const String drmfree64 = "C:/Program Files/";
-
-    private const String drmfree32 = "C:/Program Files (x86)/";
-
-    private static String exeToDLL = Path.Combine(dataFolder, Path.Combine("Managed", gameDLL));
-
-    private const string GameExe = "SlimeRancher.exe";
-
-    static bool CheckForValidDllPath(string path)
+namespace SRMLInstaller {
+    public static class GameFinder
     {
-        var parent = Directory.GetParent(path);
-        return parent.Name == "Managed" && parent.Parent.Parent.GetFiles().Any((x) => x.Name == GameExe);
-    }
+        public static string FindGame() { // only steam support for now
+            var gameRelativePath = Path.Combine("steamapps", "common", "Slime Rancher", "SlimeRancher_Data", "Managed", "Assembly-CSharp.dll");
+            var steamRoot = string.Empty;
 
-    public static String FindGame()
-    {
-        if (File.Exists(gameDLL) && CheckForValidDllPath(Path.GetFullPath(gameDLL))) return Path.GetFullPath(gameDLL);
-        var managedDLL = Path.Combine("Managed", gameDLL);
-        if (File.Exists(managedDLL))
-            return Path.GetFullPath(managedDLL);
-        if (File.Exists(Path.Combine(dataFolder, managedDLL)))
-            return Path.GetFullPath(Path.Combine(dataFolder, managedDLL));
+            if (OperatingSystem.IsWindows()) {
+                try {
+                    using var key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
+                    if (key?.GetValue("SteamPath") is string path) steamRoot = path.Replace('/', Path.DirectorySeparatorChar);
+                } catch { 
+                    // ignored
+                }
+            
+                if (string.IsNullOrEmpty(steamRoot) || !Directory.Exists(steamRoot)) steamRoot = @"C:\Program Files (x86)\Steam";
+            }
+            else if (OperatingSystem.IsLinux()) {
+                // Standard Linux Steam paths
+                var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                var paths = new[] {
+                    Path.Combine(home, ".steam", "steam"),
+                    Path.Combine(home, ".local", "share", "Steam")
+                };
 
-        Console.WriteLine($"Not in a game folder! Searching for {gameName}...");
+                foreach (var p in paths) {
+                    if (!Directory.Exists(p)) continue;
+                    steamRoot = p;
+                    break;
+                }
+            }
+            else if (OperatingSystem.IsMacOS()) steamRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "Library", "Application Support", "Steam");
+            if (!string.IsNullOrEmpty(steamRoot)) {
+                var fullPath = Path.Combine(steamRoot, gameRelativePath);
+                if (File.Exists(fullPath)) return fullPath;
+            }
 
-        Console.WriteLine();
+            Console.WriteLine("Could not automatically find Slime Rancher installation.");
+            Console.Write("Please enter the path to your Slime Rancher folder: ");
+            var manualPath = Console.ReadLine()?.Trim('"');
 
-        List<String> candidates = new List<String>();
-
-        void AddIfCandidate(String path)
-        {
-            if(CheckPathForGame(path,gameName))
-                candidates.Add(Path.Combine(path,gameName));
-            if (CheckPathForGame(path,gameNameWithSpace))
-                candidates.Add(Path.Combine(path, gameNameWithSpace));
+            if (string.IsNullOrEmpty(manualPath)) throw new FileNotFoundException("Could not locate Slime Rancher game files.");
+            var target = manualPath.EndsWith("Assembly-CSharp.dll") ? manualPath : Path.Combine(manualPath, "SlimeRancher_Data", "Managed", "Assembly-CSharp.dll");
+            return File.Exists(target) ? target : throw new FileNotFoundException("Could not locate Slime Rancher game files.");
         }
-        AddIfCandidate(epicPath);
-        AddIfCandidate(steamPath32);
-        AddIfCandidate(steamPath64);
-        AddIfCandidate(drmfree32);
-        AddIfCandidate(drmfree64);
-
-        if (candidates.Count == 0) throw new Exception($"Could not auto-locate game folder! Please move {Path.GetFileName(Assembly.GetExecutingAssembly().Location)} to a valid game folder and try again");
-        var candidatetoDLL = exeToDLL;
-        if (candidates.Count > 1)
-        {
-            Console.WriteLine("Found multiple candidates for the game path!");
-
-            return Path.Combine(SelectFromList(candidates), candidatetoDLL);
-        }
-
-        var p = Path.Combine(candidates[0], candidatetoDLL);
-        Console.WriteLine($"Found {p}!");
-        return p;
-    }
-
-    static bool CheckPathForGame(String path,string gameName)
-    {
-        return (File.Exists(Path.Combine(path, gameName, exeToDLL)));
-    }
-
-    static T SelectFromList<T>(List<T> elements)
-    {
-
-        for (int i = 0; i < elements.Count; i++)
-        {
-            Console.WriteLine($"{i+1} - {elements[i]}");
-        }
-        restart:
-        Console.Write($"Please select an option from 1 to {elements.Count}: ");
-        if (Int32.TryParse(Console.ReadLine(), out int val) && val <= elements.Count && val >= 1)
-            return elements[val - 1];
-        goto restart;
     }
 }
