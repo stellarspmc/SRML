@@ -1,10 +1,9 @@
 ﻿using HarmonyLib;
 
-namespace SRML.SR.Patches
+namespace SRML.SR.Patches;
+
+[HarmonyPatch(typeof(BaseUI), "Awake")]
+internal static class BaseUINullCheckPatch
 {
-    [HarmonyPatch(typeof(BaseUI), "Awake")]
-    internal static class BaseUINullCheckPatch
-    {
-        public static bool Prefix() => GameContext.Instance?.MessageDirector != null;
-    }
+    public static bool Prefix() => GameContext.Instance?.MessageDirector != null;
 }

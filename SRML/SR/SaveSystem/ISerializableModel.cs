@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 
-namespace SRML.SR.SaveSystem
+namespace SRML.SR.SaveSystem;
+
+public interface ISerializableModel
 {
-    public interface ISerializableModel
-    {
-        void WriteData(BinaryWriter writer);
-        void LoadData(BinaryReader reader);
-    }
+    void WriteData(BinaryWriter writer);
+    void LoadData(BinaryReader reader);
 }

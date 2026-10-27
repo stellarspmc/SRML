@@ -1,68 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using SRML.Console;
+﻿using System.Collections.Generic;
 
-namespace SRML.Console.Commands
+namespace SRML.Console.Commands;
+
+/// <summary>
+/// A command to display all commands
+/// </summary>
+public class HelpCommand : ConsoleCommand
 {
-	/// <summary>
-	/// A command to display all commands
-	/// </summary>
-	public class HelpCommand : ConsoleCommand
+	public override string ID { get; } = "help";
+	public override string Usage { get; } = "help [cmdName]";
+	public override string Description { get; } = "Displays all commands available, or an extended description of a command";
+
+	public override string ExtendedDescription => 
+		"<color=#77DDFF>[cmdName]</color> - The command you want to check the extended description for.\n" +
+		"Running without an argument shows all commands";
+
+	public override bool Execute(string[] args)
 	{
-		public override string ID { get; } = "help";
-		public override string Usage { get; } = "help [cmdName]";
-		public override string Description { get; } = "Displays all commands available, or an extended description of a command";
+		if (args != null && ArgsOutOfBounds(args.Length, 1, 1))
+			return false;
 
-		public override string ExtendedDescription => 
-			"<color=#77DDFF>[cmdName]</color> - The command you want to check the extended description for.\n" +
-			"Running without an argument shows all commands";
-
-		public override bool Execute(string[] args)
+		if (args == null)
 		{
-			if (args != null && ArgsOutOfBounds(args.Length, 1, 1))
-				return false;
+			Console.Instance.Log("<color=cyan>List of Commands Available:</color>");
+			Console.Instance.Log("<i><> is a required argument; [] is an optional argument</i>");
 
-			if (args == null)
+			foreach (var line in ConsoleWindow.cmdsText.Split('\n'))
+				Console.Instance.LogSuccess(line);
+		}
+		else
+		{
+			if (Console.commands.ContainsKey(args[0]))
 			{
-				Console.Instance.Log("<color=cyan>List of Commands Available:</color>");
-				Console.Instance.Log("<i><> is a required argument; [] is an optional argument</i>");
+				var cmd = Console.commands[args[0]];
 
-				foreach (string line in ConsoleWindow.cmdsText.Split('\n'))
-					Console.Instance.LogSuccess(line);
-			}
-			else
-			{
-				if (Console.commands.ContainsKey(args[0]))
+				if (cmd.ExtendedDescription != null)
 				{
-					ConsoleCommand cmd = Console.commands[args[0]];
-
-					if (cmd.ExtendedDescription != null)
-					{
-						Console.Instance.Log($"<color=#77DDFF>{cmd.Usage}</color> - {cmd.Description}");
-						foreach (string line in cmd.ExtendedDescription.Split('\n'))
-							Console.Instance.LogSuccess(line);
-					}
-					else
-					{
-						Console.Instance.LogWarning($"No extended description was found for command '<color=#77DDFF>{cmd.ID}</color>'. Showing default description");
-						Console.Instance.LogSuccess($"<color=#77DDFF>{Console.ColorUsage(cmd.Usage)}</color> - {cmd.Description}");
-					}
+					Console.Instance.Log($"<color=#77DDFF>{cmd.Usage}</color> - {cmd.Description}");
+					foreach (var line in cmd.ExtendedDescription.Split('\n'))
+						Console.Instance.LogSuccess(line);
 				}
 				else
 				{
-					Console.Instance.LogError($"Command '<color=white>{args[0]}</color>' not found");
+					Console.Instance.LogWarning($"No extended description was found for command '<color=#77DDFF>{cmd.ID}</color>'. Showing default description");
+					Console.Instance.LogSuccess($"<color=#77DDFF>{Console.ColorUsage(cmd.Usage)}</color> - {cmd.Description}");
 				}
 			}
-
-			return true;
-		}
-
-		public override List<string> GetAutoComplete(int argIndex, string argText)
-		{
-			if (argIndex == 0)
-				return new List<string>(Console.commands.Keys);
 			else
-				return base.GetAutoComplete(argIndex, argText);
+			{
+				Console.Instance.LogError($"Command '<color=white>{args[0]}</color>' not found");
+			}
 		}
+
+		return true;
+	}
+
+	public override List<string> GetAutoComplete(int argIndex, string argText)
+	{
+		if (argIndex == 0)
+			return new List<string>(Console.commands.Keys);
+		else
+			return base.GetAutoComplete(argIndex, argText);
 	}
 }

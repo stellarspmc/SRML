@@ -1,15 +1,14 @@
 ﻿using HarmonyLib;
 using UnityEngine;
 
-namespace SRML.SR.Patches
+namespace SRML.SR.Patches;
+
+[HarmonyPatch(typeof(WeaponVacuum), "Expel", new System.Type[] { typeof(GameObject), typeof(bool) })]
+internal static class WeaponVacuumExpelEmotionsPatch
 {
-    [HarmonyPatch(typeof(WeaponVacuum), "Expel", new System.Type[] { typeof(GameObject), typeof(bool) })]
-    internal static class WeaponVacuumExpelEmotionsPatch
+    public static void Prefix(WeaponVacuum __instance, ref bool ignoreEmotions)
     {
-        public static void Prefix(WeaponVacuum __instance, ref bool ignoreEmotions)
-        {
-            if (__instance.player.Ammo.GetSelectedEmotions() != null) return;
-            ignoreEmotions = true;
-        }
+        if (__instance.player.Ammo.GetSelectedEmotions() != null) return;
+        ignoreEmotions = true;
     }
 }

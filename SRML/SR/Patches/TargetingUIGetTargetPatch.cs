@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using System;
 using UnityEngine;
 
 namespace SRML.SR.Patches
@@ -9,14 +8,14 @@ namespace SRML.SR.Patches
     {
         public static bool Prefix(TargetingUI __instance, GameObject gameObject, ref bool __result)
         {
-            Identifiable.Id id = Identifiable.GetId(gameObject);
+            var id = Identifiable.GetId(gameObject);
             if (id == Identifiable.Id.NONE)
             {
                 __result = false;
                 return false;
             }
 
-            foreach ((Predicate<Identifiable.Id>, (Func<Identifiable.Id, MessageBundle, MessageBundle, string>, Func<Identifiable.Id, MessageBundle, MessageBundle, string>)) kvp in TargetingRegistry.customTargetingInfo)
+            foreach (var kvp in TargetingRegistry.customTargetingInfo)
             {
                 if (kvp.Item1.Invoke(id))
                 {

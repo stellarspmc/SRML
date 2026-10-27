@@ -3,27 +3,26 @@ using MonomiPark.SlimeRancher.DataModel;
 using System;
 using UnityEngine;
 
-namespace SRML.SR.Patches
+namespace SRML.SR.Patches;
+
+[HarmonyPatch(typeof(ActorModel), "Init")]
+internal static class ActorModelInitPatch
 {
-    [HarmonyPatch(typeof(ActorModel), "Init")]
-    internal static class ActorModelInitPatch
+    public static bool Prefix(ActorModel __instance, GameObject gameObj)
     {
-        public static bool Prefix(ActorModel __instance, GameObject gameObj)
+        var componentsInChildren = gameObj.GetComponentsInChildren<ActorModel.Participant>(true);
+        for (var i = 0; i < componentsInChildren.Length; i++)
         {
-            ActorModel.Participant[] componentsInChildren = gameObj.GetComponentsInChildren<ActorModel.Participant>(true);
-            for (int i = 0; i < componentsInChildren.Length; i++)
+            try
             {
-                try
-                {
-                    componentsInChildren[i].InitModel(__instance);
-                }
-                catch (Exception e)
-                {
-                    SRML.Console.Console.Instance.LogError("Failed to initialize model participant, removing component\n" + e);
-                    UnityEngine.Object.DestroyImmediate(componentsInChildren[i] as Component);
-                }
+                componentsInChildren[i].InitModel(__instance);
             }
-            return false;
+            catch (Exception e)
+            {
+                SRML.Console.Console.Instance.LogError("Failed to initialize model participant, removing component\n" + e);
+                UnityEngine.Object.DestroyImmediate(componentsInChildren[i] as Component);
+            }
         }
+        return false;
     }
 }

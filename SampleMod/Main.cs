@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
 using System.Reflection;
-using System.Text;
-using SRML;
-using HarmonyLib;
-using SRML.Utils;
-using SRML.SR;
 
 namespace SampleMod
 {

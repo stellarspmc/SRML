@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Doorstop;
 
 internal static class Entrypoint {
-    public static Assembly[] resolve = Directory.GetFiles(Path.GetFullPath(@"SRML\Libs"), "*.dll").Select(x => Assembly.LoadFrom(x)).ToArray();
+    private static readonly Assembly[] Resolve = [.. Directory.GetFiles(Path.GetFullPath(@"SRML\Libs"), "*.dll").Select(Assembly.LoadFrom)];
 
     public static void Start() => new Task(() =>
     {
@@ -20,7 +20,7 @@ internal static class Entrypoint {
         Task.Delay(2750);
         Debug.Log("Doorstop has successfully hooked.");
 
-        AppDomain.CurrentDomain.AssemblyResolve += (_, y) => resolve.FirstOrDefault(z => z.GetName() == new AssemblyName(y.Name));
+        AppDomain.CurrentDomain.AssemblyResolve += (_, y) => Resolve.FirstOrDefault(z => z.GetName() == new AssemblyName(y.Name));
 
         new Harmony("SRMLInitializer").Patch(AccessTools.Method(typeof(StandaloneStartScreen), "Update"),
             new HarmonyMethod(typeof(Main), "InitializeSRMLThenBeginLoad"));

@@ -4,59 +4,58 @@ using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 
-namespace SRML.Patches
+namespace SRML.Patches;
+
+[HarmonyPatch]
+internal static class EnumInfoPatch
 {
-    [HarmonyPatch]
-    internal static class EnumInfoPatch
+    static MethodBase TargetMethod()
     {
-        static MethodBase TargetMethod()
-        {
-            return AccessTools.Method(Type.GetType("System.Enum"), "GetCachedValuesAndNames");
-        }
+        return AccessTools.Method(Type.GetType("System.Enum"), "GetCachedValuesAndNames");
+    }
 
-        static void FixEnum(object type, ref ulong[] oldValues, ref string[] oldNames)
+    static void FixEnum(object type, ref ulong[] oldValues, ref string[] oldNames)
+    {
+        var enumType = type as Type;
+        if (EnumPatcher.TryGetRawPatch(enumType, out var patch))
         {
-            var enumType = type as Type;
-            if (EnumPatcher.TryGetRawPatch(enumType, out var patch))
+            var pairs = patch.GetPairs();
+            var newValues = new List<ulong>(oldValues);
+            var newNames = new List<string>(oldNames);
+
+            foreach (var pair in pairs)
             {
-                var pairs = patch.GetPairs();
-                List<ulong> newValues = new List<ulong>(oldValues);
-                List<string> newNames = new List<string>(oldNames);
-
-                foreach (var pair in pairs)
-                {
-                    newValues.Add(pair.Key);
-                    newNames.Add(pair.Value);
-                }
-
-                oldValues = newValues.ToArray();
-                oldNames = newNames.ToArray();
-
-                Array.Sort(oldValues, oldNames, Comparer<ulong>.Default);
+                newValues.Add(pair.Key);
+                newNames.Add(pair.Value);
             }
+
+            oldValues = newValues.ToArray();
+            oldNames = newNames.ToArray();
+
+            Array.Sort(oldValues, oldNames, Comparer<ulong>.Default);
         }
+    }
 
-        static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    {
+        using (var enumerator = instructions.GetEnumerator())
         {
-            using (var enumerator = instructions.GetEnumerator())
+            while (enumerator.MoveNext())
             {
-                while (enumerator.MoveNext())
-                {
-                    var v = enumerator.Current;
-                    yield return v;
+                var v = enumerator.Current;
+                yield return v;
 
-                    if (v.operand is MethodInfo me && me.Name == "Sort")
-                    {
-                        enumerator.MoveNext();
-                        v = enumerator.Current;
-                        var labels = v.labels;
-                        v.labels = new List<Label>();
-                        yield return new CodeInstruction(OpCodes.Ldarg_0) { labels = labels };
-                        yield return new CodeInstruction(OpCodes.Ldloca, 1);
-                        yield return new CodeInstruction(OpCodes.Ldloca, 2);
-                        yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(EnumInfoPatch), nameof(FixEnum)));
-                        yield return v;
-                    }
+                if (v.operand is MethodInfo me && me.Name == "Sort")
+                {
+                    enumerator.MoveNext();
+                    v = enumerator.Current;
+                    var labels = v.labels;
+                    v.labels = new List<Label>();
+                    yield return new CodeInstruction(OpCodes.Ldarg_0) { labels = labels };
+                    yield return new CodeInstruction(OpCodes.Ldloca, 1);
+                    yield return new CodeInstruction(OpCodes.Ldloca, 2);
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(EnumInfoPatch), nameof(FixEnum)));
+                    yield return v;
                 }
             }
         }

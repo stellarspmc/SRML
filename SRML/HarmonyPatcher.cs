@@ -1,48 +1,47 @@
 ﻿using System.Reflection;
 using HarmonyLib;
 
-namespace SRML
+namespace SRML;
+
+/// <summary>
+/// Utility class to help manage the main SRML harmony instance
+/// </summary>
+public static class HarmonyPatcher
 {
-    /// <summary>
-    /// Utility class to help manage the main SRML harmony instance
-    /// </summary>
-    public static class HarmonyPatcher
+    private static Harmony _instance;
+
+    internal static Harmony Instance
     {
-        private static Harmony _instance;
-
-        internal static Harmony Instance
+        get
         {
-            get
+            if (_instance == null)
             {
-                if (_instance == null)
-                {
-                    InitializeInstance();
-                }
-
-                return _instance;
+                InitializeInstance();
             }
-        }
 
-        static void InitializeInstance()
-        {
-            _instance = new Harmony("net.veesus.srml");
+            return _instance;
         }
+    }
 
-        internal static void PatchAll()
-        {
-            Instance.PatchAll(Assembly.GetExecutingAssembly());
-        }
+    static void InitializeInstance()
+    {
+        _instance = new Harmony("net.veesus.srml");
+    }
 
-        public static Harmony SetInstance(string name)
-        {
-            var currentMod = SRMod.GetCurrentMod();
-            currentMod.CreateHarmonyInstance(name);
-            return currentMod.HarmonyInstance;
-        }
+    internal static void PatchAll()
+    {
+        Instance.PatchAll(Assembly.GetExecutingAssembly());
+    }
 
-        public static Harmony GetInstance()
-        {
-            return SRMod.GetCurrentMod().HarmonyInstance;
-        }
+    public static Harmony SetInstance(string name)
+    {
+        var currentMod = SRMod.GetCurrentMod();
+        currentMod.CreateHarmonyInstance(name);
+        return currentMod.HarmonyInstance;
+    }
+
+    public static Harmony GetInstance()
+    {
+        return SRMod.GetCurrentMod().HarmonyInstance;
     }
 }

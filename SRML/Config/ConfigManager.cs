@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
-namespace SRML.Config
+namespace SRML.Config;
+
+internal static class ConfigManager
 {
-    internal static class ConfigManager
+    public static void PopulateConfigs(SRMod mod)
     {
-        public static void PopulateConfigs(SRMod mod)
+        SRMod.ForceModContext(mod);
+
+        foreach(var file in GetConfigs(mod.EntryType.Module))
         {
-            SRMod.ForceModContext(mod);
-
-            foreach(var file in GetConfigs(mod.EntryType.Module))
-            {
-                mod.Configs.Add(file);
-                file.TryLoadFromFile();
-            }
-
-            SRMod.ClearModContext();
+            mod.Configs.Add(file);
+            file.TryLoadFromFile();
         }
 
-        public static IEnumerable<ConfigFile> GetConfigs(Module module)
+        SRMod.ClearModContext();
+    }
+
+    public static IEnumerable<ConfigFile> GetConfigs(Module module)
+    {
+        foreach(var v in module.GetTypes())
         {
-            foreach(var v in module.GetTypes())
-            {
-                var file = ConfigFile.GenerateConfig(v);
-                if (file != null) yield return file;
-            }
+            var file = ConfigFile.GenerateConfig(v);
+            if (file != null) yield return file;
         }
     }
 }

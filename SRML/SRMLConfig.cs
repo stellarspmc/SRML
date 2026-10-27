@@ -1,10 +1,9 @@
 ﻿using SRML.Config.Attributes;
 
-namespace SRML
+namespace SRML;
+
+[ConfigFile("CONFIG", "main")]
+internal static class SRMLConfig
 {
-    [ConfigFile("CONFIG", "main")]
-    internal static class SRMLConfig
-    {
-        public static bool CREATE_MARKET_BUTTON = true;
-    }
+    public static bool CREATE_MARKET_BUTTON = true;
 }

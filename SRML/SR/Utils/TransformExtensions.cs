@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -53,8 +52,8 @@ public static class TransformExtensions
 
     public static void SetSize(this RectTransform trans, Vector2 newSize)
     {
-        Vector2 oldSize = trans.rect.size;
-        Vector2 deltaSize = newSize - oldSize;
+        var oldSize = trans.rect.size;
+        var deltaSize = newSize - oldSize;
         trans.offsetMin = trans.offsetMin - new Vector2(deltaSize.x * trans.pivot.x, deltaSize.y * trans.pivot.y);
         trans.offsetMax = trans.offsetMax + new Vector2(deltaSize.x * (1f - trans.pivot.x), deltaSize.y * (1f - trans.pivot.y));
     }
@@ -118,8 +117,8 @@ public static class TransformExtensions
     /// <returns>New Rect instance.</returns>
     public static Rect ToScreenSpace(this RectTransform transform)
     {
-        Vector2 size = Vector2.Scale(transform.rect.size, transform.lossyScale);
-        Rect rect = new Rect(transform.position.x, Screen.height - transform.position.y, size.x, size.y);
+        var size = Vector2.Scale(transform.rect.size, transform.lossyScale);
+        var rect = new Rect(transform.position.x, Screen.height - transform.position.y, size.x, size.y);
         rect.x -= (transform.pivot.x * size.x);
         rect.y -= ((1.0f - transform.pivot.y) * size.y);
         return rect;
@@ -196,7 +195,7 @@ public static class TransformExtensions
 
     private static IEnumerable<Transform> GetAscendants(this Transform transform)
     {
-        for (Transform current = transform; current != null; current = current.parent)
+        for (var current = transform; current != null; current = current.parent)
             yield return current;
     }
 
@@ -229,7 +228,7 @@ public static class TransformExtensions
             }
             else if (tran.name.ToLowerInvariant().Contains(name) && (includeInactive || tran.gameObject.activeInHierarchy))
                 return tran;
-            Transform byNameInChildren = tran.GetTransformByNameInChildren(name, includeInactive, subString);
+            var byNameInChildren = tran.GetTransformByNameInChildren(name, includeInactive, subString);
             if (byNameInChildren != null)
                 return byNameInChildren;
         }
@@ -252,7 +251,7 @@ public static class TransformExtensions
         }
         else if (trans.parent.name.ToLowerInvariant().Contains(name) && (includeInactive || trans.gameObject.activeInHierarchy))
             return trans.parent;
-        Transform byNameInAncestors = trans.parent.GetTransformByNameInAncestors(name, includeInactive, subString);
+        var byNameInAncestors = trans.parent.GetTransformByNameInAncestors(name, includeInactive, subString);
         return byNameInAncestors != null ? byNameInAncestors : null;
     }
 }

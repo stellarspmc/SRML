@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using HarmonyLib;
-using UnityEngine;
+﻿using HarmonyLib;
 
-namespace SRML.SR.Templates.Patches
+namespace SRML.SR.Templates.Patches;
+
+[HarmonyPatch(typeof(FearProfile))]
+[HarmonyPatch("OnEnable")]
+public static class FixedFearProfile
 {
-    [HarmonyPatch(typeof(FearProfile))]
-    [HarmonyPatch("OnEnable")]
-    public static class FixedFearProfile
+    public static bool Prefix(FearProfile __instance)
     {
-        public static bool Prefix(FearProfile __instance)
-        {
-            if (__instance.threats == null)
-                return false;
+        if (__instance.threats == null)
+            return false;
 
-            return true;
-        }
+        return true;
     }
 }

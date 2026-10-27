@@ -1,55 +1,54 @@
 ﻿using SRML.SR.SaveSystem.Data;
 using SRML.SR.SaveSystem.Data.Ammo;
 
-namespace SRML.SR.SaveSystem
+namespace SRML.SR.SaveSystem;
+
+internal class PersistentAmmo
 {
-    internal class PersistentAmmo
+    public AmmoIdentifier Identifier;
+    public PersistentAmmoModel DataModel;
+
+    public Identifiable.Id potentialId;
+    public CompoundDataPiece potentialTag;
+
+    public PersistentAmmo(AmmoIdentifier identifier, PersistentAmmoModel model)
     {
-        public AmmoIdentifier Identifier;
-        public PersistentAmmoModel DataModel;
+        this.Identifier = identifier;
+        this.DataModel = model;
+    }
 
-        public Identifiable.Id potentialId;
-        public CompoundDataPiece potentialTag;
+    public void Sync(bool log = false)
+    {
+        DataModel.UpdateFromExistingSlots(Identifier.ResolveModel().slots,log);
+    }
 
-        public PersistentAmmo(AmmoIdentifier identifier, PersistentAmmoModel model)
+    public void OnDecrement(int slot, int count)
+    {
+
+        if (DataModel.slots[slot].Count == 0)
         {
-            this.Identifier = identifier;
-            this.DataModel = model;
-        }
-
-        public void Sync(bool log = false)
-        {
-            DataModel.UpdateFromExistingSlots(Identifier.ResolveModel().slots,log);
-        }
-
-        public void OnDecrement(int slot, int count)
-        {
-
-            if (DataModel.slots[slot].Count == 0)
-            {
-                Sync();
-                return;
-            }
-            for (int i = 0; i < count; i++)
-            {
-                DataModel.PopDataForSlot(slot);
-            }
             Sync();
-            ClearSelected();
-
+            return;
         }
-
-        public void OnSelected(Identifiable.Id id, int slot)
+        for (var i = 0; i < count; i++)
         {
-            if (DataModel.slots[slot].Count == 0) return;
-            potentialId = id;
-            potentialTag = DataModel.PeekDataForSlot(slot);
+            DataModel.PopDataForSlot(slot);
         }
+        Sync();
+        ClearSelected();
 
-        public void ClearSelected()
-        {
-            potentialId = Identifiable.Id.NONE;
-            potentialTag = null;
-        }
+    }
+
+    public void OnSelected(Identifiable.Id id, int slot)
+    {
+        if (DataModel.slots[slot].Count == 0) return;
+        potentialId = id;
+        potentialTag = DataModel.PeekDataForSlot(slot);
+    }
+
+    public void ClearSelected()
+    {
+        potentialId = Identifiable.Id.NONE;
+        potentialTag = null;
     }
 }
