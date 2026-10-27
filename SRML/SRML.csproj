@@ -5,7 +5,7 @@
     <Authors>SlimeRancherModding</Authors>
     <Description>Mod Loader for the game Slime Rancher</Description>
     <Version>0.3.0.0</Version>
-    <TargetFramework>net4.7.2</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -17,6 +17,7 @@
     <PublicizerClearCacheOnClean>true</PublicizerClearCacheOnClean>
     <OutputType>Library</OutputType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
