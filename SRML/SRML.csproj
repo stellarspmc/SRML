@@ -24,9 +24,7 @@
     <Reference Include="..\Libs\*.dll">
       <Private>false</Private>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
+    
     <PackageReference Include="Lib.Harmony" Version="2.4.3" />
     <PackageReference Include="ini-parser" Version="2.5.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
@@ -36,19 +34,8 @@
     <PackageReference Include="Roslynator.CodeAnalysis.Analyzers" Version="5.0.1" PrivateAssets="all" ExcludeAssets="runtime" />
 
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-    <Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
 
     <EmbeddedResource Include="srml" />
     <ProjectReference Include="..\SRML.Editor\SRML.Editor.csproj" />
   </ItemGroup>
-
-  <Target Name="AutoCopyOutputsToInstaller" AfterTargets="Build">
-    <ItemGroup>
-      <FilesToCopy Include="$(TargetDir)*.dll" />
-      <FilesToCopy Include="$(TargetDir)*.xml" />
-    </ItemGroup>
-    <Copy SourceFiles="@(FilesToCopy)"
-          DestinationFolder="$(SolutionDir)SRMLInstaller\Libs"
-          SkipUnchangedFiles="true" />
-  </Target>
 </Project>

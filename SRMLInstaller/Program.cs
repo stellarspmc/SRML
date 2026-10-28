@@ -10,8 +10,6 @@ namespace SRMLInstaller;
 internal class Program {
     // ReSharper disable once InconsistentNaming
     private const string SRML = "SRML.dll";
-    private const string EmbeddedResourcePath = "SRMLInstaller.Libs.";
-    private const string EmbeddedResourceProject = "SRMLInstaller.";
 
     [UnconditionalSuppressMessage("SingleFile", "IL3000:Avoid accessing Assembly file path when publishing as a single file", Justification = "<Pending>")]
     private static void Main(string[] args) {
@@ -22,13 +20,9 @@ internal class Program {
             var filename = !vortexMode && args.Length == 0 ? GameFinder.FindGame() : (vortexMode ? args[1] : args[0]) + "/SlimeRancher_Data/Managed/Assembly-CSharp.dll";
             var root = Path.GetDirectoryName(filename);
             if (root != null) {
-                var srmlPath = Path.Combine(root, SRML);
-
-                Console.WriteLine();
-
+                var srmlPath = Path.Combine(root, "SRML", SRML);
                 var uninstalling = false;
                 var patched = false;
-                var didSrmlExist = File.Exists(srmlPath);
 
                 try_to_patch:
                 if (File.Exists(srmlPath)) {
@@ -68,50 +62,38 @@ internal class Program {
                     }
 
                     patcher.Dispose();
-                    SendFilesOver(didSrmlExist);
+                    SendFilesOver(false);
                 }
                 else {
                     SendFilesOver();
                     goto try_to_patch;
                 }
 
-                string GetAlternateRoot() {
-                    var directoryInfo = Directory.GetParent(root)?.Parent;
-                    if (directoryInfo == null) return "";
-                    var alternateRoot = Path.Combine(directoryInfo.FullName, "SRML", "Libs");
-                    if (!Directory.Exists(alternateRoot)) Directory.CreateDirectory(alternateRoot);
-                    return alternateRoot;
-                }
+                void SendFilesOver(bool log = true) {
+                    var localLibsDir = Path.Combine(AppContext.BaseDirectory, "Libs");
+                    var targetSrmlDir = Path.Combine(root, "SRML");
 
-                void SendFilesOver(bool canLog = true) {
-                    foreach(var file in Directory.GetFiles(GetAlternateRoot())) File.Delete(file);
-                    foreach (var v in Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(x =>
-                                 x.Length > EmbeddedResourceProject.Length &&
-                                 x[..EmbeddedResourceProject.Length] == EmbeddedResourceProject)) {
-                        var file = v[EmbeddedResourcePath.Length..];
-                        var combine = Path.Combine(file.Contains("SRML") ? root:GetAlternateRoot(), file);
-                        //var libPath = Path.Combine(libFolder, file);
-                        if (File.Exists(combine)) {
-                            if (canLog) Console.WriteLine(!uninstalling ? $"Found old {file}! Replacing..." : $"Deleting {file}...");
-                            File.Delete(combine);
-                        }
-                        if (uninstalling) continue;
-                        var str = File.Create(combine);
-                        var otherStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Program), v[EmbeddedResourceProject.Length..]);
-                        if (otherStream != null) {
-                            otherStream.CopyTo(str);
-                            otherStream.Close();
-                        }
-                        str.Close();
-                    }
+                    if (!Directory.Exists(targetSrmlDir)) Directory.CreateDirectory(targetSrmlDir);
+                    foreach (var file in Directory.GetFiles(targetSrmlDir)) File.Delete(file);
 
                     if (uninstalling) return;
+
+                    if (!Directory.Exists(localLibsDir)) throw new Exception($"Local 'Libs' folder not found at {localLibsDir}! Please ensure the Libs folder is packaged with the installer.");
+                    foreach (var filePath in Directory.GetFiles(localLibsDir)) {
+                        var fileName = Path.GetFileName(filePath);
+                        var destPath = Path.Combine(targetSrmlDir, fileName);
+        
+                        if (log) Console.WriteLine($"Copying {fileName}...");
+                        File.Copy(filePath, destPath, true);
+                    }
+
                     var directoryInfo = Directory.GetParent(root)?.Parent;
                     if (directoryInfo == null) return;
                     var umfPath = Path.Combine(directoryInfo.FullName, "uModFramework", "Lib", "net462");
                     if (!File.Exists(Path.Combine(umfPath, "0Harmony.dll"))) return;
+    
                     Console.WriteLine("Found existing UMF installation! Patching...");
-                    File.Copy(Path.Combine(GetAlternateRoot(), "0Harmony.dll"), Path.Combine(umfPath, "0Harmony.dll"), true);
+                    File.Copy(Path.Combine(targetSrmlDir, "0Harmony.dll"), Path.Combine(umfPath, "0Harmony.dll"), true);
                 }
 
                 Console.WriteLine();
@@ -121,9 +103,9 @@ internal class Program {
 
                 if (!uninstalling) {
                     Console.WriteLine($"{type} complete! "+ending);
-                    var directoryInfo = Directory.GetParent(root)?.Parent;
-                    if (directoryInfo != null) {
-                        var path = Path.Combine(directoryInfo.FullName, "SRML", "Mods");
+                    var dir = Directory.GetParent(root)?.Parent;
+                    if (dir != null) {
+                        var path = Path.Combine(dir.FullName, "SRML", "Mods");
                         if (!Directory.Exists(path)) Directory.CreateDirectory(path);
                         Console.WriteLine($"Mods can be installed at {path}");
                     }

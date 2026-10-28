@@ -12,8 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Libs\UnityEngine.CoreModule.dll</HintPath>
+    <Reference Include="..\Libs\UnityEngine.CoreModule.dll">
       <Private>false</Private>
     </Reference>
 

@@ -14,7 +14,7 @@ using TMPro;
 using UnityEngine;
 
 namespace SRML {
-    internal static class Main {
+    public static class Main {
         public const string VERSION_STRING = "0.3.0";
 
         private static bool isInitialized;
@@ -30,7 +30,7 @@ namespace SRML {
         internal static ConfigFile config;
         internal static AssetBundle uiBundle;
 
-        internal static bool InitializeSRMLThenBeginLoad(StandaloneStartScreen __instance) {
+        internal static bool InitializeSRMLThenBeginLoad(StandaloneStartScreen __instance) { // read Loader.cs
             // run after first frame, but before loading commences
             if (isInitialized || !__instance.pastFirstFrame || __instance.isLoading)
                 return moveForwardAfterInit;
@@ -39,7 +39,7 @@ namespace SRML {
             return false;
         }
 
-        internal static void Initialize() {
+        private static void Initialize() {
             if (isInitialized) return;
             isInitialized = true;
 
@@ -51,7 +51,7 @@ namespace SRML {
             if (sentrySdk != null) {
                 sentrySdk.Dsn = string.Empty;
                 var field = sentrySdk.GetType().GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
-                if (field != null) field.SetValue(null, null);
+                field?.SetValue(null, null);
                 sentrySdk.StopAllCoroutines();
                 Application.logMessageReceived -= sentrySdk.OnLogMessageReceived;
                 UnityEngine.Object.Destroy(sentrySdk, 1f);
@@ -88,9 +88,8 @@ namespace SRML {
             foreach (var text in ui.errorInfo.GetComponentsInChildren<TMP_Text>(true)) text.alignment = TextAlignmentOptions.MidlineLeft;
             foreach (var text in ui2.errorInfo.GetComponentsInChildren<TMP_Text>(true)) text.alignment = TextAlignmentOptions.MidlineLeft;
 
-            foreach (var c in ui2.GetComponentsInChildren(typeof(Component))) {
-                if (c.GetType().Name.Contains("Styler"))
-                    UnityEngine.Object.DestroyImmediate(c);
+            foreach (var c in ui2.GetComponentsInChildren<Component>()) {
+                if (c.GetType().Name.Contains("Styler")) UnityEngine.Object.DestroyImmediate(c);
             }
 
             // things break if this doesn't exist for reasons
@@ -129,7 +128,7 @@ namespace SRML {
         /// <summary>
         /// Called before GameContext.Awake()
         /// </summary>
-        internal static void PreLoad() {
+        public static void PreLoad() {
             if (isPreLoaded) return;
             isPreLoaded = true;
 
@@ -142,7 +141,7 @@ namespace SRML {
         /// <summary>
         /// Called before GameContext.Start()
         /// </summary>
-        internal static void Load() {
+        public static void Load() {
             if (isLoaded) return;
             isLoaded = true;
 
@@ -161,14 +160,14 @@ namespace SRML {
         /// <summary>
         /// Called after Load
         /// </summary>
-        internal static void PostLoad() {
+        public static void PostLoad() {
             if (isPostLoaded) return;
             isPostLoaded = true;
 
             SRModLoader.PostLoadMods();
         }
 
-        internal static void Reload() {
+        public static void Reload() {
             try {
                 SRModLoader.ReloadMods();
             } catch (Exception e) {
@@ -176,7 +175,7 @@ namespace SRML {
             }
         }
 
-        internal static void Unload() {
+        public static void Unload() {
             try {
                 SRModLoader.UnloadMods();
             } catch (Exception e) {
@@ -184,7 +183,7 @@ namespace SRML {
             }
         }
 
-        internal static void Update() {
+        public static void Update() {
             try {
                 SRModLoader.UpdateMods();
             } catch (Exception e) {
@@ -192,7 +191,7 @@ namespace SRML {
             }
         }
 
-        internal static void FixedUpdate() {
+        public static void FixedUpdate() {
             try {
                 SRModLoader.UpdateModsFixed();
             } catch (Exception e) {
@@ -200,7 +199,7 @@ namespace SRML {
             }
         }
 
-        internal static void LateUpdate() {
+        public static void LateUpdate() {
             try {
                 SRModLoader.UpdateModsLate();
             } catch (Exception e) {
@@ -209,7 +208,7 @@ namespace SRML {
         }
     }
 
-    internal class ModManager : MonoBehaviour {
+    public class ModManager : MonoBehaviour {
         void Update() => Main.Update();
         void FixedUpdate() => Main.FixedUpdate();
         void LateUpdate() => Main.LateUpdate();

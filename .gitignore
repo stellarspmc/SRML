@@ -10,8 +10,9 @@
 *.userosscache
 *.sln.docstates
 
-# ignore built libs
-SRMLInstaller/Libs/*
+.git/*
+.idea/*
+Libs/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

@@ -22,18 +22,22 @@
     <PackageReference Include="Mono.Cecil" Version="0.11.4" />
   </ItemGroup>
 
-  <Target Name="CopyPayloadLibs" BeforeTargets="BeforeBuild">
-    <MSBuild Projects="..\SRML\SRML.csproj" Targets="Build" Properties="Configuration=$(Configuration)" />
-    <MSBuild Projects="..\SRML.Editor\SRML.Editor.csproj" Targets="Build" Properties="Configuration=$(Configuration)" />
+  <Target Name="CopyPayloadLibs" BeforeTargets="CoreCompile">
+    <MSBuild Projects="..\SRML\SRML.csproj" Targets="Build" Properties="Configuration=$(Configuration);RuntimeIdentifier=" />
+    <MSBuild Projects="..\SRML.Editor\SRML.Editor.csproj" Targets="Build" Properties="Configuration=$(Configuration);RuntimeIdentifier=" />
+
     <MakeDir Directories="$(ProjectDir)Libs" />
+
     <ItemGroup>
-      <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\SRML.dll" />
-      <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\SRML.xml" />
-      <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\Newtonsoft.Json.dll" />
-      <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\0Harmony.dll" />
-      <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\SRML.Editor.dll" />
-      <FilesToEmbed Include="$(SolutionDir)SRMLInstaller\Libs\INIFileParser.dll" />
+      <FilesToCopy Include="..\SRML\bin\$(Configuration)\net472\SRML.dll" />
+      <FilesToCopy Include="..\SRML\bin\$(Configuration)\net472\SRML.xml" />
+      <FilesToCopy Include="..\SRML\bin\$(Configuration)\net472\Newtonsoft.Json.dll" />
+      <FilesToCopy Include="..\SRML\bin\$(Configuration)\net472\0Harmony.dll" />
+      <FilesToCopy Include="..\SRML.Editor\bin\$(Configuration)\net472\SRML.Editor.dll" />
+      <FilesToCopy Include="..\SRML\bin\$(Configuration)\net472\INIFileParser.dll" />
+      <FilesToCopy Include="..\Libs\System.Runtime.Serialization.dll" />
     </ItemGroup>
-    <Copy SourceFiles="@(FilesToEmbed)" DestinationFolder="$(ProjectDir)Libs" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
+
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(ProjectDir)Libs" OverwriteReadOnlyFiles="true" SkipUnchangedFiles="true" />
   </Target>
 </Project>

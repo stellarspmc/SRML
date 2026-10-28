@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using MethodAttributes = Mono.Cecil.MethodAttributes;
@@ -14,7 +13,8 @@ internal class Patcher : IDisposable {
     private MethodDefinition _target;
     private readonly MethodReference _methodToPatchIn;
     private readonly string _filename;
-    public Patcher(string filename,MethodReference methodToPatchIn) {
+    
+    public Patcher(string filename, MethodReference methodToPatchIn) {
         Init(filename);
         _methodToPatchIn = methodToPatchIn;
         _filename = filename;
@@ -24,7 +24,7 @@ internal class Patcher : IDisposable {
         try {
             var resolver = new DefaultAssemblyResolver();
             resolver.AddSearchDirectory(Path.GetDirectoryName(filename));
-            _curAssembly = AssemblyDefinition.ReadAssembly(filename,new ReaderParameters { AssemblyResolver = resolver });
+            _curAssembly = AssemblyDefinition.ReadAssembly(filename, new ReaderParameters { AssemblyResolver = resolver });
         } catch {
             throw new Exception($"Couldn't find {filename}!");
         }
@@ -33,20 +33,43 @@ internal class Patcher : IDisposable {
     }
 
     private MethodDefinition FindTarget() => _curAssembly.MainModule.GetType("GameContext").Methods.First(x => x.Name == "Awake");
-    public bool IsPatched() => _target.Body.Instructions[0].OpCode == OpCodes.Call && _target.Body.Instructions[0].Operand is MethodReference methRef && (methRef.Name=="LoadSRModLoader" || methRef.Name=="PreLoad");
+    
+    public bool IsPatched() => _target.Body.Instructions[0].OpCode == OpCodes.Call && _target.Body.Instructions[0].Operand is MethodReference { Name: "LoadSRModLoader" or "PreLoad" };
+    
     private void RemoveOldPatch() {
         if(_target.Body.Instructions[0].Operand is MethodReference { Name: "LoadSRML" }) _target.Body.GetILProcessor().Remove(_target.Body.Instructions[0]);
         if (_target.DeclaringType.Methods.FirstOrDefault(x => x.Name == "LoadSRML") is {} d) _target.DeclaringType.Methods.Remove(d);
     }
 
-    private static IEnumerable<Instruction> GetLoadingInstructions(ILProcessor proc,ModuleDefinition def) {
-        yield return proc.Create(OpCodes.Ldstr, "SRML/Libs");
+    private static IEnumerable<Instruction> GetLoadingInstructions(ILProcessor proc, ModuleDefinition def) {
+        var mscorlibRef = def.TypeSystem.CoreLibrary;
+        var stringArrayType = new ArrayType(def.TypeSystem.String);
+        
+        if (!def.TryGetTypeReference("UnityEngine.Application", out var appType)) throw new Exception("Couldn't find UnityEngine.Application");
+        var getDataPathMethod = new MethodReference("get_dataPath", def.TypeSystem.String, appType) { HasThis = false };
+        
+        yield return proc.Create(OpCodes.Call, def.ImportReference(getDataPathMethod));
+        yield return proc.Create(OpCodes.Ldstr, "Managed/SRML");
+
+        var pathType = new TypeReference("System.IO", "Path", def, mscorlibRef);
+        var combineMethod = new MethodReference("Combine", def.TypeSystem.String, pathType) { HasThis = false };
+        combineMethod.Parameters.Add(new ParameterDefinition(def.TypeSystem.String));
+        combineMethod.Parameters.Add(new ParameterDefinition(def.TypeSystem.String));
+
+        yield return proc.Create(OpCodes.Call, def.ImportReference(combineMethod));
+
         yield return proc.Create(OpCodes.Ldstr, "*.dll");
         yield return proc.Create(OpCodes.Ldc_I4_1);
 
-        var method = typeof(Directory).GetMethods().First(x => x.Name == "GetFiles" && x.GetParameters().Length == 3);
-        var imported = def.ImportReference(method);
-        yield return proc.Create(OpCodes.Call, imported);
+        var searchOptionType = new TypeReference("System.IO", "SearchOption", def, mscorlibRef) { IsValueType = true };
+        var directoryType = new TypeReference("System.IO", "Directory", def, mscorlibRef);
+        
+        var getFilesMethod = new MethodReference("GetFiles", stringArrayType, directoryType) { HasThis = false };
+        getFilesMethod.Parameters.Add(new ParameterDefinition(def.TypeSystem.String));
+        getFilesMethod.Parameters.Add(new ParameterDefinition(def.TypeSystem.String));
+        getFilesMethod.Parameters.Add(new ParameterDefinition(searchOptionType));
+
+        yield return proc.Create(OpCodes.Call, def.ImportReference(getFilesMethod));
 
         yield return proc.Create(OpCodes.Stloc_0);
         yield return proc.Create(OpCodes.Ldc_I4_0);
@@ -57,7 +80,14 @@ internal class Patcher : IDisposable {
         yield return eight;
         yield return proc.Create(OpCodes.Ldloc_1);
         yield return proc.Create(OpCodes.Ldelem_Ref);
-        yield return proc.Create(OpCodes.Call, def.ImportReference(typeof(Assembly).GetMethod("LoadFrom",BindingFlags.Public|BindingFlags.Static,Type.DefaultBinder, [typeof(string)],null)));
+
+        var assemblyType = new TypeReference("System.Reflection", "Assembly", def, mscorlibRef);
+        var loadFromMethod = new MethodReference("LoadFrom", assemblyType, assemblyType) {
+            HasThis = false
+        };
+        loadFromMethod.Parameters.Add(new ParameterDefinition(def.TypeSystem.String));
+
+        yield return proc.Create(OpCodes.Call, def.ImportReference(loadFromMethod));
         yield return proc.Create(OpCodes.Pop);
         yield return proc.Create(OpCodes.Ldloc_1);
         yield return proc.Create(OpCodes.Ldc_I4_1);
@@ -73,40 +103,45 @@ internal class Patcher : IDisposable {
     private MethodDefinition AddLoadMethod() {
         if (_target.DeclaringType.Methods.FirstOrDefault(x => x.Name == "LoadSRModLoader") is { } d) return d;
 
-        var method = new MethodDefinition("LoadSRModLoader", MethodAttributes.Public|MethodAttributes.Static,_target.Module.TypeSystem.Void);
-        method.Body.Variables.Add(new VariableDefinition(_curAssembly.MainModule.ImportReference(typeof(string[]))));
+        var method = new MethodDefinition("LoadSRModLoader", MethodAttributes.Public | MethodAttributes.Static, _target.Module.TypeSystem.Void);
+        method.Body.Variables.Add(new VariableDefinition(new ArrayType(_curAssembly.MainModule.TypeSystem.String)));
         method.Body.Variables.Add(new VariableDefinition(_curAssembly.MainModule.TypeSystem.Int32));
+        
         var proc = method.Body.GetILProcessor();
         var mainCall = _target.Body.GetILProcessor().Create(OpCodes.Call, _curAssembly.MainModule.ImportReference(_methodToPatchIn));
+        
         if (!_curAssembly.MainModule.TryGetTypeReference("UnityEngine.Debug", out var reference))
             throw new Exception("Couldn't find UnityEngine.Debug");
+            
         var logRef = new MethodReference("Log", _curAssembly.MainModule.TypeSystem.Void, reference);
         logRef.Parameters.Add(new ParameterDefinition(_curAssembly.MainModule.TypeSystem.Object));
-        var onFailWrite = proc.Create(OpCodes.Call,logRef);
+        var onFailWrite = proc.Create(OpCodes.Call, logRef);
 
-        if (!_curAssembly.MainModule.TryGetTypeReference("UnityEngine.Application", out var quitreference)) throw new Exception("Couldn't find UnityEngine.Application");
+        if (!_curAssembly.MainModule.TryGetTypeReference("UnityEngine.Application", out var quitreference)) 
+            throw new Exception("Couldn't find UnityEngine.Application");
 
-        var appQuit = proc.Create(OpCodes.Call,new MethodReference("Quit",_curAssembly.MainModule.TypeSystem.Void,quitreference));
+        var appQuit = proc.Create(OpCodes.Call, new MethodReference("Quit", _curAssembly.MainModule.TypeSystem.Void, quitreference));
 
         var ret = proc.Create(OpCodes.Ret);
         var leave = proc.Create(OpCodes.Leave, ret);
         var mainRet = proc.Create(OpCodes.Ret);
 
-        foreach (var v in GetLoadingInstructions(proc,_curAssembly.MainModule)) proc.Append(v);
+        foreach (var v in GetLoadingInstructions(proc, _curAssembly.MainModule)) proc.Append(v);
 
         proc.Append(mainCall);
         proc.InsertAfter(mainCall, mainRet);
-        proc.InsertAfter(mainRet,onFailWrite);
-        proc.InsertAfter(onFailWrite,appQuit);
-        proc.InsertAfter(appQuit,leave);
-        proc.InsertAfter(leave,ret);
+        proc.InsertAfter(mainRet, onFailWrite);
+        proc.InsertAfter(onFailWrite, appQuit);
+        proc.InsertAfter(appQuit, leave);
+        proc.InsertAfter(leave, ret);
 
+        var exceptionType = new TypeReference("System", "Exception", _curAssembly.MainModule, _curAssembly.MainModule.TypeSystem.CoreLibrary);
         var handler = new ExceptionHandler(ExceptionHandlerType.Catch) {
             TryStart = method.Body.Instructions.First(),
             TryEnd = onFailWrite,
             HandlerStart = onFailWrite,
             HandlerEnd = ret,
-            CatchType = _curAssembly.MainModule.ImportReference(typeof(Exception)),
+            CatchType = exceptionType,
         };
 
         method.Body.ExceptionHandlers.Add(handler);
@@ -117,12 +152,14 @@ internal class Patcher : IDisposable {
     public void Patch() {
         RemoveOldPatch();
         var proc = _target.Body.GetILProcessor();
-        proc.InsertBefore(_target.Body.Instructions[0],proc.Create(OpCodes.Call,AddLoadMethod()));
+        proc.InsertBefore(_target.Body.Instructions[0], proc.Create(OpCodes.Call, AddLoadMethod()));
     }
 
     private void Unpatch() {
-        if(_target.Body.Instructions[0].Operand is MethodReference { Name: "LoadSRModLoader" })_target.Body.GetILProcessor().Remove(_target.Body.Instructions[0]);
-        if (_target.DeclaringType.Methods.FirstOrDefault(x => x.Name == "LoadSRModLoader") is { } d) _target.DeclaringType.Methods.Remove(d);
+        if(_target.Body.Instructions[0].Operand is MethodReference { Name: "LoadSRModLoader" }) 
+            _target.Body.GetILProcessor().Remove(_target.Body.Instructions[0]);
+        if (_target.DeclaringType.Methods.FirstOrDefault(x => x.Name == "LoadSRModLoader") is { } d) 
+            _target.DeclaringType.Methods.Remove(d);
         RemoveOldPatch();
     }
 
@@ -143,7 +180,8 @@ internal class Patcher : IDisposable {
         if (pathRoot == null) return;
         var patchedName = Path.Combine(pathRoot, Path.GetFileNameWithoutExtension(_filename) + "_patched.dll");
         var oldName = Path.Combine(pathRoot, Path.GetFileNameWithoutExtension(_filename) + "_old.dll");
-        if(!CheckOrDelete(patchedName)||!CheckOrDelete(oldName)) throw new Exception("Cannot continue installation while this file exists!");
+        if (!CheckOrDelete(patchedName) || !CheckOrDelete(oldName)) 
+            throw new Exception("Cannot continue installation while this file exists!");
         _curAssembly.Write(patchedName);
         Dispose();
         if (_filename == null) return;
@@ -172,9 +210,7 @@ internal class Patcher : IDisposable {
                     File.Delete(_filename);
                     File.Move(patchedName, _filename);
                 }
-            }
-            else
-            {
+            } else {
                 Dispose();
                 if (_filename != null) {
                     File.Delete(_filename);
@@ -186,7 +222,6 @@ internal class Patcher : IDisposable {
                 File.Delete(oldName);
             }
         }
-
         Console.WriteLine("Unpatching Successful!");
     }
 }

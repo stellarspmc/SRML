@@ -234,23 +234,15 @@ namespace SRML
             return newMod;
         }
 
-        internal static void PreLoadMods()
-        {
+        internal static void PreLoadMods() {
             CurrentLoadingStep = LoadingStep.PRELOAD;
             Console.Console.Reload += Main.Reload;
-            foreach (var mod in Mods.Values)
-            {
-                if (!mod.ModInfo.IsLoaded)
-                    continue;
-
-                try
-                {
+            foreach (var mod in Mods.Values.Where(mod => mod.ModInfo.IsLoaded)) {
+                try {
                     EnumHolderResolver.RegisterAllEnums(mod.EntryType.Module);
                     ConfigManager.PopulateConfigs(mod);
                     mod.PreLoad();
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     mod.ModInfo.LoadState = SRModInfo.State.PRELOAD_ERROR;
                     mod.exception = e;
 
