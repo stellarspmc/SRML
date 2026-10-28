@@ -1,17 +1,12 @@
 ﻿using System.Reflection;
 using HarmonyLib;
-namespace SRML.Patches
-{
+
+namespace SRML.Patches {
     [HarmonyPatch]
     [HarmonyPatch(typeof(AutoSaveDirector))]
-    internal static class SaveGameLoadPatch
-    {
-        static MethodBase TargetMethod()
-        {
-            return typeof(AutoSaveDirector).GetMethod("PushSavedGame", BindingFlags.NonPublic | BindingFlags.Instance);
-        }
-        static void PostFix(AutoSaveDirector __instance)
-        {
+    internal static class SaveGameLoadPatch {
+        static MethodBase TargetMethod() => typeof(AutoSaveDirector).GetMethod("LoadSave", BindingFlags.NonPublic | BindingFlags.Instance); // weird...
+        static void PostFix(AutoSaveDirector __instance) {
             // do something on save game loads
         }
     }

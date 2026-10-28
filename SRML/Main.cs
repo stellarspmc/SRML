@@ -74,8 +74,7 @@ namespace SRML {
             config = ConfigFile.GenerateConfig(typeof(SRMLConfig));
             config.TryLoadFromFile();
 
-            uiBundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Main), "srml"));
-
+            uiBundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("srml"));
             ErrorGUI.errorUI = uiBundle.LoadAsset<GameObject>("SRMLErrorUI");
             var ui = ErrorGUI.errorUI.GetComponent<ErrorGUI>();
 
@@ -98,12 +97,12 @@ namespace SRML {
 
             HarmonyPatcher.PatchAll();
 
-            HarmonyPatcher.Instance.Patch(typeof(GameContext).GetMethod("Awake"),
+            /*HarmonyPatcher.Instance.Patch(typeof(GameContext).GetMethod("Awake"),
                 prefix: new HarmonyMethod(typeof(Main).GetMethod("PreLoad", BindingFlags.NonPublic | BindingFlags.Static)));
             HarmonyPatcher.Instance.Patch(typeof(GameContext).GetMethod("Start"),
                 prefix: new HarmonyMethod(typeof(Main).GetMethod("Load", BindingFlags.NonPublic | BindingFlags.Static)));
             HarmonyPatcher.Instance.Patch(typeof(GameContext).GetMethod("Start"),
-                postfix: new HarmonyMethod(typeof(Main).GetMethod("PostLoad", BindingFlags.NonPublic | BindingFlags.Static)));
+                postfix: new HarmonyMethod(typeof(Main).GetMethod("PostLoad", BindingFlags.NonPublic | BindingFlags.Static)));*/
 
             // this patch ensures that steam doesn't try to add modded achievements, because it wouldn't like that
             var sm = typeof(GameContext).Assembly.GetType("SteamManager", false, true);

@@ -1,19 +1,15 @@
 ﻿using SRML.SR.UI.Utils;
 using UnityEngine;
 
-namespace SRML.SR.UI
-{
-    internal static class ModMenuUIHandler
-    {
+namespace SRML.SR.UI {
+    internal static class ModMenuUIHandler {
         private static GameObject mainMenuUIPrefab;
 
-        internal static void OnMainMenuLoaded(MainMenuUI ui)
-        {
-            MainMenuUtils.AddMainMenuButtonWithTranslation(ui, "ModsButton", "b.mods", () =>
-            {
-                var g = MainMenuUtils.DisplayBlankPanelWithTranslation<BaseUI>(ui, "ModsUI", "b.mods");
-                Object.Instantiate(mainMenuUIPrefab).transform.SetParent(g.transform.GetChild(0), false);
-                
+        internal static void OnMainMenuLoaded(MainMenuUI ui) {
+            MainMenuUtils.AddMainMenuButtonWithTranslation(ui, "ModsButton", "b.mods", () => {
+                if (mainMenuUIPrefab == null) return;
+                var instance = Object.Instantiate(mainMenuUIPrefab, ui.transform.parent, false);
+                instance.SetActive(true);
             }).transform.SetSiblingIndex(5);
 
             var watermark = GameObject.Find("TitleUI/Watermark");
@@ -23,7 +19,7 @@ namespace SRML.SR.UI
 
             if (mainMenuUIPrefab) return;
 
-            var h = Main.uiBundle.LoadAsset<GameObject>("ModPanel");
+            var h = Main.uiBundle.LoadAsset<GameObject>("ModUI");
             h.AddComponent<ModMenuUI>().infoButtonPrefab = Main.uiBundle.LoadAsset<GameObject>("ModInfoButton");
             mainMenuUIPrefab = h;
         }

@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="..\Libs\*.dll">
+    <Reference Include="../Libs/*.dll">
       <Private>false</Private>
     </Reference>
     
@@ -35,7 +35,9 @@
 
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
 
-    <EmbeddedResource Include="srml" />
-    <ProjectReference Include="..\SRML.Editor\SRML.Editor.csproj" />
+    <EmbeddedResource Include="srml">
+      <LogicalName>srml</LogicalName>
+    </EmbeddedResource>
+    <ProjectReference Include="../SRML.Editor/SRML.Editor.csproj" />
   </ItemGroup>
 </Project>
