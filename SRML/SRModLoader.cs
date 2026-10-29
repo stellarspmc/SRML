@@ -9,10 +9,8 @@ using SRML.Utils.Enum;
 using SRML.Config;
 using Newtonsoft.Json.Linq;
 
-namespace SRML
-{
-    public static class SRModLoader
-    {
+namespace SRML {
+    public static class SRModLoader {
         internal const string ModJson = "modinfo.json";
 
         internal static readonly Dictionary<string, SRMod> Mods = new Dictionary<string, SRMod>();
@@ -32,41 +30,29 @@ namespace SRML
         /// <summary>
         /// Searches for valid mods and their assemblies, and decides the load order based on their settings
         /// </summary>
-        internal static void InitializeMods()
-        {
+        internal static void InitializeMods() {
             CurrentLoadingStep = LoadingStep.INITIALIZATION;
-
             FileSystem.CheckDirectory(FileSystem.ModPath);
             var foundMods = new HashSet<ProtoMod>(new ProtoMod.Comparer());
 
             // process mods with embedded modinfo.jsons
-            foreach (var dllFile in Directory.GetFiles(FileSystem.ModPath, "*.dll", SearchOption.AllDirectories))
-            {
-                if (!ProtoMod.TryParseFromDLL(dllFile, out var mods))
-                    continue;
+            foreach (var dllFile in Directory.GetFiles(FileSystem.ModPath, "*.dll", SearchOption.AllDirectories)) {
+                if (!ProtoMod.TryParseFromDLL(dllFile, out var mods)) continue;
 
                 foreach (var mod in mods)
-                {
-                    if (!foundMods.Add(mod))
-                        mod.encounteredError = new Exception($"Found mod with duplicate id {mod.id} in {dllFile}!");
-                }
+                    if (!foundMods.Add(mod)) mod.encounteredError = new Exception($"Found mod with duplicate id {mod.id} in {dllFile}!");
             }
 
             // process mods without embedded modinfo.jsons
-            foreach (var jsonFile in Directory.GetFiles(FileSystem.ModPath, ModJson, SearchOption.AllDirectories))
-            {
+            foreach (var jsonFile in Directory.GetFiles(FileSystem.ModPath, ModJson, SearchOption.AllDirectories)) {
                 var mod = ProtoMod.ParseFromJson(jsonFile);
 
                 if (foundMods.Add(mod))
                     mod.encounteredError = new Exception($"Found mod with duplicate id {mod.id} in {jsonFile}!");
             }
 
-            foreach (var mod in foundMods)
-            {
-                try
-                {
-                    mod.ValidateFields();
-                }
+            foreach (var mod in foundMods) {
+                try { mod.ValidateFields(); }
                 catch (Exception e) { mod.encounteredError = e; }
             }
 
@@ -586,17 +572,14 @@ namespace SRML
             /// Turn the ProtoMod into a proper <see cref="SRModInfo"/> instance
             /// </summary>
             /// <returns>Converted <see cref="SRModInfo"/></returns>
-            public SRModInfo ToModInfo()
-            {
+            public SRModInfo ToModInfo() {
                 SRModInfo.ModVersion version = default;
                 var dependencies = new Dictionary<string, SRModInfo.ModVersion>();
 
-                if (encounteredError == null)
-                {
-                    try
-                    {
+                if (encounteredError == null) {
+                    try {
                         // if version doesn't parse, it doesn't matter if dependencies parse,
-                        SRModInfo.ModVersion.Parse(this.version);
+                        version = SRModInfo.ModVersion.Parse(this.version);
                         dependencies = parsedDependencies?.ToDependencyDictionary() ?? dependencies;
                     }
                     catch (Exception ex) { encounteredError = ex; }
@@ -605,104 +588,65 @@ namespace SRML
                 return new SRModInfo(id, name, author, version, description, url, dependencies);
             }
 
-            public override int GetHashCode()
-            {
-                return 1877310944 + EqualityComparer<string>.Default.GetHashCode(id);
+            public override int GetHashCode() => 1877310944 + EqualityComparer<string>.Default.GetHashCode(id);
+
+            public class Comparer : IEqualityComparer<ProtoMod> {
+                public bool Equals(ProtoMod x, ProtoMod y) => x?.Equals(y) == true;
+                public int GetHashCode(ProtoMod obj) => obj.GetHashCode();
             }
 
-            public class Comparer : IEqualityComparer<ProtoMod>
-            {
-                public bool Equals(ProtoMod x, ProtoMod y)
-                {
-                    return x.Equals(y);
-                }
-
-                public int GetHashCode(ProtoMod obj)
-                {
-                    return obj.GetHashCode();
-                }
-            }
-
-            public enum InfoType
-            {
+            public enum InfoType {
                 FILE_JSON,
                 EMBEDDED_JSON,
                 ATTRIBUTE
             }
 
-            public class ProtoModConverter : JsonConverter
-            {
+            public class ProtoModConverter : JsonConverter {
                 public override bool CanConvert(Type objectType) => objectType == typeof(ProtoMod);
 
-                public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-                {
+                public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
                     var pm = new ProtoMod();
                     var token = (JObject)JToken.ReadFrom(reader);
 
-                    try
-                    {
-                        pm.id = token["id"].ToObject<string>();
+                    try {
+                        pm.id = token["id"].ToObject<string>(); // lwk if nullrefexception it's not even my fault
                         pm.version = token["version"].ToObject<string>();
                         pm.name = token["name"].ToObject<string>();
 
-                        if (token.ContainsKey("author"))
-                            pm.author = token["author"].ToObject<string>();
-                        if (token.ContainsKey("description"))
-                            pm.description = token["description"].ToObject<string>();
-                        if (token.ContainsKey("url"))
-                            pm.url = token["url"].ToObject<string>();
-                    }
-                    catch (Exception e)
-                    {
-                        if (string.IsNullOrEmpty(pm.id))
-                            throw new Exception($"Error parsing unknown basic mod information! {e}");
-                        else
-                            throw new Exception($"Error parsing basic mod information for {pm.id}! {e}");
+                        if (token.ContainsKey("author")) pm.author = token["author"].ToObject<string>();
+                        if (token.ContainsKey("description")) pm.description = token["description"].ToObject<string>();
+                        if (token.ContainsKey("url")) pm.url = token["url"].ToObject<string>();
+                    } catch (Exception e) {
+                        if (string.IsNullOrEmpty(pm.id)) throw new Exception($"Error parsing unknown basic mod information! {e}");
+                         throw new Exception($"Error parsing basic mod information for {pm.id}! {e}");
                     }
 
-                    try
-                    {
-                        if (token.ContainsKey("load_after"))
-                            pm.load_after = token["load_after"].ToObject<string[]>();
-                        if (token.ContainsKey("load_after"))
-                            pm.load_after = token["load_after"].ToObject<string[]>();
-                    }
-                    catch (Exception e)
-                    {
+                    try {
+                        if (token.ContainsKey("load_after")) pm.load_after = token["load_after"].ToObject<string[]>();
+                        if (token.ContainsKey("load_after")) pm.load_after = token["load_after"].ToObject<string[]>();
+                    } catch (Exception e) {
                         throw new Exception($"Error parsing mod loading order for {pm.id}! {e}");
                     }
 
-                    try
-                    {
-                        if (token.ContainsKey("dependencies"))
-                        {
-                            if (token["dependencies"].Type == JTokenType.Array)
-                            {
+                    try {
+                        if (token.ContainsKey("dependencies")) {
+                            if (token["dependencies"].Type == JTokenType.Array) {
                                 pm.parsedDependencies = token["dependencies"].ToObject<string[]>().Select(x =>
                                     new DependencyChecker.Dependency(x.Split(' ')[0], x.Split(' ')[1])).ToArray();
-                            }
-                            else if (token["dependencies"].Type == JTokenType.Object)
-                            {
+                            } else if (token["dependencies"].Type == JTokenType.Object) {
                                 pm.parsedDependencies = ((JObject)token["dependencies"]).Properties().Select(x =>
                                     new DependencyChecker.Dependency(x.Name, x.Value.ToObject<string>())).ToArray();
                             }
-                            else
-                            {
-                                throw new InvalidOperationException($"Malformed dependencies in {pm.id}");
-                            }
+                            else throw new InvalidOperationException($"Malformed dependencies in {pm.id}");
                         }
-                    }
-                    catch (Exception e)
-                    {
+                    } catch (Exception e) {
                         throw new Exception($"Error parsing dependencies in {pm.id}! {e}");
                     }
 
                     return pm;
                 }
 
-                public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-                {
-                }
+                public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) { }
             }
         }
     }

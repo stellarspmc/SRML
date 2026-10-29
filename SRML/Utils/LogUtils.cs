@@ -6,30 +6,17 @@ namespace SRML.Utils
     {
         private static StringBuilder currentBuilder;
 
-        public static void OpenLogSession()
-        {
-            currentBuilder = new StringBuilder();
-        }
-
+        public static void OpenLogSession() => currentBuilder = new StringBuilder();
         public static void Log(object b)
         {
-            if (currentBuilder != null)
-            {
-                currentBuilder.AppendLine(b.ToString());
-            }
-            else
-            {
-                Debug.Log(b);
-            }
+            if (currentBuilder != null) currentBuilder.AppendLine(b.ToString());
+            else Debug.Log(b);
         }
 
-        public static void CloseLogSession()
-        {
-            if (currentBuilder != null)
-            {
-                Debug.Log(currentBuilder.ToString());
-                currentBuilder = null;
-            }
+        public static void CloseLogSession() {
+            if (currentBuilder == null) return;
+            Debug.Log(currentBuilder.ToString());
+            currentBuilder = null;
         }
 
     }

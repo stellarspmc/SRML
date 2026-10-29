@@ -5,15 +5,12 @@ using HarmonyLib;
 using SRML.Config;
 using SRML.Utils;
 
-namespace SRML
-{
+namespace SRML {
     /// <summary>
     /// A basic mod data class that is safe to share between mods (no logic in it)
     /// </summary>
-    public class SRModInfo
-    {
-        public SRModInfo(string modid, string name, string author, ModVersion version, string description, string url, Dictionary<string, ModVersion> dependencies)
-        {
+    public class SRModInfo {
+        public SRModInfo(string modid, string name, string author, ModVersion version, string description, string url, Dictionary<string, ModVersion> dependencies) {
             Id = modid;
             Name = name;
             Author = author;
@@ -51,32 +48,25 @@ namespace SRML
         /// The mod info of the mod whose code is currently running.
         /// </summary>
         /// <returns>The found mod if referenced in a mod assembly, otherwise null.</returns>
-        public static SRModInfo GetCurrentInfo()
-        {
-            var assembly = ReflectionUtils.GetRelevantAssembly();
-            return SRModLoader.GetModForAssembly(assembly)?.ModInfo;
-        }
+        public static SRModInfo GetCurrentInfo() => SRModLoader.GetModForAssembly(ReflectionUtils.GetRelevantAssembly())?.ModInfo;
 
         /// <summary>
         /// Data structure to simplify versioning and the comparing of versions
         /// </summary>
-        public struct ModVersion : IComparable<ModVersion> // TODO: replace with SemVer library
-        {
+        public struct ModVersion : IComparable<ModVersion> {
+            // TODO: replace with SemVer library
+            // nope, if it works don't touch it
             public readonly int Major;
             public readonly int Minor;
             public readonly int Revision;
             public static readonly ModVersion DEFAULT = new ModVersion(1, 0);
-            public ModVersion(int major, int minor, int revision = 0)
-            {
+            public ModVersion(int major, int minor, int revision = 0) {
                 Major = major;
                 Minor = minor;
                 Revision = revision;
             }
 
-            public override string ToString()
-            {
-                return $"{Major}.{Minor}.{Revision}";
-            }
+            public override string ToString() => $"{Major}.{Minor}.{Revision}";
 
             /// <summary>
             /// Parses a mod version string of the format "Major.Minor" or "Major.Minor.Revision"
@@ -84,11 +74,10 @@ namespace SRML
             /// <param name="s">Version string in the format "Major.Minor" or "Major.Minor.Revision"</param>
             /// <returns>The parsed ModVersion</returns>
             /// <exception cref="Exception">Throws if provided version string is not in the correct format.</exception>
-            public static ModVersion Parse(string s)
-            {
+            public static ModVersion Parse(string s) {
                 var splits = s.Split('.');
                 if (splits.Length < 2 || splits.Length > 3) goto uhoh;
-                if (!Int32.TryParse(splits[0], out var major)|| !Int32.TryParse(splits[1], out var minor)) goto uhoh;
+                if (!int.TryParse(splits[0], out var major)|| !int.TryParse(splits[1], out var minor)) goto uhoh;
                 var revision = 0;
                 if (splits.Length == 3 && !Int32.TryParse(splits[2], out revision)) goto uhoh;
 
@@ -97,29 +86,25 @@ namespace SRML
                 uhoh:
                 throw new Exception($"Invalid Version String: {s}");
             }
-
             /// <summary>
             /// Compare this version to another version
             /// </summary>
             /// <param name="other"></param>
             /// <returns>-1 if other is a lower version, 1 if other is a higher version, otherwise 0</returns>
-            public int CompareTo(ModVersion other)
-            {
+            public int CompareTo(ModVersion other) {
                 if (Major > other.Major) return -1;
                 if (Major < other.Major) return 1;
                 if (Minor > other.Minor) return -1;
                 if (Minor < other.Minor) return 1;
                 if (Revision > other.Revision) return -1;
-                if (Revision < other.Revision) return 1;
-                return 0;
+                return Revision < other.Revision ? 1 : 0;
             }
         }
 
         /// <summary>
         /// A mod's state, including loading steps, errors, and being unloaded.
         /// </summary>
-        public enum State
-        {
+        public enum State {
             /// <summary>
             /// User has chosen to manually disable mod.
             /// </summary>
@@ -168,8 +153,7 @@ namespace SRML
     /// <summary>
     /// Actual internal implementation of a mod
     /// </summary>
-    internal class SRMod
-    {
+    internal class SRMod {
         /// <summary>
         /// Mods associated SRModInfo object
         /// </summary>
@@ -195,51 +179,32 @@ namespace SRML
         /// Gets the current executing mod as an SRMod instance
         /// </summary>
         /// <returns>The current executing mod</returns>
-        public static SRMod GetCurrentMod()
-        {
-            if (forcedContext != null) return forcedContext;
-            return SRModLoader.GetModForAssembly(ReflectionUtils.GetRelevantAssembly());
-        }
+        public static SRMod GetCurrentMod() => forcedContext ?? SRModLoader.GetModForAssembly(ReflectionUtils.GetRelevantAssembly());
 
         /// <summary>
         /// Forces a certain mod to be returned from <see cref="SRMod.GetCurrentMod"/>
         /// </summary>
         /// <param name="mod">The mod to be forced</param>
-        internal static void ForceModContext(SRMod mod)
-        {
-            forcedContext = mod;
-        }
+        internal static void ForceModContext(SRMod mod) => forcedContext = mod;
+
         /// <summary>
         /// Clears the current mod context
         /// </summary>
-        internal static void ClearModContext()
-        {
-            forcedContext = null;
-        }
+        internal static void ClearModContext() => forcedContext = null;
 
         public Harmony HarmonyInstance
         {
             get
             {
-                if (_harmonyInstance == null)
-                {
-                    CreateHarmonyInstance(GetDefaultHarmonyName());
-                }
-
+                if (_harmonyInstance == null) CreateHarmonyInstance(GetDefaultHarmonyName());
                 return _harmonyInstance;
             }
-            private set { _harmonyInstance = value; }
+            private set => _harmonyInstance = value;
         }
 
-        public void CreateHarmonyInstance(string name)
-        {
-            HarmonyInstance = new Harmony(name);
-        }
+        public void CreateHarmonyInstance(string name) => HarmonyInstance = new Harmony(name);
 
-        public string GetDefaultHarmonyName()
-        {
-            return $"net.{(ModInfo.Author == null || ModInfo.Author.Length == 0 ? "srml" : Regex.Replace(ModInfo.Author, @"\s+", ""))}.{ModInfo.Id}";
-        }
+        public string GetDefaultHarmonyName() => $"net.{(string.IsNullOrEmpty(ModInfo.Author) ? "srml" : Regex.Replace(ModInfo.Author, @"\s+", ""))}.{ModInfo.Id}";
 
         public SRMod(SRModInfo info, IModEntryPoint entryPoint)
         {
@@ -248,20 +213,16 @@ namespace SRML
             if (entryPoint != null)
             {
                 EntryType = entryPoint.GetType();
-                if (entryPoint is ModEntryPoint)
+                if (entryPoint is ModEntryPoint point)
                 {
-                    entryPoint2 = (ModEntryPoint)entryPoint;
+                    entryPoint2 = point;
                     useNewEntry = true;
                 }
                 this.entryPoint = entryPoint;
             }
         }
 
-        public SRMod(SRModInfo info, IModEntryPoint entryPoint, string path) : this(info, entryPoint)
-        {
-            Path = path;
-        }
-
+        public SRMod(SRModInfo info, IModEntryPoint entryPoint, string path) : this(info, entryPoint) => Path = path;
         public void PreLoad()
         {
             entryPoint.PreLoad();

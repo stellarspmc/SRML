@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Reflection.Emit;
 
 namespace SRML.Utils {
-    public class HarmonyOverrideAttribute : Attribute {}
+    public abstract class HarmonyOverrideAttribute : Attribute {}
 
     internal static class HarmonyOverrideHandler {
-        public static Dictionary<MethodBase, List<MethodBase>> methodsToPatch = new Dictionary<MethodBase, List<MethodBase>>();
+        public static readonly Dictionary<MethodBase, List<MethodBase>> methodsToPatch = new Dictionary<MethodBase, List<MethodBase>>();
 
         public static bool CheckMethod() => true; // eventually put stacktrace checking here
 
@@ -38,26 +38,18 @@ namespace SRML.Utils {
 
                 var list = instr.ToList();
                 list.First().labels.Add(lab1);
-                foreach (var v in list)
-                {
-                    yield return v;
-                }
+                foreach (var v in list) yield return v;
             }
             else
             {
-                foreach(var v in instr)
-                {
-                    yield return v;
-                }
+                foreach(var v in instr) yield return v;
             }
         }
 
         public static void PatchAll()
         {
             foreach(var v in methodsToPatch)
-            {
                 HarmonyPatcher.Instance.Patch(v.Key, transpiler: new HarmonyMethod(AccessTools.Method(typeof(HarmonyOverrideHandler), "Transpiler")));
-            }
         }
 
         public static void LoadOverrides(Module module)
@@ -70,13 +62,13 @@ namespace SRML.Utils {
                     MethodBase info = null;
                     while (true)
                     {
-                        curType = curType.BaseType;
+                        curType = curType?.BaseType;
                         if (curType == null) break;
                         info = AccessTools.Method(curType, v.Name, v.GetParameters().Select(x => x.ParameterType).ToArray(), v.IsGenericMethod?v.GetGenericArguments():null);
                         if (info != null) break;
                     }
 
-                    if (!methodsToPatch.TryGetValue(info,out var a))
+                    if (!methodsToPatch.TryGetValue(info, out var a)) // npe?
                     {
                         a = new List<MethodBase>();
                         methodsToPatch[info] = a;

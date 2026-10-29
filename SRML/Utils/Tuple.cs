@@ -27,14 +27,7 @@
             return hashCode;
         }
 
-        public static bool operator ==(Tuple<T1, T2> left, Tuple<T1, T2> right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Tuple<T1, T2> left, Tuple<T1, T2> right)
-        {
-            return !(left == right);
-        }
+        public static bool operator ==(Tuple<T1, T2> left, Tuple<T1, T2> right) => left.Equals(right);
+        public static bool operator !=(Tuple<T1, T2> left, Tuple<T1, T2> right) => !(left == right);
     }
 }

@@ -2,17 +2,11 @@
 
 namespace SRML.Utils.Enum
 {
-    public class EnumHolderAttribute : Attribute
+    public abstract class EnumHolderAttribute : Attribute
     {
-        internal bool shouldCategorize = true;
+        internal readonly bool shouldCategorize = true;
 
-        public EnumHolderAttribute()
-        {
-        }
-
-        public EnumHolderAttribute(bool shouldCategorize)
-        {
-            this.shouldCategorize = shouldCategorize;
-        }
+        public EnumHolderAttribute() { }
+        public EnumHolderAttribute(bool shouldCategorize) => this.shouldCategorize = shouldCategorize;
     }
 }

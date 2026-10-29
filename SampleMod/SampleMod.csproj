@@ -9,32 +9,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Krafs.Publicizer" Version="2.3.0" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Reference Include="..\Libs\*.dll">
       <Private>false</Private>
     </Reference>
-
     <Reference Include="..\SrmlLibs\*.dll">
       <Private>false</Private>
     </Reference>
-  </ItemGroup>
+    
+    <EmbeddedResource Include="modinfo.json">
+      <LogicalName>modinfo.json</LogicalName>
+    </EmbeddedResource>
 
-  <ItemGroup>
-    <Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="modinfo.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SRML.Editor\SRML.Editor.csproj" />
     <ProjectReference Include="..\SRML\SRML.csproj" />
+    
+    <PackageReference Include="Krafs.Publicizer" Version="2.3.0" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
   </ItemGroup>
 </Project>

@@ -6,16 +6,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace SRML.SR.Patches
-{
+namespace SRML.SR.Patches {
     [HarmonyPatch(typeof(MarketUI), "Start")]
-    internal static class MarketPatch
-    {
-        public static void Prefix(MarketUI __instance)
-        {
-            __instance.plorts = __instance.plorts.Where(x => !PlortRegistry.plortsToPatch.Any(y => y.id == x.id)).ToArray().AddRangeToArray(PlortRegistry.plortsToPatch.ToArray());
-            if (SRMLConfig.CREATE_MARKET_BUTTON)
-            {
+    internal static class MarketPatch {
+        public static void Prefix(MarketUI __instance) {
+            __instance.plorts = __instance.plorts.Where(x => PlortRegistry.plortsToPatch.All(y => y.id != x.id)).ToArray().AddRangeToArray(PlortRegistry.plortsToPatch.ToArray());
+            if (SRMLConfig.CREATE_MARKET_BUTTON) {
                 var ui = PrefabUtils.CopyPrefab(Object.FindObjectsOfType<ScienceUIActivator>().First(x => x.uiPrefab.name == "RefineryUI").uiPrefab);
                 ui.name = "ExtendedMarketUI";
                 var marketUI = ui.AddComponent<ExtendedMarketUI>();
@@ -51,8 +47,7 @@ namespace SRML.SR.Patches
                 ui.transform.Find("MainPanel/Status").gameObject.Destroy();
                 ui.RemoveComponent<RefineryUI>();
 
-                var techActivator = Object.Instantiate(__instance.transform.parent.Find("SlimePedia").Find("techActivator").gameObject);
-                techActivator.transform.parent = __instance.transform.parent;
+                var techActivator = Object.Instantiate(__instance.transform.parent.Find("SlimePedia").Find("techActivator").gameObject, __instance.transform.parent, true);
                 techActivator.GetChild(1).RemoveComponentImmediate<PediaUIActivator>();
                 var activator = techActivator.GetChild(1).AddComponent<UIActivator>();
                 activator.uiPrefab = ui;

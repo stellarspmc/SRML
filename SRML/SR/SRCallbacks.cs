@@ -2,14 +2,9 @@
 using SRML.SR.UI;
 using UnityEngine;
 
-namespace SRML.SR
-{
-    public static class SRCallbacks
-    {
-        static SRCallbacks()
-        {
-            OnMainMenuLoaded += ModMenuUIHandler.OnMainMenuLoaded;
-        }
+namespace SRML.SR {
+    public static class SRCallbacks {
+        static SRCallbacks() => OnMainMenuLoaded += ModMenuUIHandler.OnMainMenuLoaded;
 
         public delegate void OnSaveGameLoadedDelegate(SceneContext t);
         public delegate void OnMainMenuLoadedDelegate(MainMenuUI mainMenu);

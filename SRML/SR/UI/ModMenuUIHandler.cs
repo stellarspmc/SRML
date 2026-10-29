@@ -20,7 +20,7 @@ namespace SRML.SR.UI {
             if (mainMenuUIPrefab) return;
 
             var h = Main.uiBundle.LoadAsset<GameObject>("ModUI");
-            h.AddComponent<ModMenuUI>().infoButtonPrefab = Main.uiBundle.LoadAsset<GameObject>("ModInfoButton");
+            //h.AddComponent<ModMenuUI>().infoButtonPrefab = Main.uiBundle.LoadAsset<GameObject>("ModInfoButton");
             mainMenuUIPrefab = h;
         }
     }

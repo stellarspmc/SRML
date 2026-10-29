@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace SRML.SR
-{
-    public static class AchievementRegistry
-    {
+namespace SRML.SR {
+    public static class AchievementRegistry {
         internal static Dictionary<AchievementsDirector.Achievement, (AchievementsDirector.Tracker, Tier)> moddedAchievements = new Dictionary<AchievementsDirector.Achievement, (AchievementsDirector.Tracker, Tier)>();
         internal static Dictionary<Tier, Sprite> moddedTiers = new Dictionary<Tier, Sprite>();
         internal static Dictionary<AchievementsDirector.Achievement, Tier> achievementCustomTiers = new Dictionary<AchievementsDirector.Achievement, Tier>();
@@ -37,8 +35,7 @@ namespace SRML.SR
         /// <summary>
         /// Tiers for an achievement to be put into.
         /// </summary>
-        public enum Tier
-        {
+        public enum Tier {
             TIER1,
             TIER2,
             TIER3

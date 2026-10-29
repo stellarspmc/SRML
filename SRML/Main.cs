@@ -87,9 +87,8 @@ namespace SRML {
             foreach (var text in ui.errorInfo.GetComponentsInChildren<TMP_Text>(true)) text.alignment = TextAlignmentOptions.MidlineLeft;
             foreach (var text in ui2.errorInfo.GetComponentsInChildren<TMP_Text>(true)) text.alignment = TextAlignmentOptions.MidlineLeft;
 
-            foreach (var c in ui2.GetComponentsInChildren<Component>()) {
+            foreach (var c in ui2.GetComponentsInChildren<Component>()) 
                 if (c.GetType().Name.Contains("Styler")) UnityEngine.Object.DestroyImmediate(c);
-            }
 
             // things break if this doesn't exist for reasons
             foreach (var v in Assembly.GetExecutingAssembly().GetTypes())
@@ -121,7 +120,7 @@ namespace SRML {
                 Debug.LogError(mod.exception);
 
             moveForwardAfterInit = srMods.Count <= 0;
-            if (!moveForwardAfterInit && !ErrorGUI.TryCreateExtendedError(null, ErrorGUI.initErrorUI, srMods, false)) Application.Quit();
+            if (!moveForwardAfterInit && !ErrorGUI.TryCreateExtendedError(null, ErrorGUI.initErrorUI, srMods)) Application.Quit();
         }
 
         /// <summary>

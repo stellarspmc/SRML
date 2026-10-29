@@ -1,11 +1,13 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace SRML.SR.UI {
     internal class ModMenuUI : BaseUI {
-        public GameObject infoButtonPrefab;
+        //public GameObject infoButtonPrefab;
         private GameObject modScrollbarContent;
         private SRToggleGroup modScrollbarGroup;
 
@@ -21,31 +23,34 @@ namespace SRML.SR.UI {
                 modScrollbarContent = contentTransform.gameObject;
                 modScrollbarGroup = modScrollbarContent.GetComponent<SRToggleGroup>();
             }
-            else UnityEngine.Debug.LogError("[ModMenuUI] Failed to find: MainPanel/ListPanel/ContentPanel/Content");
 
-
-            var modsButton = transform.Find("MainPanel/ListPanel/Buttons/LogsButton") ?? transform.Find("ModsFolderButton");
+            var modsButton = transform.Find("MainPanel/ListPanel/Buttons/LogsButton");
             if (modsButton != null) modsButton.GetComponent<Button>()?.onClick.AddListener(() => Process.Start(Path.GetFullPath(FileSystem.ModPath)));
 
             var modInfoPanel = transform.Find("MainPanel/InfoPanel/ContentPanel/Content/ModInfoPanel");
-            if (modInfoPanel != null) {
-                modNamePanelText = modInfoPanel.Find("NameLabel")?.GetComponent<Text>();
-                authorNameText = modInfoPanel.Find("AuthorLabel")?.GetComponent<Text>();
-                descriptionText = modInfoPanel.Find("DescriptionLabel")?.GetComponent<Text>();
-                dependenciesText = modInfoPanel.Find("DependenciesLabel")?.GetComponent<Text>();
+            if (modInfoPanel == null) return;
+            modNamePanelText = SafeGetText(modInfoPanel, "NameLabel");
+            authorNameText = SafeGetText(modInfoPanel, "AuthorLabel");
+            descriptionText = SafeGetText(modInfoPanel, "DescriptionLabel");
+            dependenciesText = SafeGetText(modInfoPanel, "DependenciesLabel");
+            versionText = SafeGetText(modInfoPanel, "DownloadLabel");
+            
+            var closeButton = transform.Find("MainPanel/CloseButton").GetComponent<Button>(); // use java casting? <T extends ILayoutElement> and reuse SafeGet
+            closeButton.onClick.AddListener(this.Destroy);
+        }
 
-                versionText = modInfoPanel.Find("DownloadLabel")?.GetComponent<Text>();
-            } else UnityEngine.Debug.LogError("[ModMenuUI] Failed to find: MainPanel/InfoPanel/ContentPanel/Content/ModInfoPanel");
+        private static Text SafeGetText(Transform t, string name) {
+            var instance = t.Find(name);
+            return instance != null ? instance.GetComponent<Text>() : throw new NullReferenceException($"{name} not found in {t.name}");
         }
 
         public void Start() {
-            foreach (var mod in SRModLoader.GetMods())
-                AddModInfo(mod.ModInfo);
+            foreach (var mod in SRModLoader.GetMods()) AddModInfo(mod.ModInfo);
         }
 
         public void AddModInfo(SRModInfo info) {
-            if (infoButtonPrefab == null || modScrollbarContent == null) return;
-            var o = Instantiate(infoButtonPrefab, modScrollbarContent.transform, false);
+            if (modScrollbarContent == null) return;
+            var o = Instantiate(modScrollbarContent, modScrollbarContent.transform, false); // init buttons instead of ts
             var button = new ModButton(info);
 
             var toggle = o.GetComponent<SRToggle>();
@@ -73,11 +78,11 @@ namespace SRML.SR.UI {
         }
 
         internal class ModButton {
-            public string name;
-            public string description;
-            public string dependencies;
-            public string author;
-            public string version;
+            public readonly string name;
+            public readonly string description;
+            public readonly string dependencies;
+            public readonly string author;
+            public readonly string version;
 
             public ModButton(SRModInfo info) {
                 name = info.Name;

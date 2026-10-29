@@ -24,10 +24,12 @@ namespace SRML.Utils {
 
         public static Object DeepCopyObject(Object ob) {
             var refToRef = new Dictionary<Object, Object>();
+            return DeepCopyObject_Internal(ob);
+
             Object DeepCopyObject_Internal(Object obj) {
                 if (!obj) return obj;
                 if (refToRef.TryGetValue(obj, out var old)) return old;
-                if (refToRef.Values.Contains(obj)) return obj;
+                if (refToRef.ContainsValue(obj)) return obj;
                 var newObj = Object.Instantiate(obj);
                 if (!typeof(ScriptableObject).IsAssignableFrom(newObj.GetType())) return newObj;
                 refToRef[obj] = newObj;
@@ -51,7 +53,6 @@ namespace SRML.Utils {
                     return theObj;
                 }
             }
-            return DeepCopyObject_Internal(ob);
         }
     }
 }

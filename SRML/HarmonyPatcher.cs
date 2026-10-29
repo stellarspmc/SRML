@@ -14,25 +14,14 @@ namespace SRML
         {
             get
             {
-                if (_instance == null)
-                {
-                    InitializeInstance();
-                }
-
+                if (_instance == null) InitializeInstance();
                 return _instance;
             }
         }
 
-        static void InitializeInstance()
-        {
-            _instance = new Harmony("net.veesus.srml");
-        }
-
-        internal static void PatchAll()
-        {
-            Instance.PatchAll(Assembly.GetExecutingAssembly());
-        }
-
+        static void InitializeInstance() => _instance = new Harmony("net.veesus.srml");
+        internal static void PatchAll() => Instance.PatchAll(Assembly.GetExecutingAssembly());
+        public static Harmony GetInstance() => SRMod.GetCurrentMod().HarmonyInstance;
         public static Harmony SetInstance(string name)
         {
             var currentMod = SRMod.GetCurrentMod();
@@ -40,9 +29,5 @@ namespace SRML
             return currentMod.HarmonyInstance;
         }
 
-        public static Harmony GetInstance()
-        {
-            return SRMod.GetCurrentMod().HarmonyInstance;
-        }
     }
 }

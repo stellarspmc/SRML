@@ -11,16 +11,12 @@ namespace SRML.Utils
     {
         public static object GameContext { get; internal set; }
 
-        public static String PrintObjectTree(GameObject obj)
+        public static string PrintObjectTree(GameObject obj)
         {
-            while (obj.transform.parent != null)
-            {
-                obj = obj.transform.parent.gameObject;
-            }
+            while (obj.transform.parent != null) obj = obj.transform.parent.gameObject;
 
-            var currentIndent = "";
             var builder = new StringBuilder();
-            PrintObjectTreeInternal(obj, currentIndent, builder);
+            PrintObjectTreeInternal(obj, "", builder);
             return builder.ToString();
         }
 
@@ -59,17 +55,11 @@ namespace SRML.Utils
 
             builder.AppendLine(indent + "children: ");
 
-            for (var i = 0; i < obj.transform.childCount; i++)
-            {
+            for (var i = 0; i < obj.transform.childCount; i++) 
                 PrintObjectTreeInternal(obj.transform.GetChild(i).gameObject, indent2, builder);
-            }
         }
 
-        public static void Prefabitize(GameObject obj)
-        {
-            obj.transform.SetParent(Main.prefabParent, false);
-        }
-
+        public static void Prefabitize(GameObject obj) => obj.transform.SetParent(Main.prefabParent, false);
         public static GameObject InstantiateInactive(GameObject original)
         {
             var newObj = Object.Instantiate(original, Main.prefabParent, true);
