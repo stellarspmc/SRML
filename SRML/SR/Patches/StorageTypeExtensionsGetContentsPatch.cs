@@ -12,8 +12,8 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(SiloStorage.StorageType type,HashSet<Identifiable.Id> __result)
         {
-            if (!AmmoRegistry.siloPrefabs.ContainsKey(type)) return;
-            foreach(var v in AmmoRegistry.siloPrefabs[type])
+            if (!AmmoRegistry.siloPrefabs.TryGetValue(type, out var prefab)) return;
+            foreach(var v in prefab)
             {
                 __result.Add(v);
             }   

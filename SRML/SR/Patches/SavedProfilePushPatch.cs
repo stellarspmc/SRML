@@ -13,9 +13,6 @@ namespace SRML.SR.Patches
     [HarmonyPatch("PushOptions")]
     internal static class SavedProfilePushPatch
     {
-        public static void Prefix(OptionsV11 options)
-        {
-            OptionsHandler.Push(options);
-        }
+        public static void Prefix(OptionsV11 options) => OptionsHandler.Push(options);
     }
 }

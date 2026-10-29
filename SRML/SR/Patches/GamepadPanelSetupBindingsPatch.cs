@@ -15,11 +15,12 @@ namespace SRML.SR.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            List<CodeInstruction> allInstructions = new List<CodeInstruction>(instr);
-            CodeInstruction latestBinding = instr.Last(x => x.opcode == OpCodes.Call && ((MethodInfo)x.operand).Name == "CreateGamepadBindingLine");
-            int index = instr.IndexOfItem(latestBinding) + 1;
+            var codeInstructions = instr.ToList();
+            var allInstructions = new List<CodeInstruction>(codeInstructions);
+            var latestBinding = codeInstructions.Last(x => x.opcode == OpCodes.Call && ((MethodInfo)x.operand).Name == "CreateGamepadBindingLine");
+            var index = codeInstructions.IndexOfItem(latestBinding) + 1;
 
-            List<CodeInstruction> newInstructions = new List<CodeInstruction>()
+            var newInstructions = new List<CodeInstruction>()
             {
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GamepadPanelSetupBindingsPatch), "Alternate"))

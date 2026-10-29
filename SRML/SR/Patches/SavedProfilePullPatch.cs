@@ -12,9 +12,6 @@ namespace SRML.SR.Patches
     [HarmonyPatch("Pull")]
     internal static class SavedProfilePullPatch
     {
-        public static void Prefix(SavedProfile __instance)
-        {
-            OptionsHandler.Pull(__instance);
-        }
+        public static void Prefix(SavedProfile __instance) => OptionsHandler.Pull(__instance);
     }
 }

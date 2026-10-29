@@ -14,10 +14,7 @@ namespace SRML.SR.Patches
         {
             if (SRSingleton<SceneContext>.Instance.GameModeConfig.GetModeSettings().blueprintsEnabled)
             {
-                foreach(var v in GadgetRegistry.customBlueprintLocks)
-                {
-                    __instance.blueprintLocks[v.Key] = v.Value(__instance);
-                }
+                foreach(var v in GadgetRegistry.customBlueprintLocks) __instance.blueprintLocks[v.Key] = v.Value(__instance);
             }
         }
     }

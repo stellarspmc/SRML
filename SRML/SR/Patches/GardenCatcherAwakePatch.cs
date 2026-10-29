@@ -10,9 +10,6 @@ namespace SRML.SR.Patches
     [HarmonyPatch("Awake")]
     internal static class GardenCatcherAwakePatch
     {
-        public static void Prefix(GardenCatcher __instance)
-        {
-            PlantSlotRegistry.Patch(__instance);
-        }
+        public static void Prefix(GardenCatcher __instance) => PlantSlotRegistry.Patch(__instance);
     }
 }

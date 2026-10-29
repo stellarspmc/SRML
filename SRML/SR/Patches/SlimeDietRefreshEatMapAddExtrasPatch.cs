@@ -8,8 +8,8 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(SlimeDiet __instance, SlimeDefinition definition)
         {
-            if (SlimeExtensions.extraEatEntries.ContainsKey(definition.IdentifiableId))
-                __instance.EatMap.AddRange(SlimeExtensions.extraEatEntries[definition.IdentifiableId]);
+            if (SlimeExtensions.extraEatEntries.TryGetValue(definition.IdentifiableId, out var entry))
+                __instance.EatMap.AddRange(entry);
         }
     }
 }

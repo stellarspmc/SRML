@@ -10,9 +10,6 @@ namespace SRML.SR.Patches
     [HarmonyPatch("MarkRead")]
     internal static class MailReadPatch
     {
-        public static void Postfix(MailDirector __instance, MailDirector.Mail mail)
-        {
-            MailRegistry.ModdedMails.FirstOrDefault((x) => mail.key == x.MailKey)?.onReadCallback?.Invoke(__instance, mail);
-        }
+        public static void Postfix(MailDirector __instance, MailDirector.Mail mail) => MailRegistry.ModdedMails.FirstOrDefault((x) => mail.key == x.MailKey)?.onReadCallback?.Invoke(__instance, mail);
     }
 }

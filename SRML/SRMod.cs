@@ -205,49 +205,33 @@ namespace SRML
         /// Forces a certain mod to be returned from <see cref="SRMod.GetCurrentMod"/> 
         /// </summary>
         /// <param name="mod">The mod to be forced</param>
-        internal static void ForceModContext(SRMod mod)
-        {
-            forcedContext = mod;
-        }
+        internal static void ForceModContext(SRMod mod) => forcedContext = mod;
+
         /// <summary>
         /// Clears the current mod context
         /// </summary>
-        internal static void ClearModContext()
-        {
-            forcedContext = null;
-        }
+        internal static void ClearModContext() => forcedContext = null;
 
         public Harmony HarmonyInstance
         {
             get
             {
-                if (_harmonyInstance == null)
-                {
-                    CreateHarmonyInstance(GetDefaultHarmonyName());
-                }
-
+                if (_harmonyInstance == null) CreateHarmonyInstance(GetDefaultHarmonyName());
                 return _harmonyInstance;
             }
-            private set { _harmonyInstance = value; }
+            private set => _harmonyInstance = value;
         }
 
-        public void CreateHarmonyInstance(string name)
-        {
-            HarmonyInstance = new Harmony(name);
-        }
-
-        public string GetDefaultHarmonyName()
-        {
-            return $"net.{(ModInfo.Author == null || ModInfo.Author.Length == 0 ? "srml" : Regex.Replace(ModInfo.Author, @"\s+", ""))}.{ModInfo.Id}";
-        }
+        public void CreateHarmonyInstance(string name) => HarmonyInstance = new Harmony(name);
+        public string GetDefaultHarmonyName() => $"net.{(ModInfo.Author == null || ModInfo.Author.Length == 0 ? "srml" : Regex.Replace(ModInfo.Author, @"\s+", ""))}.{ModInfo.Id}";
 
         public SRMod(SRModInfo info, IModEntryPoint entryPoint)
         {
-            this.ModInfo = info;
+            ModInfo = info;
 
             if (entryPoint != null)
             {
-                this.EntryType = entryPoint.GetType();
+                EntryType = entryPoint.GetType();
                 if (entryPoint is ModEntryPoint)
                 {
                     entryPoint2 = (ModEntryPoint)entryPoint;
@@ -257,10 +241,7 @@ namespace SRML
             }
         }
 
-        public SRMod(SRModInfo info, IModEntryPoint entryPoint, string path) : this(info, entryPoint)
-        {
-            this.Path = path;
-        }
+        public SRMod(SRModInfo info, IModEntryPoint entryPoint, string path) : this(info, entryPoint) => Path = path;
 
         public void PreLoad()
         {
@@ -303,7 +284,7 @@ namespace SRML
             if (useNewEntry)
                 entryPoint2.FixedUpdate();
         }
-        
+
         public void LateUpdate()
         {
             if (useNewEntry)

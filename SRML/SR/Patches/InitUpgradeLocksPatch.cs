@@ -18,8 +18,7 @@ namespace SRML.SR.Patches
             {
                 if (v.Value == null) model.availUpgrades.Add(v.Key);
                 else model.upgradeLocks[v.Key] = v.Value(__instance);
-
-            }  
+            }
         }
     }
 }

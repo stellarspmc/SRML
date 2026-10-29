@@ -12,8 +12,8 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(HashSet<Identifiable.Id> __result)
         {
-            if (!AmmoRegistry.inventoryPrefabsToPatch.ContainsKey(PlayerState.AmmoMode.DEFAULT)) return;
-            foreach (var v in AmmoRegistry.inventoryPrefabsToPatch[PlayerState.AmmoMode.DEFAULT]) __result.Add(v);
+            if (!AmmoRegistry.inventoryPrefabsToPatch.TryGetValue(PlayerState.AmmoMode.DEFAULT, out var value)) return;
+            foreach (var v in value) __result.Add(v);
         }
     }
 }

@@ -9,9 +9,9 @@ namespace SRML.SR.Patches
     {
         public static bool Prefix(SlimeAppearanceApplicator __instance, Fashion.Slot fashionSlot, ref Transform __result)
         {
-            if (FashionRegistry.slotAttachPoints.ContainsKey(fashionSlot))
+            if (FashionRegistry.slotAttachPoints.TryGetValue(fashionSlot, out var point))
             {
-                __result = __instance._boneLookup[FashionRegistry.slotAttachPoints[fashionSlot].Item2].transform;
+                __result = __instance._boneLookup[point.Item2].transform;
                 return false;
             }
             return true;

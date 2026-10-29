@@ -27,10 +27,7 @@ namespace SRML.SR.Patches
             var listToAdd = range.ToList();
 
             var v = list.Where(x => listToAdd.Any(y=>cond(x,y))).ToList();
-            foreach (var a in v)
-            {
-                list.items.Remove(a);
-            }
+            foreach (var a in v) list.items.Remove(a);
             list.items.AddRange(listToAdd);
         }
     }

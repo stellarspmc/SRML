@@ -9,7 +9,7 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(AchievementsDirector __instance)
         {
-            foreach (KeyValuePair<AchievementsDirector.Achievement, (AchievementsDirector.Tracker, AchievementRegistry.Tier)> ach in AchievementRegistry.moddedAchievements)
+            foreach (var ach in AchievementRegistry.moddedAchievements)
             {
                 switch (ach.Value.Item2)
                 {
@@ -35,9 +35,9 @@ namespace SRML.SR.Patches
     {
         public static bool Prefix(AchievementsDirector.Achievement achieve, ref Sprite __result)
         {
-            if (AchievementRegistry.achievementCustomTiers.ContainsKey(achieve))
+            if (AchievementRegistry.achievementCustomTiers.TryGetValue(achieve, out var tier))
             {
-                __result = AchievementRegistry.moddedTiers[AchievementRegistry.achievementCustomTiers[achieve]];
+                __result = AchievementRegistry.moddedTiers[tier];
                 return false;
             }
             return true;
@@ -49,9 +49,9 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(AchievementsDirector __instance)
         {
-            foreach (KeyValuePair<AchievementsDirector.Achievement, (AchievementsDirector.Tracker, AchievementRegistry.Tier)> ach in AchievementRegistry.moddedAchievements)
+            foreach (var ach in AchievementRegistry.moddedAchievements)
             {
-                AchievementsDirector.Tracker tracker = ach.Value.Item1;
+                var tracker = ach.Value.Item1;
                 tracker.dir = __instance;
                 __instance.trackers[ach.Key] = tracker;
             }

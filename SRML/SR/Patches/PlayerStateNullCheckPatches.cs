@@ -10,10 +10,6 @@ namespace SRML.SR.Patches
     [HarmonyPatch("CheckAllUpgradeLockers")]
     internal static class PlayerStateNullCheckPatches
     {
-        public static bool Prefix(PlayerState __instance)
-        {
-            if (__instance.model == null) return false;
-            return true;
-        }
+        public static bool Prefix(PlayerState __instance) => __instance.model != null;
     }
 }

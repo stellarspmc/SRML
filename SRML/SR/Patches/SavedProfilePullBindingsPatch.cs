@@ -12,9 +12,6 @@ namespace SRML.SR.Patches
     [HarmonyPatch("PullBindings")]
     internal static class SavedProfilePullBindingsPatch
     {
-        public static void Prefix(ref IEnumerable<PlayerAction> actions)
-        {
-            actions = actions.Where(x => !BindingRegistry.IsModdedAction(x));
-        }
+        public static void Prefix(ref IEnumerable<PlayerAction> actions) => actions = actions.Where(x => !BindingRegistry.IsModdedAction(x));
     }
 }
