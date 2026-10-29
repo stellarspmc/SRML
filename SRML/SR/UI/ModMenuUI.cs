@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,7 +39,7 @@ namespace SRML.SR.UI
         public void AddModInfo(SRModInfo info)
         {
             var newobj = Instantiate(infoButtonPrefab);
-            ModButton button = new ModButton(info);
+            var button = new ModButton(info);
             newobj.GetComponent<SRToggle>().onValueChanged.AddListener((x) =>
             {
                 if (x) OnModSelect(button);
@@ -85,8 +81,8 @@ namespace SRML.SR.UI
                 dependencies = $"Dependencies: ";
                 if (info.Dependencies.Count > 0)
                 {
-                    int i = 0;
-                    foreach (KeyValuePair<string, SRModInfo.ModVersion> dep in info.Dependencies)
+                    var i = 0;
+                    foreach (var dep in info.Dependencies)
                     {
                         dependencies += $"{dep.Key} {dep.Value}";
                         if ((i + 1) != info.Dependencies.Count) dependencies += ", ";

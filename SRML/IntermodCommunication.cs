@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace SRML
@@ -130,7 +129,7 @@ namespace SRML
             public override string ToString()
             {
                 if (Types == null) return "UNKNOWN CALLING INFORMATION";
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
                 foreach(var v in Types)
                 {
                     builder.Append(v.ToString()+", ");

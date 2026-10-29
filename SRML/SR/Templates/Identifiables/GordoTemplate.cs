@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using MonomiPark.SlimeRancher.Regions;
-using SRML.SR;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -169,7 +167,7 @@ namespace SRML.SR.Templates.Identifiables
         protected void SetValuesAfterBuild(GameObject obj)
         {
             // Adds the bones
-            GameObject bones = boneStructure?.CreatePrefabCopy() ?? BaseObjects.originBones["GordoBones"].CreatePrefabCopy();
+            var bones = boneStructure?.CreatePrefabCopy() ?? BaseObjects.originBones["GordoBones"].CreatePrefabCopy();
             bones.transform.parent = obj.transform;
             bones.transform.localPosition = new Vector3(0, -0.5f, 0);
             bones.SetActive(true);
@@ -183,11 +181,11 @@ namespace SRML.SR.Templates.Identifiables
             obj.GetComponent<GordoEat>().toVibrate = obj.FindChild("Vibrating").transform;
 
             // Add skinned mesh info
-            SkinnedMeshRenderer render = obj.FindChild("slime_gordo").GetComponent<SkinnedMeshRenderer>();
+            var render = obj.FindChild("slime_gordo").GetComponent<SkinnedMeshRenderer>();
             render.rootBone = bones.FindChild("bone_skin_top").transform;
 
-            List<Transform> addBones = new List<Transform>();
-            foreach (GameObject bone in bones.FindChildrenWithPartialName("bone_"))
+            var addBones = new List<Transform>();
+            foreach (var bone in bones.FindChildrenWithPartialName("bone_"))
                 addBones.Add(bone.transform);
 
             render.bones = addBones.ToArray();

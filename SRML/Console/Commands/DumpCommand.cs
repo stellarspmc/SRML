@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using System;
-using SRML.Console;
 using System.Collections.Generic;
 
 namespace SRML.Console.Commands
@@ -31,7 +29,7 @@ namespace SRML.Console.Commands
 			{
 				if (args[0].Equals("all"))
 				{
-					foreach (string file in Console.dumpActions.Keys)
+					foreach (var file in Console.dumpActions.Keys)
 					{
 						DumpFile(file);
 					}
@@ -57,12 +55,12 @@ namespace SRML.Console.Commands
 				return false;
 			}
 
-			string path = Path.Combine(UnityEngine.Application.dataPath, $"../Dumps/{name}.dump");
+			var path = Path.Combine(UnityEngine.Application.dataPath, $"../Dumps/{name}.dump");
 
 			if (!Directory.Exists(path.Substring(0, path.LastIndexOf('/'))))
 				Directory.CreateDirectory(path.Substring(0, path.LastIndexOf('/')));
 
-			using (StreamWriter writer = File.CreateText(path))
+			using (var writer = File.CreateText(path))
 			{
 				Console.dumpActions[name].Invoke(writer);
 			}
@@ -75,7 +73,7 @@ namespace SRML.Console.Commands
 		{
 			if (argIndex == 0)
 			{
-				List<string> vs = new List<string>() { "all" };
+				var vs = new List<string>() { "all" };
 				vs.AddRange(Console.dumpActions.Keys);
 				return vs;
 			}

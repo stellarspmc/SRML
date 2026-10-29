@@ -13,7 +13,7 @@ namespace SRML
                 if (mod.encounteredError != null || !mod.HasDependencies)
                     continue;
 
-                IEnumerable<Dependency> unmet = mod.parsedDependencies.Where(x => !mods.Any(y => x.SatisfiedBy(y)));
+                var unmet = mod.parsedDependencies.Where(x => !mods.Any(y => x.SatisfiedBy(y)));
                 if (unmet.Any())
                     mod.encounteredError = new Exception($"Unresolved dependency for '{mod.id}'! Cannot find '{unmet.First().mod_id} {unmet.First().version}'");
             }
@@ -40,7 +40,7 @@ namespace SRML
 
         public static void CalculateLoadOrder(ref HashSet<SRModLoader.ProtoMod> mods, out List<string> loadOrder)
         {
-            List<SRModLoader.ProtoMod> modsSorted = new List<SRModLoader.ProtoMod>(mods);
+            var modsSorted = new List<SRModLoader.ProtoMod>(mods);
             modsSorted.Sort(CompareLoadingOrder);
             mods = modsSorted.ToHashSet();
             loadOrder = modsSorted.Where(x => x.id != null).Select(x => x.id).ToList();

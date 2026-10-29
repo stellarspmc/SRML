@@ -1,20 +1,12 @@
 ﻿using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.SR
 {
     public static class SRCallbacks
     {
-
-        static SRCallbacks()
-        {
-            OnMainMenuLoaded += ModMenuUIHandler.OnMainMenuLoaded;
-        }
+        static SRCallbacks() => OnMainMenuLoaded += ModMenuUIHandler.OnMainMenuLoaded;
 
         public delegate void OnSaveGameLoadedDelegate(SceneContext t);
         public delegate void OnMainMenuLoadedDelegate(MainMenuUI mainMenu);
@@ -42,15 +34,9 @@ namespace SRML.SR
         public static event OnCorporateLevelBoughtDelegate OnCorporateLevelBought;
         internal static event OnGameContextReadyDelegate OnGameContextReady;
 
-        internal static void OnLoad()
-        {
-            OnGameContextReady?.Invoke();
-        }
-
+        internal static void OnLoad() => OnGameContextReady?.Invoke();
         internal static void OnMainMenuLoad(MainMenuUI mainmenu) => OnMainMenuLoaded?.Invoke(mainmenu);
-
         internal static void OnZoneEnterCallback(ZoneDirector.Zone zone, PlayerState playerState) => OnZoneEntered?.Invoke(zone, playerState);
-
         internal static void OnCorporateLevelBoughtCallback(ProgressDirector dir) => OnCorporateLevelBought?.Invoke(dir.GetProgress(ProgressDirector.ProgressType.CORPORATE_PARTNER));
 
         internal static void OnSceneLoaded(SceneContext t)
@@ -60,7 +46,6 @@ namespace SRML.SR
         }
 
         internal static void OnActorSpawnCallback(Identifiable.Id id,GameObject obj, ActorModel model) => OnActorSpawn?.Invoke(id, obj, model);
-
         internal static void PreSceneLoad(SceneContext t)
         {
             if (Levels.isMainMenu()) return;

@@ -7,7 +7,7 @@ namespace SRML.SR
     public static class FashionRegistry
     {
         internal static List<(Identifiable.Id, (Func<AttachFashions, bool>, Vector3))> offsetsForFashions = new List<(Identifiable.Id, (Func<AttachFashions, bool>, Vector3))>();
-        
+
         internal static Dictionary<Fashion.Slot, (string, SlimeAppearance.SlimeBone)> slotAttachPoints = new Dictionary<Fashion.Slot, (string, SlimeAppearance.SlimeBone)>();
 
         /// <summary>

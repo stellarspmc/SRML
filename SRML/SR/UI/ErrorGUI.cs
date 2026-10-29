@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using SRML.SR;
 using SRML.SR.UI.Utils;
 using TMPro;
 using UnityEngine;
@@ -42,9 +41,9 @@ namespace SRML.SR.UI
                     gui = ui.InstantiateAndWaitForDestroy(uiToUse);
                 else
                     gui = Instantiate(uiToUse);
-                ErrorGUI eg = gui.GetComponent<ErrorGUI>();
+                var eg = gui.GetComponent<ErrorGUI>();
 
-                foreach (SRMod exception in erroring)
+                foreach (var exception in erroring)
                     Instantiate(eg.errorInfo, eg.errorContainer).GetComponent<IndividualExceptionUI>().GenerateMessage(exception);
 
                 return true;

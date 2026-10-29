@@ -1,6 +1,4 @@
-﻿using SRML.SR.Utils.BaseObjects;
-using SRML.SR.Templates;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SRML.SR.Utils.Debug
 {
@@ -48,7 +46,7 @@ namespace SRML.SR.Utils.Debug
 
             transform.localScale = Vector3.one;
 
-            BoxCollider col = gameObject.AddComponent<BoxCollider>();
+            var col = gameObject.AddComponent<BoxCollider>();
             col.isTrigger = true;
             col.center = Vector3.zero;
             col.size = Vector3.one;
@@ -104,7 +102,7 @@ namespace SRML.SR.Utils.Debug
         {
             if (hover && DebugCommand.DebugMode)
             {
-                TextAnchor defAnc = GUI.skin.label.alignment;
+                var defAnc = GUI.skin.label.alignment;
                 GUI.skin.label.alignment = TextAnchor.MiddleCenter;
 
                 GUI.Label(new Rect(0, 10, Screen.width, 30), $"<size=16><b>MARKER INFO</b></size>");

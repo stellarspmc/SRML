@@ -4,9 +4,7 @@ using SRML.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using static SRML.SR.PediaRegistry.PediaTab;
 
@@ -30,10 +28,7 @@ namespace SRML.SR
 
         static Dictionary<DisplaySetting, DefaultPediaRenderer> defaultRenderers = new Dictionary<DisplaySetting, DefaultPediaRenderer>();
 
-        static PediaRegistry()
-        {
-            ModdedIDRegistry.RegisterIDRegistry(moddedIds);
-        }
+        static PediaRegistry() => ModdedIDRegistry.RegisterIDRegistry(moddedIds);
 
         /// <summary>
         /// Gets the default renderer for a Slimepedia entry.
@@ -58,12 +53,10 @@ namespace SRML.SR
         /// <param name="name">The name of the <see cref="PediaDirector.Id"/>.</param>
         /// <returns>The created <see cref="PediaDirector.Id"/>.</returns>
         /// <exception cref="Exception">Throws if ran outside of PreLoad</exception>
-        public static PediaDirector.Id CreatePediaId(object value, string name)
-        {
-            if (SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD)
-                throw new Exception("Can't register slimepedia entries outside of the PreLoad step");
-            return moddedIds.RegisterValueWithEnum((PediaDirector.Id)value, name);
-        }
+        public static PediaDirector.Id CreatePediaId(object value, string name) => 
+            SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD
+                ? throw new Exception("Can't register slimepedia entries outside of the PreLoad step")
+                : moddedIds.RegisterValueWithEnum((PediaDirector.Id)value, name);
 
         /// <summary>
         /// Registers a tab for the Slimepedia.
@@ -96,23 +89,13 @@ namespace SRML.SR
             if (!customPediaRenderers.TryGetValue(id, out var renderer))
             {
                 var tab = GetCustomPediaTab(id);
-                if (tab != null)
-                {
-                    return GetDefaultRenderer(tab.DefaultDisplaySetting);
-                }
-                return null;
+                return tab != null ? GetDefaultRenderer(tab.DefaultDisplaySetting) : null;
             }
             return renderer;
         }
 
-        internal static PediaTab GetCustomPediaTab(PediaDirector.Id id)
-        {
-            foreach(var v in customTabs)
-            {
-                if (v.Key.Entries.Contains(id) || v.Key.ID == id) return v.Key;
-            }
-            return null;
-        }
+        internal static PediaTab GetCustomPediaTab(PediaDirector.Id id) => (from v in customTabs 
+            where v.Key.Entries.Contains(id) || v.Key.ID == id select v.Key).FirstOrDefault();
 
         /// <summary>
         /// Registers an entry to already be unlocked in a new game
@@ -187,11 +170,7 @@ namespace SRML.SR
         {
             public DisplaySetting DisplaySetting { get; }
             public PediaDirector.Id CurrentID { get; set; }
-            public DefaultPediaRenderer(DisplaySetting setting)
-            {
-                DisplaySetting = setting;
-
-            }
+            public DefaultPediaRenderer(DisplaySetting setting) => DisplaySetting = setting;
 
             public virtual string GetLowerName() => CurrentID.ToString().ToLowerInvariant();
 
@@ -272,10 +251,7 @@ namespace SRML.SR
 
             internal Toggle TabToggle { get; private set; }
 
-            public void SetTabTranslation(string tabname)
-            {
-                TranslationPatcher.AddUITranslation(NameKey, tabname);
-            }
+            public void SetTabTranslation(string tabname) => TranslationPatcher.AddUITranslation(NameKey, tabname);
 
             public void InitForPediaAwake(PediaUI ui)
             {
@@ -289,12 +265,9 @@ namespace SRML.SR
             public virtual Toggle.ToggleEvent GetOnSelectAction()
             {
                 var newAction = new Toggle.ToggleEvent();
-                newAction.AddListener((x)=>
-                {
-                    if(TabToggle?.isOn ?? false)
-                    {
+                newAction.AddListener((x) => {
+                    if (TabToggle?.isOn ?? false)
                         TabToggle.GetComponentInParent<PediaUI>().SelectEntry(Entries[0], true, Entries[0]);
-                    }
                 });
                 return newAction;
             }
@@ -315,7 +288,6 @@ namespace SRML.SR
                 void OnTabSelected(GameObject ui);
                 void OnTabDeselected(GameObject ui);
             }
-
         }
     }
 }

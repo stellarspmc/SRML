@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using MonomiPark.SlimeRancher.Regions;
-using SRML.SR;
+﻿using MonomiPark.SlimeRancher.Regions;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -151,7 +149,7 @@ namespace SRML.SR.Templates.Identifiables
             // Create model
             if (color != Color.clear && (decoType == Type.ECHO || decoType == Type.ECHO_NOTE))
             {
-                Material mat = new Material(materials[0]);
+                var mat = new Material(materials[0]);
                 mat.SetColor("_TintColor", color);
 
                 materials = mat.Group();

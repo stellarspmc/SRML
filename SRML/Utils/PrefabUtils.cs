@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.Utils
@@ -19,7 +18,7 @@ namespace SRML.Utils
                 {
                     if (field.FieldType == typeof(T))
                     {
-                        T t = (T)field.GetValue(comp);
+                        var t = (T)field.GetValue(comp);
                         if (!t.Equals(original)) continue;
                         field.SetValue(comp,newValue);
                     }
@@ -34,7 +33,7 @@ namespace SRML.Utils
 
         public static UnityEngine.Object DeepCopyObject(UnityEngine.Object ob)
         {
-            Dictionary<UnityEngine.Object, UnityEngine.Object> refToRef = new Dictionary<UnityEngine.Object, UnityEngine.Object>();
+            var refToRef = new Dictionary<UnityEngine.Object, UnityEngine.Object>();
             UnityEngine.Object DeepCopyObject_Internal(UnityEngine.Object obj)
             {
                 if (!obj) return obj;
@@ -59,7 +58,7 @@ namespace SRML.Utils
                     else if (theObj.GetType().IsArray)
                     {
                         var g = theObj as Array;
-                        for (int i = 0; i < g.Length; i++)
+                        for (var i = 0; i < g.Length; i++)
                         {
                             g.SetValue(ProcessObject(g.GetValue(i)), i);
                         }

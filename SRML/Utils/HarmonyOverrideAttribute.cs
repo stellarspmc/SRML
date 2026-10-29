@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using UnityEngine;
 
 namespace SRML.Utils
 {
@@ -27,7 +25,7 @@ namespace SRML.Utils
         public static IEnumerable<CodeInstruction> Transpiler(MethodBase __originalMethod,IEnumerable<CodeInstruction> instr, ILGenerator gen)
         {
             if (methodsToPatch.TryGetValue(__originalMethod, out var methods)) {
-                Label lab1 = gen.DefineLabel();
+                var lab1 = gen.DefineLabel();
                 yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(HarmonyOverrideHandler), "CheckMethod"));
                 yield return new CodeInstruction(OpCodes.Brfalse, lab1);
 
@@ -44,7 +42,7 @@ namespace SRML.Utils
                     yield return new CodeInstruction(OpCodes.Isinst, v.ReflectedType);
                     yield return new CodeInstruction(OpCodes.Brfalse, v==methods.Last()?lab1:labLoop);
                     yield return new CodeInstruction(OpCodes.Ldarg_0);
-                    int i = 1;
+                    var i = 1;
                     foreach(var p in v.GetParameters())
                     {
                         yield return new CodeInstruction(OpCodes.Ldarg, i++);

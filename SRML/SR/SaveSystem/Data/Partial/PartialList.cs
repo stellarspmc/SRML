@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using SRML.Utils;
 
 namespace SRML.SR.SaveSystem.Data.Partial
@@ -29,7 +27,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
         public override void Pull(IList<T> data)
         {
             hoistedValues.Clear();
-            for (int i = 0; i < data.Count; i++)
+            for (var i = 0; i < data.Count; i++)
             {
                 if (hoistCondition(data[i]))
                 {

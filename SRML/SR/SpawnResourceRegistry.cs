@@ -1,8 +1,5 @@
 ﻿using SRML.SR.SaveSystem;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SRML.SR
 {
@@ -23,11 +20,9 @@ namespace SRML.SR
         /// <param name="name">The name of the <see cref="SpawnResource.Id"/>.</param>
         /// <returns>The created <see cref="SpawnResource.Id"/>.</returns>
         /// <exception cref="Exception">Throws if ran outside of PreLoad</exception>
-        public static SpawnResource.Id CreateSpawnResourceId(object value, string name)
-        {
-            if (SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD)
-                throw new Exception("Can't register landplot upgrades outside of the PreLoad step");
-            return moddedSpawnResources.RegisterValueWithEnum((SpawnResource.Id)value, name);
-        }
+        public static SpawnResource.Id CreateSpawnResourceId(object value, string name) =>
+            SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD
+                ? throw new Exception("Can't register landplot upgrades outside of the PreLoad step")
+                : moddedSpawnResources.RegisterValueWithEnum((SpawnResource.Id)value, name);
     }
 }

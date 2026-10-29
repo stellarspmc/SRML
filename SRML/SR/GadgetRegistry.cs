@@ -1,8 +1,6 @@
 ﻿using SRML.SR.SaveSystem;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace SRML.SR
 {
@@ -114,7 +112,7 @@ namespace SRML.SR
 
         internal static void CategorizeAllIds()
         {
-            foreach (Gadget.Id id in moddedGadgets.Keys)
+            foreach (var id in moddedGadgets.Keys)
             {
                 if (rules.ContainsKey(id))
                     CategorizeId(id, rules[id]);
@@ -130,7 +128,7 @@ namespace SRML.SR
         /// <param name="id"></param>
         public static void CategorizeId(Gadget.Id id)
         {
-            string name = Enum.GetName(typeof(Gadget.Id), id);
+            var name = Enum.GetName(typeof(Gadget.Id), id);
 
             if (categorizationSuffixRules.TryGetValue(x => name.EndsWith(x.Key), out var suffixRule))
             {
@@ -154,7 +152,7 @@ namespace SRML.SR
         /// <param name="category"></param>
         public static void CategorizeId(Gadget.Id id, GadgetCategorization.Rule category)
         {
-            string name = Enum.GetName(typeof(Gadget.Id), id);
+            var name = Enum.GetName(typeof(Gadget.Id), id);
             if ((category & (GadgetCategorization.Rule.MISC)) != 0) Gadget.MISC_CLASS.Add(id);
             if ((category & (GadgetCategorization.Rule.EXTRACTOR)) != 0) Gadget.EXTRACTOR_CLASS.Add(id);
             if ((category & (GadgetCategorization.Rule.TELEPORTER)) != 0) Gadget.TELEPORTER_CLASS.Add(id);

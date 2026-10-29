@@ -1,19 +1,8 @@
-﻿using MonomiPark.SlimeRancher.DataModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using MonomiPark.SlimeRancher.Persist;
-using rail;
 using SRML.SR.SaveSystem.Data;
-using SRML.SR.SaveSystem.Data.Actor;
 using SRML.SR.SaveSystem.Data.Ammo;
-using VanillaActorData = MonomiPark.SlimeRancher.Persist.ActorDataV09;
-using UnityEngine;
-using VanillaGadgetData = MonomiPark.SlimeRancher.Persist.PlacedGadgetV08;
-using SRML.SR.SaveSystem.Data.Gadget;
-using SRML.SR.SaveSystem.Registry;
 using SRML.Utils;
 using VanillaAmmoData = MonomiPark.SlimeRancher.Persist.AmmoDataV02;
 namespace SRML.SR.SaveSystem.Format
@@ -49,8 +38,8 @@ namespace SRML.SR.SaveSystem.Format
             var saveInfo = SaveRegistry.GetSaveInfo(mod);
 
             identifiableData.Clear();
-            int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            var count = reader.ReadInt32();
+            for (var i = 0; i < count; i++)
             {
                 var e = new IdentifiedData();
                 e.Read(reader,saveInfo);
@@ -59,7 +48,7 @@ namespace SRML.SR.SaveSystem.Format
 
             extendedData.Clear();
             count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var e = new ExtendedDataTree();
                 e.Read(reader);
@@ -73,8 +62,8 @@ namespace SRML.SR.SaveSystem.Format
                 BinaryUtils.ReadDictionary(reader,customAmmo,(x)=>AmmoIdentifier.Read(x), (x) =>
                 {
                     var list = new List<VanillaAmmoData>();
-                    int ammoCount = x.ReadInt32();
-                    for (int i = 0; i < ammoCount; i++)
+                    var ammoCount = x.ReadInt32();
+                    for (var i = 0; i < ammoCount; i++)
                     {
                         if (x.ReadBoolean())
                         {

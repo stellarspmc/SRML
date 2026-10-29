@@ -9,7 +9,7 @@ public static class TextureExtensions
     /// <returns>New sprite instance.</returns>
     public static Sprite AsSprite(this Texture2D texture)
     {
-        Sprite spr = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+        var spr = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         spr.name = texture.name;
         return spr;
     }
@@ -19,13 +19,13 @@ public static class TextureExtensions
     /// </summary>
     public static Texture2D Resample(this Texture2D source, int targetWidth, int targetHeight)
     {
-        int sourceWidth = source.width;
-        int sourceHeight = source.height;
-        float sourceAspect = (float)sourceWidth / sourceHeight;
-        float targetAspect = (float)targetWidth / targetHeight;
+        var sourceWidth = source.width;
+        var sourceHeight = source.height;
+        var sourceAspect = (float)sourceWidth / sourceHeight;
+        var targetAspect = (float)targetWidth / targetHeight;
 
-        int xOffset = 0;
-        int yOffset = 0;
+        var xOffset = 0;
+        var yOffset = 0;
         float factor;
 
         if (sourceAspect > targetAspect)
@@ -43,9 +43,9 @@ public static class TextureExtensions
 
         var data = source.GetPixels32();
         var data2 = new Color32[targetWidth * targetHeight];
-        for (int y = 0; y < targetHeight; y++)
+        for (var y = 0; y < targetHeight; y++)
         {
-            for (int x = 0; x < targetWidth; x++)
+            for (var x = 0; x < targetWidth; x++)
             {
                 var p = new Vector2(Mathf.Clamp(xOffset + x / factor, 0, sourceWidth - 1), Mathf.Clamp(yOffset + y / factor, 0, sourceHeight - 1));
                 // bilinear filtering
@@ -70,10 +70,10 @@ public static class TextureExtensions
     /// </summary>
     public static Texture2D Crop(this Texture2D original, int left, int right, int top, int down, float brightnessOffset = 0)
     {
-        int x = left + right;
-        int y = top + down;
-        int resW = original.width - x;
-        int resH = original.height - y;
+        var x = left + right;
+        var y = top + down;
+        var resW = original.width - x;
+        var resH = original.height - y;
         var pixels = original.GetPixels(left, down, resW, resH);
 
         if (!Mathf.Approximately(brightnessOffset, 0))
@@ -84,7 +84,7 @@ public static class TextureExtensions
             }
         }
 
-        Texture2D result = new Texture2D(resW, resH, TextureFormat.RGB24, false);
+        var result = new Texture2D(resW, resH, TextureFormat.RGB24, false);
         result.SetPixels(pixels);
         result.Apply();
 
@@ -97,9 +97,9 @@ public static class TextureExtensions
     public static Texture2D WithSolidColor(this Texture2D original, Color color)
     {
         var target = new Texture2D(original.width, original.height);
-        for (int i = 0; i < target.width; i++)
+        for (var i = 0; i < target.width; i++)
         {
-            for (int j = 0; j < target.height; j++)
+            for (var j = 0; j < target.height; j++)
             {
                 target.SetPixel(i, j, color);
             }

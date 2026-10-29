@@ -9,7 +9,7 @@ namespace SRML.SR.Templates.Components
 
         public void Start()
         {
-            foreach (string action in actions)
+            foreach (var action in actions)
                 TemplateActions.RunAction(action, gameObject);
         }
     }

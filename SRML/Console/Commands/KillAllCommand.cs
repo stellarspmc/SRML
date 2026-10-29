@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.Console.Commands
@@ -16,11 +15,11 @@ namespace SRML.Console.Commands
 
         public override bool Execute(string[] args)
         {
-            int radius = -1;
-            List<Identifiable.Id> toKill = new List<Identifiable.Id>(); 
+            var radius = -1;
+            var toKill = new List<Identifiable.Id>(); 
             foreach(var v in args ?? new string[0])
             {
-                if(uint.TryParse(v,out uint rad))
+                if(uint.TryParse(v,out var rad))
                 {
                     radius = (int)rad;
                     continue;
@@ -37,7 +36,7 @@ namespace SRML.Console.Commands
             }
 
 
-            List<GameObject> toDestroy = new List<GameObject>();
+            var toDestroy = new List<GameObject>();
             foreach(var v in SceneContext.Instance.GameModel.AllActors().Where(x=>radius==-1||Vector3.Distance(x.Value?.transform?.position ?? SceneContext.Instance.PlayerState.model.position, SceneContext.Instance.PlayerState.model.position)<radius))
             {
                 if (toKill.Count == 0 || toKill.Contains(v.Value.ident))
@@ -46,7 +45,7 @@ namespace SRML.Console.Commands
 
                 }
             }
-            int deletedCount = 0;
+            var deletedCount = 0;
             foreach (var v in toDestroy)
             {
                 if (v)

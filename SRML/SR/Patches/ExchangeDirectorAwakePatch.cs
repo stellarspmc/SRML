@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace SRML.SR.Patches
 {
@@ -10,22 +7,22 @@ namespace SRML.SR.Patches
     {
         public static void Prefix(ExchangeDirector __instance)
         {
-            foreach (ExchangeDirector.ProgressOfferEntry progressOffer in ExchangeOfferRegistry.customProgressOffers.Keys)
+            foreach (var progressOffer in ExchangeOfferRegistry.customProgressOffers.Keys)
                 __instance.progressOffers = __instance.progressOffers.AddToArray(progressOffer);
-            foreach (ExchangeDirector.Rancher rancher in ExchangeOfferRegistry.customRanchers.Keys)
+            foreach (var rancher in ExchangeOfferRegistry.customRanchers.Keys)
             {
-                ExchangeDirector.Rancher modified = rancher;
+                var modified = rancher;
                 modified.chatBackground = modified.chatBackground ?? __instance.ranchers[0].chatBackground;
                 __instance.ranchers = __instance.ranchers.AddToArray(modified);
             }
-            foreach ((ExchangeDirector.Category, Identifiable.Id[]) cat in ExchangeOfferRegistry.customCategories.Keys)
+            foreach (var cat in ExchangeOfferRegistry.customCategories.Keys)
                 __instance.catDict.Add(cat.Item1, cat.Item2);
-            foreach (ExchangeDirector.UnlockList list in ExchangeOfferRegistry.customUnlocks.Values)
+            foreach (var list in ExchangeOfferRegistry.customUnlocks.Values)
             {
                 if (list.unlock == ProgressDirector.ProgressType.NONE) __instance.initUnlocked = __instance.initUnlocked.AddRangeToArray(list.ids);
                 else __instance.unlockLists = __instance.unlockLists.AddToArray(list);
             }
-            foreach (KeyValuePair<Identifiable.Id, float> d in ExchangeOfferRegistry.customUnlockValues)
+            foreach (var d in ExchangeOfferRegistry.customUnlockValues)
                 __instance.valueDict[d.Key] = d.Value;
         }
     }

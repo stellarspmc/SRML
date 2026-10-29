@@ -60,7 +60,7 @@ namespace SRML
         /// <summary>
         /// Data structure to simplify versioning and the comparing of versions
         /// </summary>
-        public struct ModVersion : IComparable<ModVersion> // TODO: replace with SemVer library
+        public struct ModVersion : IComparable<ModVersion> // TODO: replace with SemVer library 
         {
             public readonly int Major;
             public readonly int Minor;
@@ -86,10 +86,10 @@ namespace SRML
             /// <exception cref="Exception">Throws if provided version string is not in the correct format.</exception>
             public static ModVersion Parse(string s)
             {
-                string[] splits = s.Split('.');
+                var splits = s.Split('.');
                 if (splits.Length < 2 || splits.Length > 3) goto uhoh;
-                if (!Int32.TryParse(splits[0], out int major)|| !Int32.TryParse(splits[1], out int minor)) goto uhoh;
-                int revision = 0;
+                if (!Int32.TryParse(splits[0], out var major)|| !Int32.TryParse(splits[1], out var minor)) goto uhoh;
+                var revision = 0;
                 if (splits.Length == 3 && !Int32.TryParse(splits[2], out revision)) goto uhoh;
 
                 return new ModVersion(major, minor, revision);

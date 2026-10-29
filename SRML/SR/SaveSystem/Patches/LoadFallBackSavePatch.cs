@@ -1,14 +1,9 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 using HarmonyLib;
-using JetBrains.Annotations;
-using SRML.SR.SaveSystem.Format;
-using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Patches
 {

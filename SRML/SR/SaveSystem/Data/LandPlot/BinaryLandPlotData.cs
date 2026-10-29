@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using MonomiPark.SlimeRancher.DataModel;
 
 namespace SRML.SR.SaveSystem.Data.LandPlot
@@ -30,7 +26,7 @@ namespace SRML.SR.SaveSystem.Data.LandPlot
 
         public override void LoadCustomData(BinaryReader reader)
         {
-            int byteLength = reader.ReadInt32();
+            var byteLength = reader.ReadInt32();
             data = reader.ReadBytes(byteLength);
         }
 

@@ -40,8 +40,8 @@ namespace SRML.SR.SaveSystem.Data
             (x) =>
             {
                 var newList = new HashSet<DataPiece>();
-                int count = x.ReadInt32();
-                for (int i = 0; i < count; i++)
+                var count = x.ReadInt32();
+                for (var i = 0; i < count; i++)
                 {
                     newList.Add(Deserialize(x));
                 }
@@ -77,7 +77,7 @@ namespace SRML.SR.SaveSystem.Data
                 {
                     var intSerializer = serializerPairs[DataType.INT32];
                     x.Write(arrayType.AssemblyQualifiedName);
-                    for(int i = 0; i < y.Length;i++)
+                    for(var i = 0; i < y.Length;i++)
                     {
                             intSerializer.Serialize(x,(int)y.GetValue(i));
                     }
@@ -91,10 +91,10 @@ namespace SRML.SR.SaveSystem.Data
                 var arrayType = typeToDataType.FirstOrDefault((g) => g.Value == typeId).Key;
                 if (arrayType == null) throw new Exception($"Unrecognized Data Type {typeId}");
                 if(!serializerPairs.TryGetValue(typeId,out var serializer)) throw new Exception($"Unrecognized Data Type {typeId}");
-                int count = x.ReadInt32();
+                var count = x.ReadInt32();
                 var array = Array.CreateInstance(arrayType, count);
 
-                for (int i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     array.SetValue(serializer.Deserialize(x), i);
                 }
@@ -103,12 +103,12 @@ namespace SRML.SR.SaveSystem.Data
                 }
                 else
                 {
-                    int count = x.ReadInt32();
+                    var count = x.ReadInt32();
                     var str = x.ReadString();
-                    Type type = Type.GetType(str);
+                    var type = Type.GetType(str);
                     var array = Array.CreateInstance(type,count);
                     var intSerializer = serializerPairs[DataType.INT32];
-                    for(int i = 0; i < count; i++)
+                    for(var i = 0; i < count; i++)
                     {
                         array.SetValue(Enum.ToObject(type,(int)intSerializer.Deserialize(x)),i);
                     }

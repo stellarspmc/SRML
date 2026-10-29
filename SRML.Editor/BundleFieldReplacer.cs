@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.Editor
@@ -51,14 +50,8 @@ namespace SRML.Editor
         [SerializeField]
         public string replacementSourceFieldName;
 
-        public bool TryResolveSource(out FieldInfo field)
-        {
-            return Resolve(replacementSourceType, replacementSourceFieldName, out field);
-        }
-        public bool TryResolveTarget(out FieldInfo field)
-        {
-            return Resolve(fieldToReplaceType,fieldToReplaceFieldName,out field);
-        }
+        public bool TryResolveSource(out FieldInfo field) => Resolve(replacementSourceType, replacementSourceFieldName, out field);
+        public bool TryResolveTarget(out FieldInfo field) => Resolve(fieldToReplaceType,fieldToReplaceFieldName,out field);
 
         private bool Resolve(String typeName, String fieldName, out FieldInfo field)
         {

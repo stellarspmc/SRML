@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using MonomiPark.SlimeRancher.Regions;
@@ -26,25 +24,13 @@ namespace SRML.SR
         public delegate void ActorDataLoadDelegate(ActorModel model, ActorDataV09 data);
         internal static Dictionary<Predicate<ActorModel>, ActorDataLoadDelegate> actorLoaders = new Dictionary<Predicate<ActorModel>, ActorDataLoadDelegate>();
 
-        public static void RegisterActorModelOverride(Predicate<Identifiable.Id> pred, CreateActorDelegate creator)
-        {
-            actorOverrideMapping.Add(pred,creator);
-        }
+        public static void RegisterActorModelOverride(Predicate<Identifiable.Id> pred, CreateActorDelegate creator) => actorOverrideMapping.Add(pred,creator);
 
-        public static void RegisterActorSaver(Predicate<ActorModel> pred, ActorDataSaveDelegate del)
-        {
-            actorSavers.Add(pred, del);
-        }
+        public static void RegisterActorSaver(Predicate<ActorModel> pred, ActorDataSaveDelegate del) => actorSavers.Add(pred, del);
 
-        public static void RegisterActorLoader(Predicate<ActorModel> pred, ActorDataLoadDelegate del)
-        {
-            actorLoaders.Add(pred, del);
-        }
+        public static void RegisterActorLoader(Predicate<ActorModel> pred, ActorDataLoadDelegate del) => actorLoaders.Add(pred, del);
 
-        public static void RegisterCustomActorModel(Identifiable.Id id, CreateActorDelegate del)
-        {
-            RegisterActorModelOverride((x)=>x==id,del);
-        }
+        public static void RegisterCustomActorModel(Identifiable.Id id, CreateActorDelegate del) => RegisterActorModelOverride((x)=>x==id,del);
 
         public static void RegisterCustomActorModel(Identifiable.Id id, Type actorType)
         {
@@ -53,20 +39,11 @@ namespace SRML.SR
             RegisterCustomActorModel(id,(x,y,z,w)=>(ActorModel)Activator.CreateInstance(actorType,x,y,z,w.transform));
         }
 
-        public static void RegisterLandPlotModelOverride(Predicate<LandPlot.Id> pred,CreateLandPlotDelegate creator)
-        {
-            landPlotOverrides.Add(pred, creator);
-        }
+        public static void RegisterLandPlotModelOverride(Predicate<LandPlot.Id> pred,CreateLandPlotDelegate creator) => landPlotOverrides.Add(pred, creator);
 
-        public static void RegisterGadgetModelOverride(Predicate<Gadget.Id> pred, CreateGadgetDelegate creator)
-        {
-            gadgetOverrideMapping.Add(pred,creator);
-        }
+        public static void RegisterGadgetModelOverride(Predicate<Gadget.Id> pred, CreateGadgetDelegate creator) => gadgetOverrideMapping.Add(pred,creator);
 
-        public static void RegisterCustomGadgetModel(Gadget.Id id, CreateGadgetDelegate g)
-        {
-            RegisterGadgetModelOverride((x)=>x==id,g);
-        }
+        public static void RegisterCustomGadgetModel(Gadget.Id id, CreateGadgetDelegate g) => RegisterGadgetModelOverride((x)=>x==id,g);
 
         public static void RegisterCustomGadgetModel(Gadget.Id id, Type gadgetType)
         {

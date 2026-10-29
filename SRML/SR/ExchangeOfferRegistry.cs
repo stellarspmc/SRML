@@ -1,10 +1,8 @@
 ﻿using HarmonyLib;
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SRML.SR
 {

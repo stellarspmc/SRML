@@ -1,12 +1,7 @@
 ﻿using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.SaveSystem;
-using SRML.SR.Translation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using UnityEngine;
 
 namespace SRML.SR
 {
@@ -20,10 +15,7 @@ namespace SRML.SR
         internal static Dictionary<PlayerState.Upgrade, CreateUpgradeLockerDelegate> moddedLockers =
             new Dictionary<PlayerState.Upgrade, CreateUpgradeLockerDelegate>();
 
-        static PersonalUpgradeRegistry()
-        {
-            ModdedIDRegistry.RegisterIDRegistry(moddedUpgrades);
-        }
+        static PersonalUpgradeRegistry() => ModdedIDRegistry.RegisterIDRegistry(moddedUpgrades);
 
         /// <summary>
         /// Creates a <see cref="PlayerState.Upgrade"/>.
@@ -42,7 +34,7 @@ namespace SRML.SR
         /// <summary>
         /// Check if a <see cref="PlayerState.Upgrade"/> belongs to a modded upgrade.
         /// </summary>
-        /// <param name="id">The <see cref="PlayerState.Upgrade"/> to check.</param>
+        /// <param name="upgrade">The <see cref="PlayerState.Upgrade"/> to check.</param>
         /// <returns>True if <see cref="PlayerState.Upgrade"/> belongs to a modded upgrade, otherwise false.</returns>
         public static bool IsModdedUpgrade(PlayerState.Upgrade upgrade) => moddedUpgrades.ContainsKey(upgrade);
 
@@ -55,8 +47,7 @@ namespace SRML.SR
         {
             if (upgradeCallbacks.ContainsKey(upgrade))
                 upgradeCallbacks[upgrade] += callback;
-            else
-                upgradeCallbacks[upgrade] = callback;
+            else upgradeCallbacks[upgrade] = callback;
         }
 
         /// <summary>

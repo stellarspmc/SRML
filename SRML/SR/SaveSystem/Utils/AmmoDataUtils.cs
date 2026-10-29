@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using MonomiPark.SlimeRancher.Persist;
-using rail;
-using UnityEngine;
 using VanillaAmmoData = MonomiPark.SlimeRancher.Persist.AmmoDataV02;
 namespace SRML.SR.SaveSystem.Utils
 {
@@ -13,7 +10,7 @@ namespace SRML.SR.SaveSystem.Utils
         public static void SpliceAmmoData(List<VanillaAmmoData> original, List<VanillaAmmoData> toSplice)
         {
             if (original == null || toSplice == null) return;
-            for (int i = 0; i < original.Count;i++)
+            for (var i = 0; i < original.Count;i++)
             {
                 if (toSplice[i] != null) original[i] = toSplice[i];
             }
@@ -22,7 +19,7 @@ namespace SRML.SR.SaveSystem.Utils
         public static List<VanillaAmmoData> RipOutWhere(List<VanillaAmmoData> original, Predicate<VanillaAmmoData> pred,bool doRip = true)
         {
             var newData = new VanillaAmmoData[original.Count];
-            for (int i = original.Count - 1; i >= 0; i--)
+            for (var i = original.Count - 1; i >= 0; i--)
             {
                 if (pred(original[i]))
                 {
@@ -54,7 +51,7 @@ namespace SRML.SR.SaveSystem.Utils
 
         public static List<List<VanillaAmmoData>> GetAllAmmoData(GameV12 game)
         {
-            List<List<VanillaAmmoData>> ammoDataData = new List<List<VanillaAmmoData>>();
+            var ammoDataData = new List<List<VanillaAmmoData>>();
 
             ammoDataData.AddRange(game.player.ammo.Values);
 

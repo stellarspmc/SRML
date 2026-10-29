@@ -1,10 +1,7 @@
-﻿using MonomiPark.SlimeRancher.Persist;
-using SRML.Utils;
-using System;
+﻿using SRML.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using VanillaWorldData = MonomiPark.SlimeRancher.Persist.WorldV22;
 
 namespace SRML.SR.SaveSystem.Format

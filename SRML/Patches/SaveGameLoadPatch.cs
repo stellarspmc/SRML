@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using HarmonyLib;
-namespace SRML.Patches
+﻿namespace SRML.Patches
 {
-    [HarmonyPatch]
+    /*[HarmonyPatch]
     [HarmonyPatch(typeof(AutoSaveDirector))]
     internal static class SaveGameLoadPatch
     {
@@ -18,5 +12,7 @@ namespace SRML.Patches
         {
             // do something on save game loads
         }
-    }
+    }*/
+
+    // causes crash, because "PushSavedGame" doesn't exist?
 }

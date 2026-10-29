@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using SRML.Console;
+﻿using System.Collections.Generic;
 
 namespace SRML.Console.Commands
 {
@@ -27,19 +25,19 @@ namespace SRML.Console.Commands
 				Console.Instance.Log("<color=cyan>List of Commands Available:</color>");
 				Console.Instance.Log("<i><> is a required argument; [] is an optional argument</i>");
 
-				foreach (string line in ConsoleWindow.cmdsText.Split('\n'))
+				foreach (var line in ConsoleWindow.cmdsText.Split('\n'))
 					Console.Instance.LogSuccess(line);
 			}
 			else
 			{
 				if (Console.commands.ContainsKey(args[0]))
 				{
-					ConsoleCommand cmd = Console.commands[args[0]];
+					var cmd = Console.commands[args[0]];
 
 					if (cmd.ExtendedDescription != null)
 					{
 						Console.Instance.Log($"<color=#77DDFF>{cmd.Usage}</color> - {cmd.Description}");
-						foreach (string line in cmd.ExtendedDescription.Split('\n'))
+						foreach (var line in cmd.ExtendedDescription.Split('\n'))
 							Console.Instance.LogSuccess(line);
 					}
 					else

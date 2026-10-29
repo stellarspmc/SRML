@@ -18,8 +18,8 @@ namespace SRML.SR.UI
         {
             base.Awake();
             actorBundle = SRSingleton<GameContext>.Instance.MessageDirector.GetBundle("actor");
-            EconomyDirector econDirector = SceneContext.Instance.EconomyDirector;
-            foreach (MarketUI.PlortEntry item in plorts)
+            var econDirector = SceneContext.Instance.EconomyDirector;
+            foreach (var item in plorts)
                 AddInventory(item.id, econDirector.GetCurrValue(item.id).GetValueOrDefault(), econDirector.GetChangeInValue(item.id).GetValueOrDefault());
             transform.Find("MainPanel/CloseButton").GetComponent<Button>().onClick.AddListener(base.Close);
         }
@@ -28,7 +28,7 @@ namespace SRML.SR.UI
 
         private GameObject CreateInventoryEntry(Identifiable.Id id, int value, int change)
         {
-            GameObject inventoryEntry = Instantiate(inventoryEntryPrefab);
+            var inventoryEntry = Instantiate(inventoryEntryPrefab);
             inventoryEntry.transform.Find("Content/Name").gameObject.GetComponent<TMP_Text>().text = actorBundle.Xlate("l." + id.ToString().ToLowerInvariant());
             inventoryEntry.transform.Find("Content/Icon").gameObject.GetComponent<Image>().sprite = id.GetIcon();
             inventoryEntry.transform.Find("CountsOuterPanel/CountsPanel/Counts").gameObject.GetComponent<TMP_Text>().text = value.ToString();

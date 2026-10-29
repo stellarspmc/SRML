@@ -36,10 +36,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Publicize Include="Assembly-CSharp" IncludeCompilerGeneratedMembers="false" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="srml" />
   </ItemGroup>
 

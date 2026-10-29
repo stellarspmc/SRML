@@ -1,5 +1,4 @@
 ﻿using System;
-using SRML.Console;
 
 namespace SRML.Console.Commands
 {
@@ -20,7 +19,7 @@ namespace SRML.Console.Commands
 				return false;
 			}
 
-			DateTime now = DateTime.Now;
+			var now = DateTime.Now;
 
 			try
 			{

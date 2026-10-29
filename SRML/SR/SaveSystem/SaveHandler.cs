@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data;
-using SRML.SR.SaveSystem.Data.Actor;
 using SRML.SR.SaveSystem.Data.Ammo;
 using SRML.SR.SaveSystem.Data.Gadget;
 using SRML.SR.SaveSystem.Data.Partial;
 using SRML.SR.SaveSystem.Format;
 using SRML.SR.SaveSystem.Utils;
-using SRML.Utils;
 using UnityEngine;
 using VanillaActorData = MonomiPark.SlimeRancher.Persist.ActorDataV09;
 using VanillaGadgetData = MonomiPark.SlimeRancher.Persist.PlacedGadgetV08;
@@ -131,7 +127,7 @@ namespace SRML.SR.SaveSystem
                 segment.playerData.Pull(game.player, mod);
             }
 
-            PediaDataBuffer buf = new PediaDataBuffer(game.pedia);
+            var buf = new PediaDataBuffer(game.pedia);
             foreach (var mod in ModPediaData.FindAllModsWithData(buf))
             {
                 var segment = data.GetSegmentForMod(mod);

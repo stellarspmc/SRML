@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using MonomiPark.SlimeRancher.Persist;
+﻿using System.IO;
 using SRML.SR.SaveSystem.Data.Partial;
 using SRML.SR.SaveSystem.Format;
 using SRML.Utils;
-using UnityEngine;
 using VanillaActorData = MonomiPark.SlimeRancher.Persist.ActorDataV09;
 namespace SRML.SR.SaveSystem.Data.Actor
 {

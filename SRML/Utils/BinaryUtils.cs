@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 namespace SRML.Utils
 {
@@ -17,10 +15,10 @@ namespace SRML.Utils
         {
             if (pattern.Length != replacement.Length) throw new Exception("Mismatched pattern and replacement length");
 
-            for (int i = 0; i < bytes.Length - pattern.Length; i++)
+            for (var i = 0; i < bytes.Length - pattern.Length; i++)
             {
-                bool matches = true;
-                for (int x = 0; x < pattern.Length; x++)
+                var matches = true;
+                for (var x = 0; x < pattern.Length; x++)
                 {
                     var bigIndex = i + x;
                     matches = bytes[bigIndex] == pattern[x];
@@ -28,7 +26,7 @@ namespace SRML.Utils
 
                 if (!matches) continue;
 
-                for (int x = 0; x < replacement.Length; x++)
+                for (var x = 0; x < replacement.Length; x++)
                 {
                     var bigIndex = i + x;
                     bytes[bigIndex] = replacement[x];
@@ -45,8 +43,8 @@ namespace SRML.Utils
 
         public static void ReadMeshWithBones(BinaryReader reader, SkinnedMeshRenderer rend)
         {
-            int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            var count = reader.ReadInt32();
+            for (var i = 0; i < count; i++)
             {
                 ReadTransform(reader,rend.bones[i]);
             }
@@ -169,8 +167,8 @@ namespace SRML.Utils
         public static void ReadList<T>(BinaryReader reader, List<T> list, Func<BinaryReader, T> listReader)
         {
             list.Clear();
-            int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            var count = reader.ReadInt32();
+            for (var i = 0; i < count; i++)
             {
                 list.Add(listReader(reader));
             }
@@ -190,8 +188,8 @@ namespace SRML.Utils
         public static void ReadDictionary<K, V>(BinaryReader reader, Dictionary<K, V> dict,Func<BinaryReader,K> keyReader, Func<BinaryReader,V> valueReader)
         {
             dict.Clear();
-            int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            var count = reader.ReadInt32();
+            for (var i = 0; i < count; i++)
             {
                 dict.Add(keyReader(reader),valueReader(reader));
             }
@@ -223,7 +221,7 @@ namespace SRML.Utils
 
         public static void WriteMatrix4(BinaryWriter writer, Matrix4x4 matrix)
         {
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 WriteVector4(writer, matrix.GetColumn(i));
             }
@@ -238,7 +236,7 @@ namespace SRML.Utils
         public static void WriteArray<T>(BinaryWriter writer, T[] array, Action<BinaryWriter, T> writeAction)
         {
             writer.Write(array.Length);
-            for (int i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length; i++)
                 writeAction(writer, array[i]);
         }
 
@@ -246,15 +244,15 @@ namespace SRML.Utils
         public static void WriteArray(BinaryWriter writer, Array array, Action<BinaryWriter, object> writeAction)
         {
             writer.Write(array.Length);
-            for (int i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length; i++)
                 writeAction(writer, array.GetValue(i));
         }
 
         public static T[] ReadArray<T>(BinaryReader reader, Func<BinaryReader, T> readAction)
         {
-            int length = reader.ReadInt32();
-            T[] output = new T[length];
-            for (int i = 0; i < length; i++)
+            var length = reader.ReadInt32();
+            var output = new T[length];
+            for (var i = 0; i < length; i++)
             {
 
                 output[i] = readAction(reader);

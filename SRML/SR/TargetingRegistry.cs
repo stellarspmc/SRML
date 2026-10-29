@@ -25,9 +25,9 @@ namespace SRML.SR
         /// <param name="key1">The key to be added to.</param>
         /// <param name="key2">The key to be added.</param>
         /// <returns>The composed description.</returns>
-        public static string ComposeDescription(MessageBundle bundle, string key1, string key2) => 
-            bundle.Xlate(MessageUtil.Compose(key1, new string[1] { key2 }));
-        
+        public static string ComposeDescription(MessageBundle bundle, string key1, string key2) =>
+            bundle.Xlate(MessageUtil.Compose(key1, key2));
+
         /// <summary>
         /// Composes a type description translation.
         /// </summary>

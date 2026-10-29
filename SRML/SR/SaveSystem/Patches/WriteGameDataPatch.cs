@@ -170,7 +170,7 @@ namespace SRML.SR.SaveSystem.Patches
 
             public void AddAllBack()
             {
-                foreach (Action action in addBacks)
+                foreach (var action in addBacks)
                 {
                     action();
                 }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -8,8 +7,6 @@ using MonomiPark.SlimeRancher;
 using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data.LandPlot;
-using SRML.Utils;
-using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Patches
 {
@@ -19,7 +16,7 @@ namespace SRML.SR.SaveSystem.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            bool flag = false;
+            var flag = false;
             foreach (var v in instr)
             {
                 if (v.opcode == OpCodes.Callvirt && v.operand is MethodInfo info && info.Name == "Remove")

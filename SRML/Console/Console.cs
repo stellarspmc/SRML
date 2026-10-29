@@ -223,19 +223,19 @@ namespace SRML.Console
             {
                 Instance.Log("<color=cyan>Command: </color>" + command);
 
-                string[] cmds = command.Split(';');
-                foreach (string c in cmds)
+                var cmds = command.Split(';');
+                foreach (var c in cmds)
                 {
-                    bool spaces = c.Contains(" ");
-                    string cmd = spaces ? c.Substring(0, c.IndexOf(' ')) : c;
+                    var spaces = c.Contains(" ");
+                    var cmd = spaces ? c.Substring(0, c.IndexOf(' ')) : c;
 
                     if (commands.ContainsKey(cmd))
                     {
-                        bool executed = false;
-                        bool keepExecution = true;
-                        string[] args = spaces ? StripArgs(c) : null;
+                        var executed = false;
+                        var keepExecution = true;
+                        var args = spaces ? StripArgs(c) : null;
 
-                        foreach (CommandCatcher catcher in catchers)
+                        foreach (var catcher in catchers)
                         {
                             keepExecution = catcher.Invoke(cmd, args);
 
@@ -273,8 +273,8 @@ namespace SRML.Console
 
         internal static string[] StripArgs(string command, bool autoComplete = false)
         {
-            MatchCollection result = Regex.Matches(command.Substring(command.IndexOf(' ') + 1), "[^'\"\\s\\n]+|'[^']+'?|\"[^\"]+\"?");
-            List<string> args = new List<string>(result.Count);
+            var result = Regex.Matches(command.Substring(command.IndexOf(' ') + 1), "[^'\"\\s\\n]+|'[^']+'?|\"[^\"]+\"?");
+            var args = new List<string>(result.Count);
 
             foreach (Match match in result)
                 args.Add(autoComplete ? match.Value : Regex.Replace(match.Value, "'|\"", ""));
@@ -296,7 +296,7 @@ namespace SRML.Console
 
         internal static string GetLogName()
         {
-            SRMod mod = SRMod.GetCurrentMod();
+            var mod = SRMod.GetCurrentMod();
             if (mod != null) return mod.ModInfo.Name;
             return "SRML";
         }
@@ -304,8 +304,8 @@ namespace SRML.Console
         // LOGS A NEW ENTRY
         internal void LogEntry(LogType logType, string message, bool logToFile, string name)
         {
-            string type = TypeToText(logType);
-            string color = "white";
+            var type = TypeToText(logType);
+            var color = "white";
             if (type.Equals("ERRO")) color = "#FFAAAA";
             if (type.Equals("WARN")) color = "#EEEE99";
 
@@ -322,8 +322,8 @@ namespace SRML.Console
 
         internal static string ColorUsage(string usage)
         {
-            string result = string.Empty;
-            MatchCollection matches = Regex.Matches(usage, @"[\w\d]+|\<[\w]+\>|\[[\w]+\]");
+            var result = string.Empty;
+            var matches = Regex.Matches(usage, @"[\w\d]+|\<[\w]+\>|\[[\w]+\]");
 
             foreach (Match match in matches)
             {
@@ -356,7 +356,7 @@ namespace SRML.Console
             if (message.Equals(string.Empty))
                 return;
 
-            string toDisplay = message;
+            var toDisplay = message;
             if (!trace.Equals(string.Empty))
                 toDisplay += "\n" + trace;
             toDisplay = Regex.Replace(toDisplay, @"\[INFO]\s|\[ERROR]\s|\[WARNING]\s", "");

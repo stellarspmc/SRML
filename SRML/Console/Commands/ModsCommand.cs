@@ -1,7 +1,4 @@
-﻿using System;
-using SRML.Console;
-
-namespace SRML.Console.Commands
+﻿namespace SRML.Console.Commands
 {
 	/// <summary>
 	/// A command to display all mods
@@ -22,7 +19,7 @@ namespace SRML.Console.Commands
 
 			Console.Instance.Log("<color=cyan>List of Mods Loaded:</color>");
 
-			foreach (string line in ConsoleWindow.modsText.Split('\n'))
+			foreach (var line in ConsoleWindow.modsText.Split('\n'))
 				Console.Instance.Log(line);
 
 			return true;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using MonomiPark.SlimeRancher.Regions;
-using SRML.SR;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -299,20 +298,20 @@ namespace SRML.SR.Templates.Identifiables
         protected void ConfigBones(GameObject obj)
         {
             // Setup Bones
-            GameObject sm = skinnedMesh.CreatePrefabCopy();
+            var sm = skinnedMesh.CreatePrefabCopy();
             sm.name = "mesh_body";
             sm.transform.parent = obj.transform.Find("Animal");
 
-            GameObject b = bones.CreatePrefabCopy();
+            var b = bones.CreatePrefabCopy();
             b.name = "root";
             b.transform.parent = obj.transform.Find("Animal");
 
             // Read all bones to the skinned mesh
-            SkinnedMeshRenderer render = sm.GetComponent<SkinnedMeshRenderer>();
+            var render = sm.GetComponent<SkinnedMeshRenderer>();
             render.rootBone = b.FindChild("bone_spine", true).transform;
 
-            List<Transform> addBones = new List<Transform>();
-            foreach (GameObject bone in b.FindChildrenWithPartialName("bone_"))
+            var addBones = new List<Transform>();
+            foreach (var bone in b.FindChildrenWithPartialName("bone_"))
                 addBones.Add(bone.transform);
 
             render.bones = addBones.ToArray();

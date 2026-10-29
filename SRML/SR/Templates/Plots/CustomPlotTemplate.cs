@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using SRML.Console;
-using SRML.SR.Utils.Debug;
 using SRML.SR.Templates.Misc;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
@@ -88,7 +86,7 @@ namespace SRML.SR.Templates.Plots
             );
 
             // Add Attachments
-            foreach (IModPrefab attach in attachments)
+            foreach (var attach in attachments)
             {
                 if (attach is IPlotUpgradeTemplate upgrade)
                 {

@@ -1,8 +1,5 @@
 ﻿using SRML.SR.SaveSystem;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.SR
@@ -44,7 +41,7 @@ namespace SRML.SR
         {
             PurchasableUIRegistry.RegisterPurchasable<EmptyPlotUI>(x => new PurchaseUI.Purchasable(entry.NameKey, entry.icon, entry.mainImg, entry.DescKey, entry.cost, entry.pediaId, () =>
             {
-                EmptyPlotUI emptyPlotUi = x;
+                var emptyPlotUi = x;
                 emptyPlotUi.BuyPlot(new LandPlotUI.PlotPurchaseItem()
                 {
                     icon = entry.icon,

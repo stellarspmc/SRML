@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SRML.Console.Commands
 {
@@ -18,7 +14,7 @@ namespace SRML.Console.Commands
 
         public override bool Execute(string[] args)
         {
-            bool noclipState = SceneContext.Instance.Player.GetComponentInChildren<vp_FPController>().MotorFreeFly;
+            var noclipState = SceneContext.Instance.Player.GetComponentInChildren<vp_FPController>().MotorFreeFly;
             SceneContext.Instance.Player.GetComponentInChildren<vp_FPController>().MotorFreeFly = !noclipState;
             if (!noclipState) originalLayer = SceneContext.Instance.Player.layer;
             SceneContext.Instance.Player.layer = noclipState ? (originalLayer) : LayerMask.NameToLayer("RaycastOnly");

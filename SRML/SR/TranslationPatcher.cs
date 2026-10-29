@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Newtonsoft.Json.Converters;
-using SRML.SR.SaveSystem.Data.Partial;
 using UnityEngine;
 
 namespace SRML.SR
@@ -117,7 +113,7 @@ namespace SRML.SR
 
         internal static Dictionary<string, List<string>> GetKeysForMod(SRMod mod)
         {
-            Dictionary<string, List<string>> output = new Dictionary<string, List<string>>();
+            var output = new Dictionary<string, List<string>>();
             List<string> GetListForKey(string key)
             {
                 return output.TryGetValue(key, out var list) ? list : output[key] = new List<string>();

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using SRML.Console;
 using SRML.SR.Utils.BaseObjects;
 using SRML.SR.Utils.Debug;
 using UnityEngine;
@@ -366,9 +365,9 @@ namespace SRML.SR.Templates.Plantables
             }
 
             // Add network nodes
-            GameObjectTemplate[] droneNetworkNodes = new GameObjectTemplate[4];
+            var droneNetworkNodes = new GameObjectTemplate[4];
 
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 droneNetworkNodes[i] = new GameObjectTemplate($"DroneNetworkNode{(i + 1).ToString("00")}",
                     new Create<PathingNetworkNode>(null)
@@ -385,7 +384,7 @@ namespace SRML.SR.Templates.Plantables
             );
 
             // Add tree
-            GameObjectTemplate treeObj = new GameObjectTemplate("tree_bark",
+            var treeObj = new GameObjectTemplate("tree_bark",
                 new Create<MeshFilter>((filter) => filter.sharedMesh = tree ?? GardenObjects.modelTreeMeshs[treeID] ?? GardenObjects.modelTreeMeshs[SpawnResource.Id.POGO_TREE]),
                 new Create<MeshRenderer>((render) => render.sharedMaterials = treeMaterials ?? GardenObjects.modelTreeMaterials[treeID] ?? GardenObjects.modelTreeMaterials[SpawnResource.Id.POGO_TREE]),
                 new Create<MeshCollider>((col) =>
@@ -395,7 +394,7 @@ namespace SRML.SR.Templates.Plantables
                 })
             ).SetTransform(Vector3.zero, Vector3.zero, customTreeScale ? treeScale : Vector3.one * 0.7f);
 
-            GameObjectTemplate leavesObj = new GameObjectTemplate("leaves_tree",
+            var leavesObj = new GameObjectTemplate("leaves_tree",
                 new Create<MeshFilter>((filter) => filter.sharedMesh = leaves ?? GardenObjects.modelLeavesMeshs[leavesID] ?? GardenObjects.modelLeavesMeshs[SpawnResource.Id.POGO_TREE]),
                 new Create<MeshRenderer>((render) => render.sharedMaterials = leavesMaterials ?? GardenObjects.modelLeavesMaterials[leavesID] ?? GardenObjects.modelLeavesMaterials[SpawnResource.Id.POGO_TREE]),
                 new Create<MeshCollider>((col) =>
@@ -417,7 +416,7 @@ namespace SRML.SR.Templates.Plantables
             }
 
             // Add spawn joints
-            for (int i = 0; i < 20; i++)
+            for (var i = 0; i < 20; i++)
             {
                 mainObject.AddChild(new GameObjectTemplate($"SpawnJoint{(i + 1).ToString("00")}",
                     new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
@@ -441,7 +440,7 @@ namespace SRML.SR.Templates.Plantables
             if (isDeluxe)
             {
                 // Add spawn joints
-                for (int i = 20; i < 34; i++)
+                for (var i = 20; i < 34; i++)
                 {
                     mainObject.AddChild(new GameObjectTemplate($"SpawnJoint{(i + 1).ToString("00")}",
                         new Create<MeshFilter>((filter) => filter.sharedMesh = GardenObjects.modelMeshs.ContainsKey(ID) ? GardenObjects.modelMeshs[ID] : modelMesh),
@@ -483,11 +482,11 @@ namespace SRML.SR.Templates.Plantables
 
         protected void SetNetworkNodes(GameObject obj)
         {
-            PathingNetworkNode[] nodes = obj.GetComponentsInChildren<PathingNetworkNode>();
+            var nodes = obj.GetComponentsInChildren<PathingNetworkNode>();
 
             if (nodes.Length > 0)
             {
-                foreach (PathingNetworkNode node in nodes)
+                foreach (var node in nodes)
                 {
                     if (node.connections == null)
                         node.connections = new List<PathingNetworkNode>();

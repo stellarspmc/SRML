@@ -6,7 +6,6 @@ using SRML.SR.SaveSystem.Data.Actor;
 using SRML.SR.SaveSystem.Data.Gadget;
 using SRML.SR.SaveSystem.Data.LandPlot;
 using SRML.SR.SaveSystem.Registry;
-using UnityEngine;
 using VanillaActorData = MonomiPark.SlimeRancher.Persist.ActorDataV09;
 using VanillaGadgetData = MonomiPark.SlimeRancher.Persist.PlacedGadgetV08;
 using VanillaPlotData = MonomiPark.SlimeRancher.Persist.LandPlotV08;
@@ -60,7 +59,7 @@ namespace SRML.SR.SaveSystem.Format
 
         public void Write(BinaryWriter writer, ModSaveInfo info)
         {
-            long start = writer.BaseStream.Position;
+            var start = writer.BaseStream.Position;
             writer.Write(0L);
             IsCustomModel = info.BelongsToMe(data);
             DataIdentifier.Write(writer,dataID);
@@ -85,7 +84,7 @@ namespace SRML.SR.SaveSystem.Format
                     throw new NotImplementedException();
             }
 
-            long current = writer.BaseStream.Position;
+            var current = writer.BaseStream.Position;
 
             writer.BaseStream.Seek(start, SeekOrigin.Begin);
             dataLength = current - start;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using UnityEngine;

@@ -1,7 +1,5 @@
 ﻿using SRML.Config.Parsing;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace SRML.Config
@@ -62,7 +60,7 @@ namespace SRML.Config
 
             public string EncodeObject(object obj)
             {
-                Range<TType> range = (Range<TType>)obj;
+                var range = (Range<TType>)obj;
                 return ParserRegistry.GetParser(typeof(TType)).EncodeObject(range.Value);
             }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using HarmonyLib;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+
 namespace SRML.SR.Patches
 {
     [HarmonyPatch(typeof(SceneContext))]
@@ -26,7 +25,7 @@ namespace SRML.SR.Patches
             {
                 Console.Console.Instance.Log($"Error pre-save load! {e}");
 
-                AutoSaveDirector autoSaveDirector = GameContext.Instance.AutoSaveDirector;
+                var autoSaveDirector = GameContext.Instance.AutoSaveDirector;
                 LoadErrorUI.OpenLoadErrorUI(autoSaveDirector.loadFileErrorPrefab, "e.srml_load", false, "e.ok_button", () => autoSaveDirector.loadingUI.OnLoadingError());
             }
         }

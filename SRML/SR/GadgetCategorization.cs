@@ -6,11 +6,11 @@ namespace SRML.SR
     [AttributeUsage(AttributeTargets.Field)]
     public class GadgetCategorization : Attribute
     {
-        public static List<Gadget.Id> doNotAutoCategorize = new List<Gadget.Id>();
+        public static readonly List<Gadget.Id> doNotAutoCategorize = new List<Gadget.Id>();
 
         public GadgetCategorization(Rule rules) => this.rules = rules;
 
-        public Rule rules;
+        public readonly Rule rules;
 
         [Flags]
         public enum Rule

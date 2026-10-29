@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SRML.Utils;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,7 +13,7 @@ namespace SRML.SR.UI.Utils
             h.name = title;
             Component.DestroyImmediate(h.GetComponent<OptionsUI>());
 
-            for (int i = 0; i < h.transform.GetChild(0).childCount; i++)
+            for (var i = 0; i < h.transform.GetChild(0).childCount; i++)
             {
                 var v = h.transform.GetChild(0).GetChild(i).gameObject;
                 if (v.name == "CloseButton")
@@ -58,7 +54,7 @@ namespace SRML.SR.UI.Utils
             h.name = name;
             Component.DestroyImmediate(h.GetComponent<OptionsUI>());
 
-            for (int i = 0; i < h.transform.GetChild(0).childCount; i++)
+            for (var i = 0; i < h.transform.GetChild(0).childCount; i++)
             {
                 var v = h.transform.GetChild(0).GetChild(i).gameObject;
                 if (v.name == "CloseButton")

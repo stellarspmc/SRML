@@ -37,15 +37,15 @@ namespace SRML
             CurrentLoadingStep = LoadingStep.INITIALIZATION;
 
             FileSystem.CheckDirectory(FileSystem.ModPath);
-            HashSet<ProtoMod> foundMods = new HashSet<ProtoMod>(new ProtoMod.Comparer());
+            var foundMods = new HashSet<ProtoMod>(new ProtoMod.Comparer());
 
             // process mods with embedded modinfo.jsons
-            foreach (string dllFile in Directory.GetFiles(FileSystem.ModPath, "*.dll", SearchOption.AllDirectories))
+            foreach (var dllFile in Directory.GetFiles(FileSystem.ModPath, "*.dll", SearchOption.AllDirectories))
             {
-                if (!ProtoMod.TryParseFromDLL(dllFile, out ProtoMod[] mods))
+                if (!ProtoMod.TryParseFromDLL(dllFile, out var mods))
                     continue;
 
-                foreach (ProtoMod mod in mods)
+                foreach (var mod in mods)
                 {
                     if (!foundMods.Add(mod))
                         mod.encounteredError = new Exception($"Found mod with duplicate id {mod.id} in {dllFile}!");
@@ -53,15 +53,15 @@ namespace SRML
             }
 
             // process mods without embedded modinfo.jsons
-            foreach (string jsonFile in Directory.GetFiles(FileSystem.ModPath, ModJson, SearchOption.AllDirectories))
+            foreach (var jsonFile in Directory.GetFiles(FileSystem.ModPath, ModJson, SearchOption.AllDirectories))
             {
-                ProtoMod mod = ProtoMod.ParseFromJson(jsonFile);
+                var mod = ProtoMod.ParseFromJson(jsonFile);
 
                 if (foundMods.Add(mod))
                     mod.encounteredError = new Exception($"Found mod with duplicate id {mod.id} in {jsonFile}!");
             }
 
-            foreach (ProtoMod mod in foundMods)
+            foreach (var mod in foundMods)
             {
                 try
                 {
@@ -110,17 +110,17 @@ namespace SRML
 
         internal static void DiscoverAndLoadAssemblies(ICollection<ProtoMod> protoMods)
         {
-            HashSet<AssemblyInfo> foundAssemblies = new HashSet<AssemblyInfo>();
-            foreach (ProtoMod mod in protoMods)
+            var foundAssemblies = new HashSet<AssemblyInfo>();
+            foreach (var mod in protoMods)
             {
                 if (mod.encounteredError != null)
                     continue;
 
                 if (mod.type == ProtoMod.InfoType.FILE_JSON)
                 {
-                    foreach (string file in Directory.GetFiles(mod.path, "*.dll", SearchOption.AllDirectories))
+                    foreach (var file in Directory.GetFiles(mod.path, "*.dll", SearchOption.AllDirectories))
                     {
-                        AssemblyInfo existing = foundAssemblies.FirstOrDefault(x => x.Path == Path.GetFullPath(file));
+                        var existing = foundAssemblies.FirstOrDefault(x => x.Path == Path.GetFullPath(file));
                         if (existing != null)
                             existing.externalJsonMod = mod;
                         else
@@ -129,10 +129,10 @@ namespace SRML
                 }
                 else
                 {
-                    string fullPath = Path.Combine(mod.path, mod.entryFile);
+                    var fullPath = Path.Combine(mod.path, mod.entryFile);
 
                     // there's a chance a file JSON already claimed this assembly as its own, so overwrite that if that's the case
-                    AssemblyInfo existing = foundAssemblies.FirstOrDefault(x => x.Path == fullPath);
+                    var existing = foundAssemblies.FirstOrDefault(x => x.Path == fullPath);
                     if (existing != null)
                         existing.mods.Add(mod);
                     else
@@ -147,12 +147,12 @@ namespace SRML
             {
                 // find an entry type for each mod
                 // attribute mods gets first pick for mod entry points, followed by embedded, followed by external
-                foreach (AssemblyInfo assembly in foundAssemblies)
+                foreach (var assembly in foundAssemblies)
                 {
-                    Assembly a = assembly.LoadAssembly();
-                    foreach (ProtoMod mod in assembly.AllMods)
+                    var a = assembly.LoadAssembly();
+                    foreach (var mod in assembly.AllMods)
                     {
-                        if ((mod.entryType != null && mod.entryType.Assembly.FullName != a.FullName) || !TryGetEntryType(a, out Type entryType, protoMods))
+                        if ((mod.entryType != null && mod.entryType.Assembly.FullName != a.FullName) || !TryGetEntryType(a, out var entryType, protoMods))
                             continue;
 
                         assembly.IsModAssembly = true;
@@ -160,7 +160,7 @@ namespace SRML
                     }
                 }
 
-                foreach (ProtoMod mod in protoMods)
+                foreach (var mod in protoMods)
                 {
                     if (mod.encounteredError == null && mod.entryType == null)
                         mod.encounteredError = new EntryPointNotFoundException($"Could not find a suitable entry point for '{mod}'");
@@ -174,7 +174,7 @@ namespace SRML
 
         internal static void AddMods(ICollection<ProtoMod> mods)
         {
-            foreach (ProtoMod mod in mods)
+            foreach (var mod in mods)
             {
                 AddMod(mod, mod.entryType);
 
@@ -205,7 +205,7 @@ namespace SRML
 
         static SRMod AddMod(ProtoMod modInfo, Type entryType)
         {
-            SRModInfo parsedModInfo = modInfo.ToModInfo();
+            var parsedModInfo = modInfo.ToModInfo();
             IModEntryPoint entryPoint = null;
 
             if (modInfo.encounteredError == null)
@@ -224,7 +224,7 @@ namespace SRML
                 }
             }
 
-            SRMod newMod = new SRMod(parsedModInfo, entryPoint, Path.Combine(modInfo.path, modInfo.entryFile))
+            var newMod = new SRMod(parsedModInfo, entryPoint, Path.Combine(modInfo.path, modInfo.entryFile))
             {
                 exception = modInfo.encounteredError
             };
@@ -238,7 +238,7 @@ namespace SRML
         {
             CurrentLoadingStep = LoadingStep.PRELOAD;
             Console.Console.Reload += Main.Reload;
-            foreach (SRMod mod in Mods.Values)
+            foreach (var mod in Mods.Values)
             {
                 if (!mod.ModInfo.IsLoaded)
                     continue;
@@ -262,7 +262,7 @@ namespace SRML
         internal static void LoadMods()
         {
             CurrentLoadingStep = LoadingStep.LOAD;
-            foreach (SRMod mod in Mods.Values)
+            foreach (var mod in Mods.Values)
             {
                 if (!mod.ModInfo.IsLoaded)
                     continue;
@@ -284,7 +284,7 @@ namespace SRML
         internal static void PostLoadMods()
         {
             CurrentLoadingStep = LoadingStep.POSTLOAD;
-            foreach (SRMod mod in Mods.Values)
+            foreach (var mod in Mods.Values)
             {
                 if (!mod.ModInfo.IsLoaded)
                     continue;
@@ -308,7 +308,7 @@ namespace SRML
         internal static void ReloadMods()
         {
             CurrentLoadingStep = LoadingStep.RELOAD;
-            foreach (SRMod mod in Mods.Values)
+            foreach (var mod in Mods.Values)
             {
                 if (!mod.ModInfo.IsLoaded)
                     continue;
@@ -334,7 +334,7 @@ namespace SRML
         internal static void UnloadMods()
         {
             CurrentLoadingStep = LoadingStep.UNLOAD;
-            foreach (SRMod mod in Mods.Values)
+            foreach (var mod in Mods.Values)
             {
                 if (!mod.ModInfo.IsLoaded)
                     continue;
@@ -353,7 +353,7 @@ namespace SRML
         internal static void UpdateMods()
         {
             if (CurrentLoadingStep != LoadingStep.FINISHED) return;
-            foreach (SRMod mod in Mods.Values)
+            foreach (var mod in Mods.Values)
             {
                 if (!mod.ModInfo.IsLoaded)
                     continue;
@@ -372,7 +372,7 @@ namespace SRML
         internal static void UpdateModsFixed()
         {
             if (CurrentLoadingStep != LoadingStep.FINISHED) return;
-            foreach (SRMod mod in Mods.Values)
+            foreach (var mod in Mods.Values)
             {
                 try
                 {
@@ -388,7 +388,7 @@ namespace SRML
         internal static void UpdateModsLate()
         {
             if (CurrentLoadingStep != LoadingStep.FINISHED) return;
-            foreach (SRMod mod in Mods.Values)
+            foreach (var mod in Mods.Values)
             {
                 if (!mod.ModInfo.IsLoaded)
                     continue;
@@ -420,7 +420,7 @@ namespace SRML
             {
                 get
                 {
-                    ProtoMod[] allMods = new ProtoMod[mods.Count + (externalJsonMod == null ? 0 : 1)];
+                    var allMods = new ProtoMod[mods.Count + (externalJsonMod == null ? 0 : 1)];
 
                     Array.Copy(mods.ToArray(), allMods, mods.Count);
                     if (externalJsonMod != null)
@@ -518,7 +518,7 @@ namespace SRML
 
             public static ProtoMod ParseFromJson(string jsonData, string path)
             {
-                ProtoMod proto = JsonConvert.DeserializeObject<ProtoMod>(jsonData, new ProtoModConverter());
+                var proto = JsonConvert.DeserializeObject<ProtoMod>(jsonData, new ProtoModConverter());
                 proto.path = Path.GetDirectoryName(path);
                 proto.entryFile = Path.GetFileName(path);
                 return proto;
@@ -532,12 +532,12 @@ namespace SRML
             /// <returns>Whether the parsing was successful</returns>
             public static bool TryParseFromDLL(string dllFile, out ProtoMod[] mods)
             {
-                Assembly assembly = Assembly.LoadFrom(dllFile);
-                List<ProtoMod> modList = new List<ProtoMod>();
+                var assembly = Assembly.LoadFrom(dllFile);
+                var modList = new List<ProtoMod>();
 
-                foreach (ModInfoAttribute att in assembly.GetCustomAttributes<ModInfoAttribute>())
+                foreach (var att in assembly.GetCustomAttributes<ModInfoAttribute>())
                 {
-                    ProtoMod mod = att.Parse();
+                    var mod = att.Parse();
 
                     mod.type = InfoType.ATTRIBUTE;
                     mod.path = Path.GetDirectoryName(dllFile);
@@ -597,7 +597,7 @@ namespace SRML
             public SRModInfo ToModInfo()
             {
                 SRModInfo.ModVersion version = default;
-                Dictionary<string, SRModInfo.ModVersion> dependencies = new Dictionary<string, SRModInfo.ModVersion>();
+                var dependencies = new Dictionary<string, SRModInfo.ModVersion>();
 
                 if (encounteredError == null)
                 {
@@ -644,8 +644,8 @@ namespace SRML
 
                 public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
                 {
-                    ProtoMod pm = new ProtoMod();
-                    JObject token = (JObject)JToken.ReadFrom(reader);
+                    var pm = new ProtoMod();
+                    var token = (JObject)JToken.ReadFrom(reader);
 
                     try
                     {

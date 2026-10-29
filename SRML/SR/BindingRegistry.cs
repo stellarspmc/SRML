@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using static HarmonyLib.AccessTools;
 
 namespace SRML.SR
 {
@@ -28,7 +26,7 @@ namespace SRML.SR
         /// <returns>The created action</returns>
         public static PlayerAction RegisterAction(string name)
         {
-            PlayerAction act = new PlayerAction(name, SRInput.Actions);
+            var act = new PlayerAction(name, SRInput.Actions);
             RegisterAction(act, SRMod.GetCurrentMod());
             return act;
         }
@@ -40,7 +38,7 @@ namespace SRML.SR
         /// <returns>The created action</returns>
         public static PlayerAction RegisterBindedAction(string name)
         {
-            PlayerAction act = RegisterAction(name);
+            var act = RegisterAction(name);
             RegisterBind(act);
             return act;
         }
@@ -53,7 +51,7 @@ namespace SRML.SR
         /// <returns>The created action</returns>
         public static PlayerAction RegisterBindedTranslatedAction(string name, string translation)
         {
-            PlayerAction act = RegisterBindedAction(name);
+            var act = RegisterBindedAction(name);
             TranslationPatcher.AddUITranslation("key." + name.ToLowerInvariant(), translation);
             return act;
         }
@@ -74,7 +72,7 @@ namespace SRML.SR
             var mod = SRMod.GetCurrentMod();
             foreach (var field in type.GetFields().Where(x => x.IsStatic && typeof(PlayerAction).IsAssignableFrom(x.FieldType)))
             {
-                PlayerAction action = new PlayerAction(field.Name, SRInput.Actions);
+                var action = new PlayerAction(field.Name, SRInput.Actions);
                 RegisterAction(action, mod);
                 RegisterBind(action);
             }

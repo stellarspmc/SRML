@@ -28,7 +28,7 @@ public static class GameObjectExtensions
 	// DEBUG STUFF
 	public static GameObject GetReadyForMarker(this GameObject obj, MarkerType type, float scaleMult = 1f)
 	{
-		AddDebugMarker marker = obj.AddComponent<AddDebugMarker>();
+		var marker = obj.AddComponent<AddDebugMarker>();
 		marker.type = type;
 		marker.scaleMult = scaleMult;
 
@@ -39,16 +39,16 @@ public static class GameObjectExtensions
 	{
 		if (BaseObjects.markerMaterials.ContainsKey(type))
 		{
-			GameObject marker = new GameObject("DebugMarker");
+			var marker = new GameObject("DebugMarker");
 			marker.transform.parent = obj.transform;
 
-			MeshFilter filter = marker.AddComponent<MeshFilter>();
+			var filter = marker.AddComponent<MeshFilter>();
 			filter.sharedMesh = BaseObjects.cubeMesh;
 
-			MeshRenderer render = marker.AddComponent<MeshRenderer>();
+			var render = marker.AddComponent<MeshRenderer>();
 			render.sharedMaterial = BaseObjects.markerMaterials[type];
 
-			DebugMarker dm = marker.AddComponent<DebugMarker>();
+			var dm = marker.AddComponent<DebugMarker>();
 			dm.scaleMult = scaleMult;
 			dm.type = type;
 
@@ -116,7 +116,7 @@ public static class GameObjectExtensions
 
 	public static GameObject[] FindChildrenWithPartialName(this GameObject obj, string name, bool noDive = false)
 	{
-		List<GameObject> result = new List<GameObject>();
+		var result = new List<GameObject>();
 
 		foreach (Transform child in obj.transform)
 		{
@@ -132,7 +132,7 @@ public static class GameObjectExtensions
 
 	public static GameObject[] FindChildren(this GameObject obj, string name, bool noDive = false)
 	{
-		List<GameObject> result = new List<GameObject>();
+		var result = new List<GameObject>();
 
 		foreach (Transform child in obj.transform)
 		{

@@ -87,11 +87,11 @@ namespace SRML.Utils
         /// <returns>The list of all values in the enum</returns>
         public static object[] GetAll(Type enumType)
         {
-            List<object> enums = new List<object>();
+            var enums = new List<object>();
 
-            foreach (string name in GetAllNames(enumType))
+            foreach (var name in GetAllNames(enumType))
             {
-                object value = Parse(enumType, name);
+                var value = Parse(enumType, name);
                 if (value != null)
                     enums.Add(value);
             }
@@ -125,7 +125,7 @@ namespace SRML.Utils
         /// <returns>true if found, false if not.</returns>
         public static bool HasEnumValue(Type enumType, string value)
         {
-            foreach (string name in GetAllNames(enumType))
+            foreach (var name in GetAllNames(enumType))
             {
                 if (name.Equals(value))
                 {
@@ -214,9 +214,9 @@ namespace SRML.Utils
         /// <returns>The list of all values in the enum</returns>
         public static T[] GetAll<T>(T errorReturn = default) where T : System.Enum
         {
-            List<T> enums = new List<T>();
+            var enums = new List<T>();
 
-            foreach (string name in GetAllNames<T>())
+            foreach (var name in GetAllNames<T>())
                 enums.Add(Parse(name, errorReturn));
 
             return enums.ToArray();
@@ -248,7 +248,7 @@ namespace SRML.Utils
         /// <returns>true if found, false if not.</returns>
         public static bool HasEnumValue<T>(string value) where T : System.Enum
         {
-            foreach (string name in GetAllNames<T>())
+            foreach (var name in GetAllNames<T>())
             {
                 if (name.Equals(value))
                 {

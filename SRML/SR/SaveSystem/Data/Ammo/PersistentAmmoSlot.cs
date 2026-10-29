@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Data.Ammo
@@ -87,9 +85,9 @@ namespace SRML.SR.SaveSystem.Data.Ammo
         {
             data.Clear();
             var count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
-                bool shouldbenull = reader.ReadBoolean();
+                var shouldbenull = reader.ReadBoolean();
                 if (shouldbenull)
                 {
                     data.Add(null);

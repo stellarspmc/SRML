@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace SRML.Utils
+﻿namespace SRML.Utils
 {
     public class Tuple<T1,T2>
     {

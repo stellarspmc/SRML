@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Data.Ammo
 {
@@ -40,7 +37,7 @@ namespace SRML.SR.SaveSystem.Data.Ammo
         public void UpdateFromExistingSlots(global::Ammo.Slot[] ammoSlots,bool log = false)
         {
             AdjustSlotCount(ammoSlots.Length);
-            for (int i = 0; i < ammoSlots.Length; i++)
+            for (var i = 0; i < ammoSlots.Length; i++)
             {
                 slots[i].UpdateFromExistingSlot(ammoSlots[i],log);
             }
@@ -92,10 +89,10 @@ namespace SRML.SR.SaveSystem.Data.Ammo
 
         public void Read(BinaryReader reader)
         {
-            int count = reader.ReadInt32();
+            var count = reader.ReadInt32();
             this.slots = new PersistentAmmoSlot[count];
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 slots[i] = new PersistentAmmoSlot();
                 slots[i].Read(reader);

@@ -1,10 +1,6 @@
-﻿using HarmonyLib;
-using SRML.SR.SaveSystem;
+﻿using SRML.SR.SaveSystem;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SRML.SR
 {
@@ -27,12 +23,10 @@ namespace SRML.SR
         /// <param name="name"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static RanchDirector.Palette CreatePalette(object value, string name)
-        {
-            if (SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD)
-                throw new Exception("Can't register palettes outside of the PreLoad step");
-            return moddedPalettes.RegisterValueWithEnum((RanchDirector.Palette)value, name);
-        }
+        public static RanchDirector.Palette CreatePalette(object value, string name) =>
+            SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD
+                ? throw new Exception("Can't register palettes outside of the PreLoad step")
+                : moddedPalettes.RegisterValueWithEnum((RanchDirector.Palette)value, name);
 
         /// <summary>
         /// Creates a <see cref="RanchDirector.PaletteType"/> and registers it into the enum
@@ -41,12 +35,10 @@ namespace SRML.SR
         /// <param name="name"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static RanchDirector.PaletteType CreatePaletteType(object value, string name)
-        {
-            if (SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD)
-                throw new Exception("Can't register palette types outside of the PreLoad step");
-            return moddedPaletteTypes.RegisterValueWithEnum((RanchDirector.PaletteType)value, name);
-        }
+        public static RanchDirector.PaletteType CreatePaletteType(object value, string name) => 
+            SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD 
+                ? throw new Exception("Can't register palette types outside of the PreLoad step")
+                : moddedPaletteTypes.RegisterValueWithEnum((RanchDirector.PaletteType)value, name);
 
         /// <summary>
         /// Registers a <see cref="RanchDirector.PaletteEntry"/>

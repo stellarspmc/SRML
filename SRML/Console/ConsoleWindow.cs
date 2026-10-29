@@ -104,7 +104,7 @@ namespace SRML.Console
         /// </summary>
         public static void AttachWindow(Scene oldScene, Scene newScene)
         {
-            GameObject window = new GameObject("_ConsoleWindow", typeof(ConsoleWindow));
+            var window = new GameObject("_ConsoleWindow", typeof(ConsoleWindow));
             DontDestroyOnLoad(window);
 
             SceneManager.activeSceneChanged -= AttachWindow;
@@ -119,7 +119,7 @@ namespace SRML.Console
             Console.Instance.Log("Use command '<color=#77DDFF>mods</color>' for a list of all mods loaded");
             Console.Instance.Log("You can also check the menu on the right");
 
-            foreach (SRModInfo info in SRModLoader.LoadedMods)
+            foreach (var info in SRModLoader.LoadedMods)
             {
                 modsText += $"{(modsText.Equals(string.Empty) ? "" : "\n")}<color=#77DDFF>{info.Name}</color> [<color=#77DDFF>Author:</color> {info.Author} | <color=#77DDFF>ID:</color> {info.Id} | <color=#77DDFF>Version:</color> {info.Version}]";
             }
@@ -152,7 +152,7 @@ namespace SRML.Console
         // DRAWS THE WINDOW
         private void OnGUI()
         {
-            Font font = GUI.skin.font;
+            var font = GUI.skin.font;
             GUI.skin.font = consoleFont;
 
             // UNITY PREVENTS "GUI" STUFF FROM BEING CALLED OUTSIDE "OnGUI"
@@ -213,10 +213,10 @@ namespace SRML.Console
 
         private void DrawWindow(int id)
         {
-            int bFontSize = GUI.skin.button.fontSize;
-            int tfFontSize = GUI.skin.textField.fontSize;
-            int tFontSize = GUI.skin.toggle.fontSize;
-            int lFontSize = GUI.skin.label.fontSize;
+            var bFontSize = GUI.skin.button.fontSize;
+            var tfFontSize = GUI.skin.textField.fontSize;
+            var tFontSize = GUI.skin.toggle.fontSize;
+            var lFontSize = GUI.skin.label.fontSize;
             GUI.skin.button.fontSize = consoleFont.fontSize;
             GUI.skin.textField.fontSize = consoleFont.fontSize;
             GUI.skin.toggle.fontSize = consoleFont.fontSize;
@@ -455,8 +455,8 @@ namespace SRML.Console
             commandScroll = GUI.BeginScrollView(csRect, commandScroll, caRect, false, true);
             GUI.BeginGroup(caRect);
 
-            int y = 5;
-            foreach (ConsoleButton button in Console.cmdButtons.Values)
+            var y = 5;
+            foreach (var button in Console.cmdButtons.Values)
             {
                 btnRect.y = y;
                 if (GUI.Button(btnRect, button.Text))
@@ -476,7 +476,7 @@ namespace SRML.Console
             if (updateDisplay)
             {
                 fullText = string.Empty;
-                for (int i = 0; i < Console.lines.Count; i++)
+                for (var i = 0; i < Console.lines.Count; i++)
                 {
                     fullText += $"{(i == 0 ? string.Empty : "\n")}{Console.lines[i]}";
                 }
@@ -488,7 +488,7 @@ namespace SRML.Console
             // MOVES THE CURSOR AFTER AUTO COMPLETE
             if (moveCursor)
             {
-                TextEditor txt = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
+                var txt = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
                 txt.MoveCursorToPosition(Vector2.one * 50000);
 
                 autoComplete = false;
@@ -506,13 +506,13 @@ namespace SRML.Console
 
         private void DrawACWindow(int id)
         {
-            int bFontSize = GUI.skin.button.fontSize;
+            var bFontSize = GUI.skin.button.fontSize;
             GUI.skin.button.fontSize = consoleFont.fontSize;
 
-            bool spaces = cmdText.Contains(" ");
-            string command = spaces ? cmdText.Substring(0, cmdText.IndexOf(' ')) : cmdText;
+            var spaces = cmdText.Contains(" ");
+            var command = spaces ? cmdText.Substring(0, cmdText.IndexOf(' ')) : cmdText;
 
-            TextEditor txt = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
+            var txt = (TextEditor)GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl);
             if (txt.hasSelection)
                 command = string.Empty;
 
@@ -520,7 +520,7 @@ namespace SRML.Console
             aCompleteScroll = GUI.BeginScrollView(acsRect, aCompleteScroll, intRect, false, true);
             GUI.BeginGroup(intRect);
 
-            Texture2D bg = GUI.skin.textField.normal.background;
+            var bg = GUI.skin.textField.normal.background;
             GUI.skin.textField.normal.background = GUI.skin.button.active.background;
             GUI.skin.textField.richText = true;
 
@@ -529,7 +529,7 @@ namespace SRML.Console
                 if (!command.Equals(oldCmdText))
                 {
                     cachedAC.RemoveAll(s => true); // .Clear() gets broken sometimes when you dynamically load an Assembly, so do the same another way
-                    foreach (string cmd in Console.commands.Keys)
+                    foreach (var cmd in Console.commands.Keys)
                     {
                         if (cmd.ToLowerInvariant().StartsWith(command.ToLowerInvariant()))
                             cachedAC.Add(cmd);
@@ -545,8 +545,8 @@ namespace SRML.Console
 
                     selectComplete = cmdText.Substring(0, cmdText.Length - command.Length) + cachedAC[completeIndex];
 
-                    int y = 5;
-                    for (int i = 0; i < cachedAC.Count; i++)
+                    var y = 5;
+                    for (var i = 0; i < cachedAC.Count; i++)
                     {
                         GUI.backgroundColor = Color.white;
                         if (completeIndex == i)
@@ -568,16 +568,16 @@ namespace SRML.Console
             }
             else
             {
-                string[] args = Console.StripArgs(cmdText, true);
+                var args = Console.StripArgs(cmdText, true);
 
-                int count = args.Length;
+                var count = args.Length;
                 if (count > 0)
                 {
-                    string lastArg = args[count - 1];
+                    var lastArg = args[count - 1];
 
                     if (Console.commands.ContainsKey(command))
                     {
-                        List<string> autoC = Console.commands[command].GetAutoComplete(count - 1, lastArg);
+                        var autoC = Console.commands[command].GetAutoComplete(count - 1, lastArg);
                         if (autoC == null) autoC = Console.commands[command].GetAutoComplete(count - 1, args);
                         autoC?.RemoveAll(s => s.Contains(" "));
 
@@ -589,7 +589,7 @@ namespace SRML.Console
                             if (!cmdText.Equals(oldCmdText))
                             {
                                 cachedAC.RemoveAll(s => true); // .Clear() gets broken sometimes when you dynamically load an Assembly, so do the same another way
-                                foreach (string cmd in autoC)
+                                foreach (var cmd in autoC)
                                 {
                                     if (cmd.ToLowerInvariant().StartsWith(lastArg.ToLowerInvariant()))
                                         cachedAC.Add(cmd);
@@ -605,8 +605,8 @@ namespace SRML.Console
 
                                 selectComplete = cmdText.Substring(0, cmdText.Length - lastArg.Length) + cachedAC[completeIndex];
 
-                                int y = 5;
-                                for (int i = 0; i < cachedAC.Count; i++)
+                                var y = 5;
+                                for (var i = 0; i < cachedAC.Count; i++)
                                 {
                                     GUI.backgroundColor = Color.white;
                                     if (completeIndex == i)
@@ -660,7 +660,7 @@ namespace SRML.Console
                 SceneContext.Instance.TimeDirector.Pause(true);
 
                 cachedCasters = FindObjectsOfType<GraphicRaycaster>();
-                foreach (GraphicRaycaster caster in cachedCasters)
+                foreach (var caster in cachedCasters)
                 {
                     if (caster == null)
                         continue;
@@ -679,7 +679,7 @@ namespace SRML.Console
 
                 SceneContext.Instance.TimeDirector.Unpause(true);
 
-                foreach (GraphicRaycaster caster in cachedCasters)
+                foreach (var caster in cachedCasters)
                 {
                     if (!caster)
                         continue;
@@ -703,7 +703,7 @@ namespace SRML.Console
 
             SceneContext.Instance.TimeDirector.Unpause(true);
 
-            foreach (GraphicRaycaster caster in cachedCasters)
+            foreach (var caster in cachedCasters)
             {
                 if (!caster)
                     continue;
