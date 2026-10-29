@@ -32,6 +32,7 @@ namespace SRML.SR.Templates.Identifiables
         /// Template to create new fashion attachments
         /// </summary>
         /// <param name="name">The name of the object (prefixes are recommend, but not needed)</param>
+        /// <param name="ID">The Identifiable ID for this fashion attachment</param>
         /// <param name="mesh">The model's mesh for this fashion attachment</param>
         /// <param name="materials">The materials that compose this fashion attachment's model</param>
         public FashionAttachTemplate(string name, Mesh mesh, Material[] materials) : base(name)
@@ -66,14 +67,14 @@ namespace SRML.SR.Templates.Identifiables
         public override FashionAttachTemplate Create()
         {
             // Create model
-            var model = new GameObjectTemplate("model_fp").SetTransform(modelTrans);
+            GameObjectTemplate model = new GameObjectTemplate("model_fp").SetTransform(modelTrans);
 
-            var num = 1;
-            foreach (var layer in layers)
+            int num = 1;
+            foreach (LayerInfo layer in layers)
             {
                 model.AddChild(new GameObjectTemplate("layer" + num,
-                    new Create<MeshFilter>(filter => filter.sharedMesh = layer.mesh),
-                    new Create<MeshRenderer>(render => render.sharedMaterials = layer.materials)
+                    new Create<MeshFilter>((filter) => filter.sharedMesh = layer.mesh),
+                    new Create<MeshRenderer>((render) => render.sharedMaterials = layer.materials)
                 ));
             }
 

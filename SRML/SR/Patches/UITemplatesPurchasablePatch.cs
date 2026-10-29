@@ -1,7 +1,9 @@
 ﻿using HarmonyLib;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 
 namespace SRML.SR.Patches
 {
@@ -11,7 +13,7 @@ namespace SRML.SR.Patches
     {
         public static void Prefix(ref PurchaseUI.Purchasable[] purchasables, PurchaseUI.OnClose onClose)
         {
-            var trace = new StackTrace(1);
+            StackTrace trace = new StackTrace(1);
             Type type = null;
             foreach(var v in trace.GetFrames())
             {
@@ -23,7 +25,7 @@ namespace SRML.SR.Patches
                 }
             }
             if (type == null) return;
-            var ui = onClose.Target as BaseUI;
+            BaseUI ui = onClose.Target as BaseUI;
 
             purchasables = PurchasableUIRegistry.customPurchasables.Where(x => x.Key(type, ui)).Select(x => x.Value(ui)).ToArray().AddRangeToArray(purchasables);
 

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace SRML.SR.Patches
 {
-    [HarmonyPatch(typeof(ActorModel), MethodType.Constructor,
+    [HarmonyPatch(typeof(ActorModel), MethodType.Constructor, 
         new[] { typeof(long), typeof(Identifiable.Id), typeof(RegionRegistry.RegionSetId), typeof(Transform) } )]
     internal static class ActorModelResetRegionSetIdPatch
     {
@@ -13,7 +13,7 @@ namespace SRML.SR.Patches
         {
             if (SceneContext.Instance && !SceneContext.Instance.RegionRegistry.regionsTrees.ContainsKey(__instance.currRegionSetId) &&
                 !RegionSetRegistry.customTrees.ContainsKey(__instance.currRegionSetId))
-                __instance.currRegionSetId = RegionRegistry.RegionSetId.HOME;
+                __instance.currRegionSetId = MonomiPark.SlimeRancher.Regions.RegionRegistry.RegionSetId.HOME;
         }
     }
 }

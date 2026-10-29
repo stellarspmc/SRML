@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
 
@@ -9,11 +11,11 @@ namespace SRML.SR.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            var instructions = new List<CodeInstruction>(instr);
-            var insertIndex = -1;
+            List<CodeInstruction> instructions = new List<CodeInstruction>(instr);
+            int insertIndex = -1;
             object jumpTo = null;
             object localVar = null;
-            for (var i = 0; i < instructions.Count; i++)
+            for (int i = 0; i < instructions.Count; i++)
             {
                 if (instructions[i].opcode == OpCodes.Stloc_S && instructions[i - 1].opcode == OpCodes.Ldc_I4_S) localVar = instructions[i].operand;
                 if (instructions[i].opcode == OpCodes.Brtrue_S && instructions[i - 1].opcode == OpCodes.Call)

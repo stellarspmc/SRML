@@ -4,10 +4,11 @@ using SRML.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using static SRML.SR.PediaRegistry.PediaTab;
-using Object = UnityEngine.Object;
 
 namespace SRML.SR
 {
@@ -236,7 +237,7 @@ namespace SRML.SR
 
             void IPediaRenderer.OnListingDeselected(GameObject panelObj)
             {
-                if (createdObject) Object.Destroy(createdObject);
+                if (createdObject) GameObject.Destroy(createdObject);
             }
         }
 
@@ -288,7 +289,7 @@ namespace SRML.SR
             public virtual Toggle.ToggleEvent GetOnSelectAction()
             {
                 var newAction = new Toggle.ToggleEvent();
-                newAction.AddListener(x=>
+                newAction.AddListener((x)=>
                 {
                     if(TabToggle?.isOn ?? false)
                     {

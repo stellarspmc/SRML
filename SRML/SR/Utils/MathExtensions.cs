@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 public static class MathExtensions
 {
@@ -14,7 +17,7 @@ public static class MathExtensions
     {
         var unixStart = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         var unixTimeStampInTicks = (long)(unixTime * TimeSpan.TicksPerSecond);
-        return new DateTime(unixStart.Ticks + unixTimeStampInTicks, DateTimeKind.Utc);
+        return new DateTime(unixStart.Ticks + unixTimeStampInTicks, System.DateTimeKind.Utc);
     }
 
     /// <summary>
@@ -30,54 +33,54 @@ public static class MathExtensions
     }
     #endregion
 
-    public static float Abs(this float value) => value < 0.0 ? -value : value;
+    public static float Abs(this float value) => (double)value < 0.0 ? -value : value;
 
     public static bool Approx(this float v1, float v2)
     {
-        var num = v1 - v2;
-        return num >= -1.0000000116861E-07 && num <= 1.0000000116861E-07;
+        float num = v1 - v2;
+        return (double)num >= -1.0000000116861E-07 && (double)num <= 1.0000000116861E-07;
     }
 
-    public static bool IsNotZero(this float value) => value < -1.0000000116861E-07 || value > 1.0000000116861E-07;
+    public static bool IsNotZero(this float value) => (double)value < -1.0000000116861E-07 || (double)value > 1.0000000116861E-07;
 
-    public static bool IsZero(this float value) => value >= -1.0000000116861E-07 && value <= 1.0000000116861E-07;
+    public static bool IsZero(this float value) => (double)value >= -1.0000000116861E-07 && (double)value <= 1.0000000116861E-07;
 
-    public static bool AbsoluteIsOverThreshold(this float value, float threshold) => value < -(double)threshold || value > (double)threshold;
+    public static bool AbsoluteIsOverThreshold(this float value, float threshold) => (double)value < -(double)threshold || (double)value > (double)threshold;
 
     public static float NormalizeAngle(this float angle)
     {
-        while (angle < 0.0)
+        while ((double)angle < 0.0)
             angle += 360f;
-        while (angle > 360.0)
+        while ((double)angle > 360.0)
             angle -= 360f;
         return angle;
     }
 
-    public static float Min(this float v0, float v1) => v0 >= (double)v1 ? v1 : v0;
+    public static float Min(this float v0, float v1) => (double)v0 >= (double)v1 ? v1 : v0;
 
-    public static float Max(this float v0, float v1) => v0 <= (double)v1 ? v1 : v0;
+    public static float Max(this float v0, float v1) => (double)v0 <= (double)v1 ? v1 : v0;
 
     public static float Min(this float v0, float v1, float v2, float v3)
     {
-        var num1 = v0 < (double)v1 ? v0 : v1;
-        var num2 = v2 < (double)v3 ? v2 : v3;
-        return num1 >= (double)num2 ? num2 : num1;
+        float num1 = (double)v0 < (double)v1 ? v0 : v1;
+        float num2 = (double)v2 < (double)v3 ? v2 : v3;
+        return (double)num1 >= (double)num2 ? num2 : num1;
     }
 
     public static float Max(this float v0, float v1, float v2, float v3)
     {
-        var num1 = v0 > (double)v1 ? v0 : v1;
-        var num2 = v2 > (double)v3 ? v2 : v3;
-        return num1 <= (double)num2 ? num2 : num1;
+        float num1 = (double)v0 > (double)v1 ? v0 : v1;
+        float num2 = (double)v2 > (double)v3 ? v2 : v3;
+        return (double)num1 <= (double)num2 ? num2 : num1;
     }
 
     internal static float ValueFromSides(this float negativeSide, float positiveSide)
     {
-        var v1 = negativeSide.Abs();
-        var v2 = positiveSide.Abs();
+        float v1 = negativeSide.Abs();
+        float v2 = positiveSide.Abs();
         if (v1.Approx(v2))
             return 0.0f;
-        return v1 > (double)v2 ? -v1 : v2;
+        return (double)v1 > (double)v2 ? -v1 : v2;
     }
 
     internal static float ValueFromSides(this float negativeSide, float positiveSide, bool invertSides) => invertSides ? positiveSide.ValueFromSides(negativeSide) : negativeSide.ValueFromSides(positiveSide);
@@ -155,7 +158,7 @@ public static class MathExtensions
     /// </summary>
     public static void Swap<T>(ref T a, ref T b)
     {
-        var x = a;
+        T x = a;
         a = b;
         b = x;
     }
@@ -171,7 +174,7 @@ public static class MathExtensions
     /// <summary>
     /// Snap to grid of "round" size
     /// </summary>
-    public static float Snap(this float val, float round) => (float)Snap(val, (double)round);
+    public static float Snap(this float val, float round) => (float)Snap((double)val, (double)round);
 
     /// <summary>
     /// Returns the sign 1/-1 evaluated at the given value.
@@ -214,7 +217,7 @@ public static class MathExtensions
 
         if (num < min || num > max) return num;
 
-        var mid = (max - min) / 2;
+        float mid = (max - min) / 2;
 
         if (num > min) return num + mid < max ? min : max;
         return num - mid > min ? max : min;
@@ -240,8 +243,8 @@ public static class MathExtensions
             pointB = x;
         }
 
-        var middle = (pointB - pointA) / 2;
-        var withOffset = num.NotInRange(pointA, pointB) + middle;
-        return withOffset >= pointB ? pointB : pointA;
+        float middle = (pointB - pointA) / 2;
+        float withOffset = num.NotInRange(pointA, pointB) + middle;
+        return (withOffset >= pointB) ? pointB : pointA;
     }
 }

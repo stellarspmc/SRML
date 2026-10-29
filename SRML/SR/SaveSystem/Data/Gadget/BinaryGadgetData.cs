@@ -1,5 +1,9 @@
 ﻿using MonomiPark.SlimeRancher.DataModel;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace SRML.SR.SaveSystem.Data.Gadget
 {
@@ -26,7 +30,7 @@ namespace SRML.SR.SaveSystem.Data.Gadget
 
         public override void LoadCustomData(BinaryReader reader)
         {
-            var byteLength = reader.ReadInt32();
+            int byteLength = reader.ReadInt32();
             data = reader.ReadBytes(byteLength);
         }
 

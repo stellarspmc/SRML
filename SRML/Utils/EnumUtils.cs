@@ -59,28 +59,45 @@ namespace SRML.Utils
         /// <param name="enumType">Type of the enum</param>
         /// <param name="value">Int to convert to enum</param>
         /// <returns>The enum equal to the int</returns>
-        public static object FromInt(Type enumType, int value) =>
-            !enumType.IsEnum
-                ? throw new Exception($"The given type isn't an enum ({enumType.FullName} isn't an Enum)")
-                : System.Enum.ToObject(enumType, value);
+        public static object FromInt(Type enumType, int value)
+        {
+            if (!enumType.IsEnum)
+                throw new Exception($"The given type isn't an enum ({enumType.FullName} isn't an Enum)");
+
+            return System.Enum.ToObject(enumType, value);
+        }
 
         /// <summary>
         /// Gets all names in an enum
         /// </summary>
         /// <param name="enumType">Type of the enum</param>
         /// <returns>The list of names in the enum</returns>
-        public static string[] GetAllNames(Type enumType) =>
-            !enumType.IsEnum
-                ? throw new Exception($"The given type isn't an enum ({enumType.FullName} isn't an Enum)")
-                : System.Enum.GetNames(enumType);
+        public static string[] GetAllNames(Type enumType)
+        {
+            if (!enumType.IsEnum)
+                throw new Exception($"The given type isn't an enum ({enumType.FullName} isn't an Enum)");
+
+            return System.Enum.GetNames(enumType);
+        }
 
         /// <summary>
         /// Gets all enum values in an enum
         /// </summary>
         /// <param name="enumType">Type of the enum</param>
         /// <returns>The list of all values in the enum</returns>
-        public static object[] GetAll(Type enumType) => GetAllNames(enumType).Select(name => Parse(enumType, name))
-                                                                             .Where(value => value != null).ToArray();
+        public static object[] GetAll(Type enumType)
+        {
+            List<object> enums = new List<object>();
+
+            foreach (string name in GetAllNames(enumType))
+            {
+                object value = Parse(enumType, name);
+                if (value != null)
+                    enums.Add(value);
+            }
+
+            return enums.ToArray();
+        }
 
         /// <summary>
         /// Checks if an enum is defined.
@@ -106,14 +123,28 @@ namespace SRML.Utils
         /// <param name="enumType">Type of the enum</param>
         /// <param name="value">Value to find</param>
         /// <returns>true if found, false if not.</returns>
-        public static bool HasEnumValue(Type enumType, string value) => GetAllNames(enumType).Any(name => name.Equals(value));
+        public static bool HasEnumValue(Type enumType, string value)
+        {
+            foreach (string name in GetAllNames(enumType))
+            {
+                if (name.Equals(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         public static object GetMinValue(Type enumType)
         {
             return GetAll(enumType).Cast<int>().Min();
         }
 
-        public static object GetMaxValue(Type enumType) => GetAll(enumType).Cast<int>().Max();
+        public static object GetMaxValue(Type enumType)
+        {
+            return GetAll(enumType).Cast<int>().Max();
+        }
 
         /// <summary>
         /// Parses an enum in a easier way
@@ -160,14 +191,20 @@ namespace SRML.Utils
         /// <typeparam name="T">Type of the enum</typeparam>
         /// <param name="value">Int to convert to enum</param>
         /// <returns>The enum equal to the int</returns>
-        public static T FromInt<T>(int value) where T : System.Enum => (T)System.Enum.ToObject(typeof(T), value);
+        public static T FromInt<T>(int value) where T : System.Enum
+        {
+            return (T)System.Enum.ToObject(typeof(T), value);
+        }
 
         /// <summary>
         /// Gets all names in an enum
         /// </summary>
         /// <typeparam name="T">Type of the enum</typeparam>
         /// <returns>The list of names in the enum</returns>
-        public static string[] GetAllNames<T>() where T : System.Enum => System.Enum.GetNames(typeof(T));
+        public static string[] GetAllNames<T>() where T : System.Enum
+        {
+            return System.Enum.GetNames(typeof(T));
+        }
 
         /// <summary>
         /// Gets all enum values in an enum
@@ -175,7 +212,15 @@ namespace SRML.Utils
         /// <typeparam name="T">Type of the enum</typeparam>
         /// <param name="errorReturn">What to return if the parse fails.</param>
         /// <returns>The list of all values in the enum</returns>
-        public static T[] GetAll<T>(T errorReturn = default) where T : System.Enum => GetAllNames<T>().Select(name => Parse(name, errorReturn)).ToArray();
+        public static T[] GetAll<T>(T errorReturn = default) where T : System.Enum
+        {
+            List<T> enums = new List<T>();
+
+            foreach (string name in GetAllNames<T>())
+                enums.Add(Parse(name, errorReturn));
+
+            return enums.ToArray();
+        }
 
         /// <summary>
         /// Checks if an enum is defined.
@@ -203,16 +248,27 @@ namespace SRML.Utils
         /// <returns>true if found, false if not.</returns>
         public static bool HasEnumValue<T>(string value) where T : System.Enum
         {
-            foreach (var name in GetAllNames<T>())
+            foreach (string name in GetAllNames<T>())
             {
-                if (name.Equals(value)) return true;
+                if (name.Equals(value))
+                {
+                    return true;
+                }
             }
 
             return false;
         }
 
-        public static T GetMinValue<T>() where T : System.Enum => GetAll<T>().Min();
-        public static T GetMaxValue<T>() where T : System.Enum => GetAll<T>().Max();
+        public static T GetMinValue<T>() where T : System.Enum
+        {
+            return GetAll<T>().Min();
+        }
+
+        public static T GetMaxValue<T>() where T : System.Enum
+        {
+            return GetAll<T>().Max();
+        }
+
         internal unsafe static long FastCastToLong<T>(T enumValue) where T : unmanaged, System.Enum
         {
             var size = Marshal.SizeOf<T>();

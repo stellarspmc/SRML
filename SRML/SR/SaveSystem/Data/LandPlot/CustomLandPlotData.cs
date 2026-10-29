@@ -22,12 +22,12 @@ namespace SRML.SR.SaveSystem.Data.LandPlot
 
         public sealed override void PushCustomModel(LandPlotModel model)
         {
-            PushCustomModel((T)model);
+            this.PushCustomModel((T)model);
         }
 
         public sealed override void PullCustomModel(LandPlotModel model)
         {
-            PullCustomModel((T)model);
+            this.PullCustomModel((T)model);
         }
 
         public sealed override void Load(Stream stream, bool skipPayloadEnd)

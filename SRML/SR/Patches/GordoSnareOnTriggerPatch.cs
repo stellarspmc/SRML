@@ -11,9 +11,9 @@ namespace SRML.SR.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            var instructions = new List<CodeInstruction>(instr);
-            var index = -1;
-            for (var i = 0; i < instructions.Count; i++)
+            List<CodeInstruction> instructions = new List<CodeInstruction>(instr);
+            int index = -1;
+            for (int i = 0; i < instructions.Count; i++)
             {
                 if (instructions[i].opcode == OpCodes.Ldloc_0 && instructions[i - 1].opcode == OpCodes.Brfalse_S)
                 {

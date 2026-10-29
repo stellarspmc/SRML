@@ -8,7 +8,7 @@ namespace SRML.SR.Patches
     {
         public static bool Prefix(ZoneDirector.Zone zone, ref RegionRegistry.RegionSetId __result)
         {
-            if (RegionSetRegistry.regionForZones.TryGetValue(zone, out var val))
+            if (RegionSetRegistry.regionForZones.TryGetValue(zone, out RegionRegistry.RegionSetId val))
             {
                 __result = val;
                 return false;

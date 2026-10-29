@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using SRML.Console;
 
 namespace SRML.Console.Commands
 {
@@ -11,7 +13,7 @@ namespace SRML.Console.Commands
 		public override string Usage { get; } = "help [cmdName]";
 		public override string Description { get; } = "Displays all commands available, or an extended description of a command";
 
-		public override string ExtendedDescription =>
+		public override string ExtendedDescription => 
 			"<color=#77DDFF>[cmdName]</color> - The command you want to check the extended description for.\n" +
 			"Running without an argument shows all commands";
 
@@ -25,19 +27,19 @@ namespace SRML.Console.Commands
 				Console.Instance.Log("<color=cyan>List of Commands Available:</color>");
 				Console.Instance.Log("<i><> is a required argument; [] is an optional argument</i>");
 
-				foreach (var line in ConsoleWindow.cmdsText.Split('\n'))
+				foreach (string line in ConsoleWindow.cmdsText.Split('\n'))
 					Console.Instance.LogSuccess(line);
 			}
 			else
 			{
 				if (Console.commands.ContainsKey(args[0]))
 				{
-					var cmd = Console.commands[args[0]];
+					ConsoleCommand cmd = Console.commands[args[0]];
 
 					if (cmd.ExtendedDescription != null)
 					{
 						Console.Instance.Log($"<color=#77DDFF>{cmd.Usage}</color> - {cmd.Description}");
-						foreach (var line in cmd.ExtendedDescription.Split('\n'))
+						foreach (string line in cmd.ExtendedDescription.Split('\n'))
 							Console.Instance.LogSuccess(line);
 					}
 					else

@@ -12,7 +12,7 @@ namespace SRML.SR.Utils
 
         public static SlimeAppearanceStructure Clone(this SlimeAppearanceStructure structure)
         {
-            var cloned = new SlimeAppearanceStructure(structure);
+            SlimeAppearanceStructure cloned = new SlimeAppearanceStructure(structure);
             cloned.Element.name = cloned.Element.name.Replace("(Clone)", string.Empty);
             return cloned;
         }
@@ -22,15 +22,15 @@ namespace SRML.SR.Utils
         public static SlimeDiet LoadLargoDiet(this SlimeDefinition def)
         {
             if (!def.IsLargo || def.BaseSlimes.Length == 0) return null;
-            var diet = new SlimeDiet();
+            SlimeDiet diet = new SlimeDiet();
 
             diet.AdditionalFoods = new Identifiable.Id[0];
             diet.Favorites = new Identifiable.Id[0];
             diet.MajorFoodGroups = new SlimeEat.FoodGroup[0];
             diet.Produces = new Identifiable.Id[0];
-            foreach (var baseDef in def.BaseSlimes)
+            foreach (SlimeDefinition baseDef in def.BaseSlimes)
             {
-                var baseDiet = baseDef.Diet;
+                SlimeDiet baseDiet = baseDef.Diet;
                 if (baseDiet.AdditionalFoods != null) diet.AdditionalFoods = diet.AdditionalFoods.Union(baseDiet.AdditionalFoods).ToArray();
                 if (baseDiet.Favorites != null) diet.Favorites = diet.Favorites.Union(baseDiet.Favorites).ToArray();
                 if (baseDiet.MajorFoodGroups != null) diet.MajorFoodGroups = diet.MajorFoodGroups.Union(baseDiet.MajorFoodGroups).ToArray();
@@ -54,7 +54,7 @@ namespace SRML.SR.Utils
 
         public static void RefreshEatmaps(this SlimeDefinitions defs)
         {
-            foreach (var def in defs.Slimes) def.Diet?.RefreshEatMap(defs, def);
+            foreach (SlimeDefinition def in defs.Slimes) def.Diet?.RefreshEatMap(defs, def);
         }
     }
 }

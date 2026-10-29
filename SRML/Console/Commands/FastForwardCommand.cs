@@ -1,4 +1,9 @@
-﻿namespace SRML.Console.Commands
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace SRML.Console.Commands
 {
     class FastForwardCommand : ConsoleCommand
     {
@@ -10,7 +15,7 @@
 
         public override bool Execute(string[] args)
         {
-            var timeToFastForwardTo = SceneContext.Instance.TimeDirector.GetNextDawn();
+            double timeToFastForwardTo = SceneContext.Instance.TimeDirector.GetNextDawn();
             if((args?.Length ?? 0) == 1)
             {
                 if(float.TryParse(args[0],out var amount))

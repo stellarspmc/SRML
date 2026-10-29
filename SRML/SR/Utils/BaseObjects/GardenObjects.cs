@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using SRML.Console;
 
 namespace SRML.SR.Utils.BaseObjects
 {
@@ -9,7 +10,7 @@ namespace SRML.SR.Utils.BaseObjects
 		private static LookupDirector Director => GameContext.Instance.LookupDirector;
 
 		// Garden Positions
-		public readonly static ObjectTransformValues[] spawnJoints = new[]
+		public readonly static ObjectTransformValues[] spawnJoints = new ObjectTransformValues[]
 		{
 			// NORMAL SPAWN JOINTS
 			new ObjectTransformValues(new Vector3(3.40f, 0.20f, 1.26f), new Vector3(0.00f, 151.60f, 0.00f), Vector3.one * 0.25f),
@@ -51,7 +52,7 @@ namespace SRML.SR.Utils.BaseObjects
 			new ObjectTransformValues(new Vector3(3.31f, 0.92f, -3.99f), new Vector3(0.00f, 182.38f, 0.00f), Vector3.one * 0.25f)
 		};
 
-		public readonly static ObjectTransformValues[] beds = new[]
+		public readonly static ObjectTransformValues[] beds = new ObjectTransformValues[]
 		{
 			// NORMAL BEDS
 			new ObjectTransformValues(new Vector3(-3.15f, 0.00f, 0.00f), new Vector3(0.00f, 0.00f, 0.00f), Vector3.one),
@@ -64,7 +65,7 @@ namespace SRML.SR.Utils.BaseObjects
 			new ObjectTransformValues(new Vector3(3.80f, 0.90f, -3.80f), new Vector3(0.00f, 225.00f, 0.00f), Vector3.one),
 		};
 
-		public readonly static ObjectTransformValues[] bedSprouts = new[]
+		public readonly static ObjectTransformValues[] bedSprouts = new ObjectTransformValues[]
 		{
 			// NORMAL SPROUTS
 			new ObjectTransformValues(new Vector3(0.00f, 0.10f, -2.97f), new Vector3(351.24f, 0.00f, 0.00f), Vector3.one * 0.144f),
@@ -78,7 +79,7 @@ namespace SRML.SR.Utils.BaseObjects
 			new ObjectTransformValues(new Vector3(0.22f, 0.03f, 1.33f), new Vector3(359.31f, 30.23f, 348.55f), Vector3.one * 0.127224f)
 		};
 
-		public readonly static ObjectTransformValues[] droneNodes = new[]
+		public readonly static ObjectTransformValues[] droneNodes = new ObjectTransformValues[]
 		{
 			// NORMAL NODES
 			new ObjectTransformValues(new Vector3(-2.2f, -0.6f, 0), Vector3.zero, Vector3.one),
@@ -216,19 +217,19 @@ namespace SRML.SR.Utils.BaseObjects
 			modelLeavesCols.Add(SpawnResource.Id.POGO_TREE, BaseObjects.originMesh["leaves_pogo_COL"]);
 
 			// Get all tree joints
-			foreach (var joint in Director.GetResourcePrefab(SpawnResource.Id.POGO_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
+			foreach (GameObject joint in Director.GetResourcePrefab(SpawnResource.Id.POGO_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
 				treeSpawnJoints[SpawnResource.Id.POGO_TREE].Add(new ObjectTransformValues(joint.transform.localPosition, joint.transform.localEulerAngles, joint.transform.localScale));
 
-			foreach (var joint in Director.GetResourcePrefab(SpawnResource.Id.CUBERRY_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
+			foreach (GameObject joint in Director.GetResourcePrefab(SpawnResource.Id.CUBERRY_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
 				treeSpawnJoints[SpawnResource.Id.CUBERRY_TREE].Add(new ObjectTransformValues(joint.transform.localPosition, joint.transform.localEulerAngles, joint.transform.localScale));
 
-			foreach (var joint in Director.GetResourcePrefab(SpawnResource.Id.LEMON_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
+			foreach (GameObject joint in Director.GetResourcePrefab(SpawnResource.Id.LEMON_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
 				treeSpawnJoints[SpawnResource.Id.LEMON_TREE].Add(new ObjectTransformValues(joint.transform.localPosition, joint.transform.localEulerAngles, joint.transform.localScale));
 
-			foreach (var joint in Director.GetResourcePrefab(SpawnResource.Id.PEAR_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
+			foreach (GameObject joint in Director.GetResourcePrefab(SpawnResource.Id.PEAR_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
 				treeSpawnJoints[SpawnResource.Id.PEAR_TREE].Add(new ObjectTransformValues(joint.transform.localPosition, joint.transform.localEulerAngles, joint.transform.localScale));
 
-			foreach (var joint in Director.GetResourcePrefab(SpawnResource.Id.MANGO_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
+			foreach (GameObject joint in Director.GetResourcePrefab(SpawnResource.Id.MANGO_TREE_DLX).FindChildrenWithPartialName("SpawnJoint"))
 				treeSpawnJoints[SpawnResource.Id.MANGO_TREE].Add(new ObjectTransformValues(joint.transform.localPosition, joint.transform.localEulerAngles, joint.transform.localScale));
 		}
 

@@ -1,14 +1,17 @@
 ﻿using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data.Partial;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace SRML.SR.SaveSystem.Data.World
 {
     internal class PartialExchangeData : VersionedPartialData<ExchangeOfferV04>
     {
-        public PartialCollection<RequestedItemEntryV03> requests = new PartialCollection<RequestedItemEntryV03>(x => ModdedIDRegistry.IsModdedID(x.id) || ModdedIDRegistry.IsModdedID(x.nonIdentReward), new SRML.Utils.SerializerPair<RequestedItemEntryV03>((x, y) => y.Write(x.BaseStream), x => { var v = new RequestedItemEntryV03(); v.Load(x.BaseStream); return v; }));
-        public PartialCollection<ItemEntryV03> rewards = new PartialCollection<ItemEntryV03>(x => ModdedIDRegistry.IsModdedID(x.id) || ModdedIDRegistry.IsModdedID(x.nonIdentReward), new SRML.Utils.SerializerPair<ItemEntryV03>((x, y) => y.Write(x.BaseStream), x => { var v = new ItemEntryV03(); v.Load(x.BaseStream); return v; }));
+        public PartialCollection<RequestedItemEntryV03> requests = new PartialCollection<RequestedItemEntryV03>((x) => ModdedIDRegistry.IsModdedID(x.id) || ModdedIDRegistry.IsModdedID(x.nonIdentReward), new SRML.Utils.SerializerPair<RequestedItemEntryV03>((x, y) => y.Write(x.BaseStream), (x) => { var v = new RequestedItemEntryV03(); v.Load(x.BaseStream); return v; }));
+        public PartialCollection<ItemEntryV03> rewards = new PartialCollection<ItemEntryV03>((x) => ModdedIDRegistry.IsModdedID(x.id) || ModdedIDRegistry.IsModdedID(x.nonIdentReward), new SRML.Utils.SerializerPair<ItemEntryV03>((x, y) => y.Write(x.BaseStream), (x) => { var v = new ItemEntryV03(); v.Load(x.BaseStream); return v; }));
         public override int LatestVersion => 0;
         public override void Pull(ExchangeOfferV04 data)
         {
@@ -64,7 +67,7 @@ namespace SRML.SR.SaveSystem.Data.World
             });
 
 
-            CustomChecker.RegisterCustomChecker<ExchangeOfferV04>(data =>
+            CustomChecker.RegisterCustomChecker<ExchangeOfferV04>((data) =>
             {
                 if (ExchangeOfferRegistry.IsCustom(data)) return CustomChecker.CustomLevel.FULL;
                 if (data.requests.Any(x => ModdedIDRegistry.IsModdedID(x.id) || ModdedIDRegistry.IsModdedID(x.nonIdentReward))) return CustomChecker.CustomLevel.PARTIAL;

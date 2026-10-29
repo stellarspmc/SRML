@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using UnityEngine;
@@ -21,46 +22,46 @@ namespace SRML.SR.SaveSystem.Data.Ammo
 
         public AmmoIdentifier(AmmoType type, long id)
         {
-            AmmoType = type;
-            longIdentifier = id;
-            stringIdentifier = "";
-            custommodid = "";
+            this.AmmoType = type;
+            this.longIdentifier = id;
+            this.stringIdentifier = "";
+            this.custommodid = "";
         }
 
         public AmmoIdentifier(AmmoType type, string id)
         {
-            AmmoType = type;
-            longIdentifier = long.MaxValue;
-            stringIdentifier = id;
-            custommodid = "";
+            this.AmmoType = type;
+            this.longIdentifier = long.MaxValue;
+            this.stringIdentifier = id;
+            this.custommodid = "";
         }
 
         public AmmoIdentifier(AmmoType type, long longId, string stringId)
         {
-            AmmoType = type;
-            longIdentifier = longId;
-            stringIdentifier = stringId;
-            custommodid = "";
+            this.AmmoType = type;
+            this.longIdentifier = longId;
+            this.stringIdentifier = stringId;
+            this.custommodid = "";
         }
 
         public AmmoIdentifier(AmmoType type, long longId, string stringId,string modid)
         {
-            AmmoType = type;
-            longIdentifier = longId;
-            stringIdentifier = stringId;
-            custommodid = modid;
+            this.AmmoType = type;
+            this.longIdentifier = longId;
+            this.stringIdentifier = stringId;
+            this.custommodid = modid;
         }
         public static void Write(AmmoIdentifier identifier, BinaryWriter writer)
         {
             writer.Write((int)identifier.AmmoType);
             writer.Write(identifier.longIdentifier);
             writer.Write(identifier.stringIdentifier);
-            if (identifier.AmmoType.IsCustom()) writer.Write(identifier.custommodid);
+            if (identifier.AmmoType.IsCustom()) writer.Write(identifier.custommodid); 
         }
 
         public static AmmoIdentifier Read(BinaryReader reader)
         {
-            var ammotype = (AmmoType)reader.ReadInt32();
+            var ammotype = (Ammo.AmmoType)reader.ReadInt32();
             return new AmmoIdentifier(ammotype, reader.ReadInt64(), reader.ReadString(), ammotype.IsCustom()?reader.ReadString():"");
         }
 
@@ -68,10 +69,10 @@ namespace SRML.SR.SaveSystem.Data.Ammo
         {
             return GetIdentifier(ammo.ammoModel);
         }
-
+        
         public static AmmoIdentifier GetIdentifier(AmmoModel model)
         {
-            var foundKey = _cache.FirstOrDefault(x => x.Value == model).Key;
+            var foundKey = _cache.FirstOrDefault((x) => x.Value == model).Key;
             if (foundKey.AmmoType != AmmoType.NONE) return foundKey;
 
             var newIdentifier = GetIdentifierInternal(model);
@@ -83,10 +84,10 @@ namespace SRML.SR.SaveSystem.Data.Ammo
         {
             foreach (var candidate in SceneContext.Instance.GameModel.player.ammoDict)
             {
-                if (candidate.Value == ammoModel) return new AmmoIdentifier(AmmoType.PLAYER, (long)candidate.Key);
+                if (candidate.Value == ammoModel) return new AmmoIdentifier(Ammo.AmmoType.PLAYER, (long)candidate.Key);
             }
 
-            foreach (var candidate in SceneContext.Instance.GameModel.gadgetSites.Where(x => x.Value.HasAttached()))
+            foreach (var candidate in SceneContext.Instance.GameModel.gadgetSites.Where((x) => x.Value.HasAttached()))
             {
                 var potentialKey = new AmmoIdentifier(AmmoType.GADGET, candidate.Key);
                 if (candidate.Value.attached is DroneModel drone)
@@ -170,7 +171,7 @@ namespace SRML.SR.SaveSystem.Data.Ammo
         }
 
         static readonly Dictionary<AmmoIdentifier, global::Ammo> _ammoCache = new Dictionary<AmmoIdentifier, global::Ammo>();
-
+        
         public static global::Ammo ResolveAmmo(AmmoIdentifier identifier)
         {
             if (_ammoCache.TryGetValue(identifier, out var model)) return model;
@@ -188,11 +189,11 @@ namespace SRML.SR.SaveSystem.Data.Ammo
                 default:
                     foreach(var v in Resources.FindObjectsOfTypeAll<Drone>())
                     {
-                        if (v.ammo!=null&&GetIdentifier(v.ammo).Equals(identifier)) return v.ammo;
+                        if (v.ammo!=null&&AmmoIdentifier.GetIdentifier(v.ammo).Equals(identifier)) return v.ammo;
                     }
                     foreach(var v in Resources.FindObjectsOfTypeAll<SiloStorage>())
                     {
-                        if (v.ammo != null && GetIdentifier(v.ammo).Equals(identifier)) return v.ammo;
+                        if (v.ammo != null && AmmoIdentifier.GetIdentifier(v.ammo).Equals(identifier)) return v.ammo;
                     }
                     break;
             }
@@ -206,9 +207,9 @@ namespace SRML.SR.SaveSystem.Data.Ammo
                 case AmmoType.PLAYER:
                     return game.player.ammo[(PlayerState.AmmoMode)identifier.longIdentifier];
                 case AmmoType.GADGET:
-                    return ModdedStringRegistry.IsValidString(identifier.stringIdentifier) ? game.world.placedGadgets[identifier.stringIdentifier].drone?.drone?.ammo is AmmoDataV02 amdat ? new[] { amdat }.ToList() : game.world.placedGadgets[identifier.stringIdentifier].ammo :null;
+                    return ModdedStringRegistry.IsValidString(identifier.stringIdentifier) ? (game.world.placedGadgets[identifier.stringIdentifier].drone?.drone?.ammo is AmmoDataV02 amdat ? new AmmoDataV02[] { amdat }.ToList() : game.world.placedGadgets[identifier.stringIdentifier].ammo) :null;
                 case AmmoType.LANDPLOT:
-                    return game.ranch.plots.FirstOrDefault(x => x.id == identifier.stringIdentifier)?
+                    return game.ranch.plots.FirstOrDefault((x) => x.id == identifier.stringIdentifier)?
                         .siloAmmo[(SiloStorage.StorageType)identifier.longIdentifier];
             }
 

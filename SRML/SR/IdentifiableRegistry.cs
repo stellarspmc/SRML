@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SRML.SR.Utils;
 using SRML.SR.SaveSystem;
+using UnityEngine;
 
 namespace SRML.SR
 {
@@ -83,7 +85,9 @@ namespace SRML.SR
         /// Remove all instances of an <see cref="Identifiable.Id"/> from every class in <see cref="Identifiable"/>
         /// </summary>
         /// <param name="id"></param>
-        public static void Uncategorize(this Identifiable.Id id) {
+        /// <param name="rule"></param>
+        public static void Uncategorize(this Identifiable.Id id)
+        {
             Identifiable.ALLERGY_FREE_CLASS.Remove(id);
             Identifiable.BOOP_CLASS.Remove(id);
             Identifiable.CHICK_CLASS.Remove(id);
@@ -123,12 +127,17 @@ namespace SRML.SR
         /// <returns>All <see cref="Identifiable.Id"/>s reigstered by a mod.</returns>
         public static HashSet<Identifiable.Id> GetIdentifiablesForMod(string id) => moddedIdentifiables.Where(x => x.Value.ModInfo.Id == id).Select(x => x.Key).ToHashSet();
 
-        internal static void CategorizeAllIds() {
-            foreach (var id in moddedIdentifiables.Keys) {
-                if (rules.TryGetValue(id, out var rule)) CategorizeId(id, rule);
-                else if (!IdentifiableCategorization.doNotAutoCategorize.Contains(id)) CategorizeId(id);
+        internal static void CategorizeAllIds()
+        {
+            foreach (Identifiable.Id id in moddedIdentifiables.Keys)
+            {
+                if (rules.TryGetValue(id, out IdentifiableCategorization.Rule rule))
+                    CategorizeId(id, rule);
+                else if (!IdentifiableCategorization.doNotAutoCategorize.Contains(id))
+                    CategorizeId(id);
 
-                if (!FoodGroupRegistry.alreadyRegistered.Contains(id)) id.RegisterToFoodGroup(); // should use id?
+                if (!FoodGroupRegistry.alreadyRegistered.Contains(id)) 
+                    FoodGroupRegistry.RegisterToFoodGroup(id);
             }
         }
 
@@ -152,13 +161,19 @@ namespace SRML.SR
         /// <param name="id"></param>
         public static void CategorizeId(Identifiable.Id id)
         {
-            var name = Enum.GetName(typeof(Identifiable.Id), id);
-            if (categorizationSuffixRules.TryGetValue(x => name?.EndsWith(x.Key) == true, out var suffixRule)) {
+            string name = Enum.GetName(typeof(Identifiable.Id), id);
+
+            if (categorizationSuffixRules.TryGetValue(x => name.EndsWith(x.Key), out var suffixRule))
+            {
                 CategorizeId(id, suffixRule.Value);
                 return;
             }
 
-            if (categorizationPrefixRules.TryGetValue(x => name?.StartsWith(x.Key) == true, out var prefixRule)) CategorizeId(id, prefixRule.Value);
+            if (categorizationPrefixRules.TryGetValue(x => name.StartsWith(x.Key), out var prefixRule))
+            {
+                CategorizeId(id, prefixRule.Value);
+                return;
+            }
         }
 
         /// <summary>
@@ -168,14 +183,17 @@ namespace SRML.SR
         /// <param name="category"></param>
         public static void CategorizeId(Identifiable.Id id, IdentifiableCategorization.Rule category)
         {
-            var name = Enum.GetName(typeof(Identifiable.Id), id);
-            if (name?.Contains("TANGLE") == true) Identifiable.ALLERGY_FREE_CLASS.Add(id);
+            string name = Enum.GetName(typeof(Identifiable.Id), id);
+            if (name.Contains("TANGLE"))
+            {
+                Identifiable.ALLERGY_FREE_CLASS.Add(id);
+            }
             if (category == IdentifiableCategorization.Rule.NONE) return;
 
-            if ((category & (IdentifiableCategorization.Rule.VEGGIE |
-                IdentifiableCategorization.Rule.FRUIT |
-                IdentifiableCategorization.Rule.TOFU |
-                IdentifiableCategorization.Rule.PLORT |
+            if ((category & (IdentifiableCategorization.Rule.VEGGIE | 
+                IdentifiableCategorization.Rule.FRUIT | 
+                IdentifiableCategorization.Rule.TOFU | 
+                IdentifiableCategorization.Rule.PLORT | 
                 IdentifiableCategorization.Rule.MEAT |
                 IdentifiableCategorization.Rule.CHICK |
                 IdentifiableCategorization.Rule.CRAFT)) != 0) Identifiable.NON_SLIMES_CLASS.Add(id);
@@ -183,22 +201,22 @@ namespace SRML.SR
                 IdentifiableCategorization.Rule.FRUIT |
                 IdentifiableCategorization.Rule.TOFU |
                 IdentifiableCategorization.Rule.MEAT)) != 0) Identifiable.FOOD_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.VEGGIE) != 0) Identifiable.VEGGIE_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.FRUIT) != 0) Identifiable.FRUIT_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.TOFU) != 0) Identifiable.TOFU_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.SLIME) != 0) Identifiable.SLIME_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.LARGO) != 0) Identifiable.LARGO_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.GORDO) != 0) Identifiable.GORDO_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.PLORT) != 0) Identifiable.PLORT_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.MEAT) != 0) Identifiable.MEAT_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.CHICK) != 0) Identifiable.CHICK_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.LIQUID) != 0) Identifiable.LIQUID_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.CRAFT) != 0) Identifiable.CRAFT_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.FASHION) != 0) Identifiable.FASHION_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.ECHO) != 0) Identifiable.ECHO_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.ECHO_NOTE) != 0) Identifiable.ECHO_NOTE_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.ORNAMENT) != 0) Identifiable.ORNAMENT_CLASS.Add(id);
-            if ((category & IdentifiableCategorization.Rule.TOY) != 0) Identifiable.TOY_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.VEGGIE)) != 0) Identifiable.VEGGIE_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.FRUIT)) != 0) Identifiable.FRUIT_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.TOFU)) != 0) Identifiable.TOFU_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.SLIME)) != 0) Identifiable.SLIME_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.LARGO)) != 0) Identifiable.LARGO_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.GORDO)) != 0) Identifiable.GORDO_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.PLORT)) != 0) Identifiable.PLORT_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.MEAT)) != 0) Identifiable.MEAT_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.CHICK)) != 0) Identifiable.CHICK_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.LIQUID)) != 0) Identifiable.LIQUID_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.CRAFT)) != 0) Identifiable.CRAFT_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.FASHION)) != 0) Identifiable.FASHION_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.ECHO)) != 0) Identifiable.ECHO_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.ECHO_NOTE)) != 0) Identifiable.ECHO_NOTE_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.ORNAMENT)) != 0) Identifiable.ORNAMENT_CLASS.Add(id);
+            if ((category & (IdentifiableCategorization.Rule.TOY)) != 0) Identifiable.TOY_CLASS.Add(id);
 
             Identifiable.EATERS_CLASS.UnionWith(Identifiable.SLIME_CLASS);
             Identifiable.EATERS_CLASS.UnionWith(Identifiable.LARGO_CLASS);

@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Runtime;
+using SRML.Utils;
 
 namespace SRML.SR.SaveSystem
 {
@@ -50,7 +54,7 @@ namespace SRML.SR.SaveSystem
             id = split[2];
             modid = split[1];
         }
-
+        
         public static bool IsLongForm(string longform)
         {
             return longform.Split('.').Length == 3;
@@ -58,7 +62,8 @@ namespace SRML.SR.SaveSystem
 
         public string RegisterID(string id, SRMod mod)
         {
-            GetIDsForMod(mod).Add(id);
+
+            GetIDsForMod(mod).Add(id); 
             return GetLongFormID(id, mod);
         }
 
@@ -72,5 +77,6 @@ namespace SRML.SR.SaveSystem
             GetIDsForMod(mod).Clear();
         }
 
+       
     }
 }

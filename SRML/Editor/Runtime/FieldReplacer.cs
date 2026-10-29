@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace SRML.Editor.Runtime
 {
     public class FieldReplacer : IFieldReplacer
     {
         public IInstanceInfo InstanceInfo { get; private set; }
-
+    
 
         public bool ReplaceInChildren { get; private set; }
 
@@ -17,7 +20,7 @@ namespace SRML.Editor.Runtime
 
         public FieldReplacer(IInstanceInfo rinfo, bool replaceInChildren, params IFieldReplacement[] replacements)
         {
-            InstanceInfo = rinfo;
+            this.InstanceInfo = rinfo;
             this.replacements.AddRange(replacements);
         }
     }

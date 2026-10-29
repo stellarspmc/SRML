@@ -1,5 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using HarmonyLib;
+using UnityEngine;
 
 namespace SRML.SR.Patches
 {
@@ -12,7 +17,7 @@ namespace SRML.SR.Patches
         {
             if (path == "ui")
             {
-                var lang = GameContext.Instance.MessageDirector.GetCultureLang();
+                MessageDirector.Lang lang = GameContext.Instance.MessageDirector.GetCultureLang();
                 if (TranslationPatcher.srmlErrorMessages.ContainsKey(lang))
                 {
                     __result["t.srml_error"] = TranslationPatcher.srmlErrorMessages[lang].Key;
@@ -73,7 +78,7 @@ namespace SRML.SR.Patches
             }
 
             TranslationPatcher.doneDictionaries[path] = __result;
-            if (!TranslationPatcher.patches.TryGetValue(path, out var dict)) return;
+            if (!TranslationPatcher.patches.TryGetValue(path, out var dict)) return;    
             foreach (var entry in dict)
             {
                 __result[entry.Key] = entry.Value;

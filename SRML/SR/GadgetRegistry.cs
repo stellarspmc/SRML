@@ -1,6 +1,8 @@
 ﻿using SRML.SR.SaveSystem;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace SRML.SR
 {
@@ -112,7 +114,7 @@ namespace SRML.SR
 
         internal static void CategorizeAllIds()
         {
-            foreach (var id in moddedGadgets.Keys)
+            foreach (Gadget.Id id in moddedGadgets.Keys)
             {
                 if (rules.ContainsKey(id))
                     CategorizeId(id, rules[id]);
@@ -128,7 +130,7 @@ namespace SRML.SR
         /// <param name="id"></param>
         public static void CategorizeId(Gadget.Id id)
         {
-            var name = Enum.GetName(typeof(Gadget.Id), id);
+            string name = Enum.GetName(typeof(Gadget.Id), id);
 
             if (categorizationSuffixRules.TryGetValue(x => name.EndsWith(x.Key), out var suffixRule))
             {
@@ -152,17 +154,17 @@ namespace SRML.SR
         /// <param name="category"></param>
         public static void CategorizeId(Gadget.Id id, GadgetCategorization.Rule category)
         {
-            var name = Enum.GetName(typeof(Gadget.Id), id);
-            if ((category & GadgetCategorization.Rule.MISC) != 0) Gadget.MISC_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.EXTRACTOR) != 0) Gadget.EXTRACTOR_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.TELEPORTER) != 0) Gadget.TELEPORTER_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.WARP_DEPOT) != 0) Gadget.WARP_DEPOT_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.ECHO_NET) != 0) Gadget.ECHO_NET_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.LAMP) != 0) Gadget.LAMP_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.FASHION_POD) != 0) Gadget.FASHION_POD_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.SNARE) != 0) Gadget.SNARE_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.DECO) != 0) Gadget.DECO_CLASS.Add(id);
-            if ((category & GadgetCategorization.Rule.DRONE) != 0) Gadget.DRONE_CLASS.Add(id);
+            string name = Enum.GetName(typeof(Gadget.Id), id);
+            if ((category & (GadgetCategorization.Rule.MISC)) != 0) Gadget.MISC_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.EXTRACTOR)) != 0) Gadget.EXTRACTOR_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.TELEPORTER)) != 0) Gadget.TELEPORTER_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.WARP_DEPOT)) != 0) Gadget.WARP_DEPOT_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.ECHO_NET)) != 0) Gadget.ECHO_NET_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.LAMP)) != 0) Gadget.LAMP_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.FASHION_POD)) != 0) Gadget.FASHION_POD_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.SNARE)) != 0) Gadget.SNARE_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.DECO)) != 0) Gadget.DECO_CLASS.Add(id);
+            if ((category & (GadgetCategorization.Rule.DRONE)) != 0) Gadget.DRONE_CLASS.Add(id);
         }
 
         [Obsolete]

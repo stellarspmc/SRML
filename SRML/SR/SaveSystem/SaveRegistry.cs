@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
 using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.SaveSystem.Data.Actor;
 using SRML.SR.SaveSystem.Data.Gadget;
@@ -31,7 +33,7 @@ namespace SRML.SR.SaveSystem
 
         public static bool IsFullyModdedData(object data)
         {
-            return modToSaveInfo.Any(x => x.Value.BelongsToMe(data));
+            return modToSaveInfo.Any((x) => x.Value.BelongsToMe(data));
         }
 
         public static bool IsCustom(object data)

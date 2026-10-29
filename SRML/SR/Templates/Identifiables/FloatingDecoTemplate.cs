@@ -1,4 +1,6 @@
-﻿using MonomiPark.SlimeRancher.Regions;
+﻿using System.Collections.Generic;
+using MonomiPark.SlimeRancher.Regions;
+using SRML.SR;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -127,37 +129,37 @@ namespace SRML.SR.Templates.Identifiables
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<Identifiable>(ident => ident.id = ID),
-                new Create<Vacuumable>(vac => vac.size = vacSize),
-                new Create<Rigidbody>(body =>
+                new Create<Identifiable>((ident) => ident.id = ID),
+                new Create<Vacuumable>((vac) => vac.size = vacSize),
+                new Create<Rigidbody>((body) =>
                 {
                     body.drag = 5f;
                     body.angularDrag = 0.5f;
                     body.mass = 0.3f;
                     body.useGravity = false;
                 }),
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.25f;
                 }),
                 new Create<CollisionAggregator>(null),
-                new Create<RegionMember>(rg => rg.canHibernate = true),
-                new Create<StopOnCollision>(stop => stop.distFromCol = 0.25f)
+                new Create<RegionMember>((rg) => rg.canHibernate = true),
+                new Create<StopOnCollision>((stop) => stop.distFromCol = 0.25f)
             );
 
             // Create model
             if (color != Color.clear && (decoType == Type.ECHO || decoType == Type.ECHO_NOTE))
             {
-                var mat = new Material(materials[0]);
+                Material mat = new Material(materials[0]);
                 mat.SetColor("_TintColor", color);
 
                 materials = mat.Group();
             }
 
             mainObject.AddChild(new GameObjectTemplate("model",
-                new Create<MeshFilter>(filter => filter.sharedMesh = mesh),
-                new Create<MeshRenderer>(render =>
+                new Create<MeshFilter>((filter) => filter.sharedMesh = mesh),
+                new Create<MeshRenderer>((render) =>
                 {
                     render.sharedMaterials = materials;
                     render.receiveShadows = false;
@@ -171,13 +173,13 @@ namespace SRML.SR.Templates.Identifiables
                 mainObject.AddAfterChildren(SetNoteRenderer);
 
                 mainObject.AddChild(new GameObjectTemplate("echo_note",
-                    new Create<SphereCollider>(col =>
+                    new Create<SphereCollider>((col) =>
                     {
                         col.center = Vector3.zero;
                         col.radius = 0.75f;
                         col.isTrigger = true;
                     }),
-                    new Create<EchoNote>(note => note.clip = clip),
+                    new Create<EchoNote>((note) => note.clip = clip),
                     new Create<ResetLayerChanges>(null)
                 ));
             }

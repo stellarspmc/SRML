@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using SRML.Console;
 
 namespace SRML.Console.Commands
 {
@@ -11,7 +13,7 @@ namespace SRML.Console.Commands
 		public override string Usage { get; } = "addbutton <id> <text> <command>";
 		public override string Description { get; } = "Adds a user defined button to the command menu";
 
-		public override string ExtendedDescription =>
+		public override string ExtendedDescription => 
 			"<color=#77DDFF><id></color> - The id of the button. '<color=#77DDFF>all</color>' is not a valid id\n" +
 			"<color=#77DDFF><text></color> - The text to display on the button\n" +
 			"<color=#77DDFF><command></color> - The command the button will execute";

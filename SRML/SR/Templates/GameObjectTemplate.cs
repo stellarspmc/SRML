@@ -38,14 +38,14 @@ namespace SRML.SR.Templates
 
         public GameObjectTemplate Clone(string name = null, bool cloneChildren = false)
         {
-            var clone = new GameObjectTemplate(name ?? Name, components.ToArray());
+            GameObjectTemplate clone = new GameObjectTemplate(name ?? Name, components.ToArray());
 
             clone.SetTransform(Position, Rotation, Scale);
             clone.SetDebugMarker(DebugMarker);
             clone.Tag = Tag;
             clone.Layer = Layer;
 
-            foreach (var child in children)
+            foreach (GameObjectTemplate child in children)
             {
                 clone.AddChild(cloneChildren ? child.Clone() : child);
             }
@@ -76,9 +76,9 @@ namespace SRML.SR.Templates
             if (BaseObjects.markerMaterials.ContainsKey(type))
             {
                 AddChild(new GameObjectTemplate("DebugMarker",
-                    new Create<MeshFilter>(filter => filter.sharedMesh = BaseObjects.cubeMesh),
-                    new Create<MeshRenderer>(render => render.sharedMaterial = BaseObjects.markerMaterials[type]),
-                    new Create<DebugMarker>(marker =>
+                    new Create<MeshFilter>((filter) => filter.sharedMesh = BaseObjects.cubeMesh),
+                    new Create<MeshRenderer>((render) => render.sharedMaterial = BaseObjects.markerMaterials[type]),
+                    new Create<DebugMarker>((marker) =>
                     {
                         marker.scaleMult = scaleMult;
                         marker.type = type;
@@ -122,7 +122,7 @@ namespace SRML.SR.Templates
 
         public GameObjectTemplate RemoveComponents(params ICreateComponent[] comps)
         {
-            foreach (var comp in comps)
+            foreach (ICreateComponent comp in comps)
                 components.Remove(comp);
 
             return this;
@@ -130,7 +130,7 @@ namespace SRML.SR.Templates
 
         public GameObjectTemplate FindChild(string name, bool parcial = false)
         {
-            foreach (var child in children)
+            foreach (GameObjectTemplate child in children)
             {
                 if (child.Name.StartsWith(name) && parcial || child.Name.Equals(name) && !parcial)
                     return child;
@@ -159,17 +159,17 @@ namespace SRML.SR.Templates
 
             if (actionOnAwake.Count > 0)
             {
-                var comp = obj.AddComponent<ActionOnAwake>();
+                ActionOnAwake comp = obj.AddComponent<ActionOnAwake>();
                 comp.actions = actionOnAwake;
             }
 
             if (actionOnStart.Count > 0)
             {
-                var comp = obj.AddComponent<ActionOnStart>();
+                ActionOnStart comp = obj.AddComponent<ActionOnStart>();
                 comp.actions = actionOnStart;
             }
 
-            foreach (var comp in components)
+            foreach (ICreateComponent comp in components)
             {
                 if (comp == null)
                     continue;
@@ -180,7 +180,7 @@ namespace SRML.SR.Templates
             if (Tag != null) obj.tag = Tag;
             if (Layer != LayerMask.NameToLayer("Default")) obj.layer = Layer;
 
-            foreach (var child in children)
+            foreach (GameObjectTemplate child in children)
                 child.ToGameObject(obj);
 
             AfterChildren?.Invoke(obj);

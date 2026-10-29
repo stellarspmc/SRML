@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using SRML.Console;
 
 namespace SRML.Console.Commands
 {
@@ -11,7 +13,7 @@ namespace SRML.Console.Commands
 		public override string Usage { get; } = "editbutton <id> <text> <command>";
 		public override string Description { get; } = "Edits a user defined button";
 
-		public override string ExtendedDescription =>
+		public override string ExtendedDescription => 
 			"<color=#77DDFF><id></color> - The id of the button being edited\n" +
 			"<color=#77DDFF><text></color> - The text to replace the old one. '<color=#77DDFF>.</color>' to keep the value\n" +
 			"<color=#77DDFF><command></color> - The command to replace the old one. '<color=#77DDFF>.</color>' to keep the value";

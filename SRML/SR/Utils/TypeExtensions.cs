@@ -6,13 +6,13 @@ public static class TypeExtensions
 {
     private const string MIDDLE = " cannot be converted to type ";
 
-    private static void LogConvert(ArgumentException e, string what = "field")
+    private static void LogConvert(System.ArgumentException e, string what = "field")
     {
         if (e.Message.Contains(MIDDLE))
         {
-            var j = e.Message.Substring(15).Replace("'", "");
-            var p = j.Substring(0, j.Length - 1);
-            var i = p.IndexOf(MIDDLE);
+            string j = e.Message.Substring(15).Replace("'", "");
+            string p = j.Substring(0, j.Length - 1);
+            int i = p.IndexOf(MIDDLE);
             UnityEngine.Debug.LogWarning($"Cannot set {what} because the value ({p.Substring(0, i)}) cannot be converted to the {what} type ({p.Substring(i + MIDDLE.Length)}).");
         }
     }
@@ -20,14 +20,14 @@ public static class TypeExtensions
     /// <summary>
     /// Invokes a static method
     /// </summary>
-    /// <param name="type">Type to get method from</param>
+    /// <param name="type">Type to get method from</typeparam>
     /// <param name="name">The name of the method</param>
     /// <param name="list">parameters</param>
     public static object InvokeMethod(this Type type, string name, params object[] list)
     {
         try
         {
-            var method = type.GetStaticMethod(name, list.Select(o => o.GetType()).ToArray());
+            MethodInfo method = type.GetStaticMethod(name, list.Select(o => o.GetType()).ToArray());
 
             if (method == null) return null;
 
@@ -45,14 +45,14 @@ public static class TypeExtensions
     /// Invokes a static method
     /// </summary>
     /// <typeparam name="T">Type of return</typeparam>
-    /// <param name="type">Type to get method from</param>
+    /// <param name="type">Type to get method from</typeparam>
     /// <param name="name">The name of the method</param>
     /// <param name="list">parameters</param>
     public static T InvokeMethod<T>(this Type type, string name, params object[] list)
     {
         try
         {
-            var method = type.GetStaticMethod(name, list.Select(o => o.GetType()).ToArray());
+            MethodInfo method = type.GetStaticMethod(name, list.Select(o => o.GetType()).ToArray());
 
             if (method == null) return default;
 
@@ -69,20 +69,20 @@ public static class TypeExtensions
     /// <summary>
     /// Sets the value of a static field
     /// </summary>
-    /// <param name="type">Type to set field value of</param>
+    /// <param name="type">Type to set field value of</typeparam>
     /// <param name="name">The name of the field</param>
     /// <param name="value">The value to set</param>
     public static void SetField(this Type type, string name, object value)
     {
         try
         {
-            var field = type.GetStaticField(name);
+            FieldInfo field = type.GetStaticField(name);
 
             if (field == null) return;
 
             field?.SetValue(null, value);
         }
-        catch (ArgumentException e)
+        catch (System.ArgumentException e)
         {
             LogConvert(e);
         }
@@ -96,20 +96,20 @@ public static class TypeExtensions
     /// Sets the value of a static field
     /// </summary>
     /// <typeparam name="T">Type of value</typeparam>
-    /// <param name="type">Type to set field value of</param>
+    /// <param name="type">Type to set field value of</typeparam>
     /// <param name="name">The name of the field</param>
     /// <param name="value">The value to set</param>
     public static void SetField<T>(this Type type, string name, T value)
     {
         try
         {
-            var field = type.GetStaticField(name);
+            FieldInfo field = type.GetStaticField(name);
 
             if (field == null) return;
 
             field?.SetValue(null, value);
         }
-        catch (ArgumentException e)
+        catch (System.ArgumentException e)
         {
             LogConvert(e);
         }
@@ -122,13 +122,13 @@ public static class TypeExtensions
     /// <summary>
     /// Gets the value of a static field
     /// </summary>
-    /// <param name="type">Type to get field value from</param>
+    /// <param name="type">Type to get field value from</typeparam>
     /// <param name="name">The name of the field</param>
     public static object GetField(this Type type, string name)
     {
         try
         {
-            var field = type.GetStaticField(name);
+            FieldInfo field = type.GetStaticField(name);
 
             if (field == null) return default;
 
@@ -146,13 +146,13 @@ public static class TypeExtensions
     /// Gets the value of a static field
     /// </summary>
     /// <typeparam name="T">Type of value</typeparam>
-    /// <param name="type">Type to get field value from</param>
+    /// <param name="type">Type to get field value from</typeparam>
     /// <param name="name">The name of the field</param>
     public static T GetField<T>(this Type type, string name)
     {
         try
         {
-            var field = type.GetStaticField(name);
+            FieldInfo field = type.GetStaticField(name);
 
             if (field == null) return default;
 
@@ -169,14 +169,14 @@ public static class TypeExtensions
     /// <summary>
     /// Sets the value of a static property
     /// </summary>
-    /// <param name="type">Type to set property value of</param>
+    /// <param name="type">Type to set property value of</typeparam>
     /// <param name="name">The name of the property</param>
     /// <param name="value">The value to set</param>
     public static void SetProperty(this Type type, string name, object value)
     {
         try
         {
-            var field = type.GetStaticProperty(name);
+            PropertyInfo field = type.GetStaticProperty(name);
 
             if (field == null) return;
 
@@ -185,7 +185,7 @@ public static class TypeExtensions
             else
                 type.SetField($"<{name}>k__BackingField", value);
         }
-        catch (ArgumentException e)
+        catch (System.ArgumentException e)
         {
             LogConvert(e, "property");
         }
@@ -198,7 +198,7 @@ public static class TypeExtensions
     /// <summary>
     /// Sets the value of a static property
     /// </summary>
-    /// <param name="type">Type to set property value of</param>
+    /// <param name="type">Type to set property value of</typeparam>
     /// <param name="name">The name of the property</param>
     /// <param name="value">The value to set</param>
     /// <typeparam name="T">Type of value</typeparam>
@@ -206,7 +206,7 @@ public static class TypeExtensions
     {
         try
         {
-            var field = type.GetStaticProperty(name);
+            PropertyInfo field = type.GetStaticProperty(name);
 
             if (field == null) return;
 
@@ -215,7 +215,7 @@ public static class TypeExtensions
             else
                 type.SetField<T>($"<{name}>k__BackingField", value);
         }
-        catch (ArgumentException e)
+        catch (System.ArgumentException e)
         {
             LogConvert(e, "property");
         }
@@ -228,13 +228,13 @@ public static class TypeExtensions
     /// <summary>
     /// Gets the value of a static property
     /// </summary>
-    /// <param name="type">Type to get property value from</param>
+    /// <param name="type">Type to get property value from</typeparam>
     /// <param name="name">The name of the property</param>
     public static object GetProperty(this Type type, string name)
     {
         try
         {
-            var field = type.GetStaticProperty(name);
+            PropertyInfo field = type.GetStaticProperty(name);
 
             if (field == null) return default;
 
@@ -251,14 +251,14 @@ public static class TypeExtensions
     /// <summary>
     /// Gets the value of a static property
     /// </summary>
-    /// <param name="type">Type to get property value from</param>
+    /// <param name="type">Type to get property value from</typeparam>
     /// <param name="name">The name of the property</param>
     /// <typeparam name="T">Type of value</typeparam>
     public static T GetProperty<T>(this Type type, string name)
     {
         try
         {
-            var field = type.GetStaticProperty(name);
+            PropertyInfo field = type.GetStaticProperty(name);
 
             if (field == null) return default;
 
@@ -278,9 +278,9 @@ public static class TypeExtensions
             throw new ArgumentNullException(nameof(types));
         if (parameters.Length != types.Length)
             return false;
-        for (var index = 0; index < types.Length; ++index)
+        for (int index = 0; index < types.Length; ++index)
         {
-            if (types[index] == null)
+            if (types[index] == (Type)null)
                 throw new ArgumentNullException(nameof(types));
             if (parameters[index].ParameterType != types[index])
                 return false;

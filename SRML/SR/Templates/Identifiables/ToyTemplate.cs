@@ -1,4 +1,6 @@
-﻿using MonomiPark.SlimeRancher.Regions;
+﻿using System.Collections.Generic;
+using MonomiPark.SlimeRancher.Regions;
+using SRML.SR;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -74,25 +76,25 @@ namespace SRML.SR.Templates.Identifiables
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<Identifiable>(ident => ident.id = ID),
-                new Create<Vacuumable>(vac => vac.size = vacSize),
-                new Create<Rigidbody>(body =>
+                new Create<Identifiable>((ident) => ident.id = ID),
+                new Create<Vacuumable>((vac) => vac.size = vacSize),
+                new Create<Rigidbody>((body) =>
                 {
                     body.drag = 0.2f;
                     body.angularDrag = 0.5f;
                     body.mass = 0.5f;
                     body.useGravity = true;
                 }),
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.5f;
                 }),
-                new Create<DragFloatReactor>(drag => drag.floatDragMultiplier = 25f),
+                new Create<DragFloatReactor>((drag) => drag.floatDragMultiplier = 25f),
                 new Create<CollisionAggregator>(null),
-                new Create<RegionMember>(rg => rg.canHibernate = true),
+                new Create<RegionMember>((rg) => rg.canHibernate = true),
                 new Create<TotemLinkerHelper>(null),
-                new Create<PlaySoundOnHit>(hit =>
+                new Create<PlaySoundOnHit>((hit) =>
                 {
                     hit.hitCue = hitCue;
                     hit.minTimeBetween = 0.3f;
@@ -103,13 +105,13 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create Totem Linker
             mainObject.AddChild(new GameObjectTemplate("TotemLinker",
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;
                     col.isTrigger = true;
                 }),
-                new Create<TotemLinker>(totem =>
+                new Create<TotemLinker>((totem) =>
                 {
                     totem.receptivenessProb = 0.25f;
                     totem.rethinkReceptivenessMin = 6;
@@ -120,7 +122,7 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create delaunch
             mainObject.AddChild(new GameObjectTemplate("DelaunchTrigger",
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;
@@ -131,19 +133,19 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create influence
             mainObject.AddChild(new GameObjectTemplate("Influence",
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 5f;
                     col.isTrigger = true;
                 }),
-                new Create<ToyProximityTrigger>(toy => toy.fashion = fashion)
+                new Create<ToyProximityTrigger>((toy) => toy.fashion = fashion)
             ));
 
             // Create model
             mainObject.AddChild(new GameObjectTemplate("resource_ld",
-                new Create<MeshFilter>(filter => filter.sharedMesh = mesh),
-                new Create<MeshRenderer>(render => render.sharedMaterials = materials)
+                new Create<MeshFilter>((filter) => filter.sharedMesh = mesh),
+                new Create<MeshRenderer>((render) => render.sharedMaterials = materials)
             ).SetTransform(new Vector3(0, -0.5f, 0), Vector3.zero, Vector3.one * 0.5f));
 
             mainObject.Layer = BaseObjects.layers["Actor"];

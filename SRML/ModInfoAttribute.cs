@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 
-namespace SRML {
+namespace SRML
+{
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    public class ModInfoAttribute : Attribute {
+    public class ModInfoAttribute : Attribute
+    {
         private readonly Type entryType;
         private readonly string id;
         private readonly string name;
@@ -15,7 +17,8 @@ namespace SRML {
         private readonly string[] loadBefore;
         private readonly string[] dependencies;
 
-        internal SRModLoader.ProtoMod Parse() => new SRModLoader.ProtoMod {
+        internal SRModLoader.ProtoMod Parse() => new SRModLoader.ProtoMod()
+        {
             entryType = entryType,
             id = id,
             name = name,
@@ -25,10 +28,15 @@ namespace SRML {
             url = url,
             load_after = loadAfter ?? new string[0],
             load_before = loadBefore ?? new string[0],
-            parsedDependencies = dependencies?.Select(x => {
-                var pieces = x.Split(':');
-                return pieces.Length != 2 ? throw new ArgumentException($"Malformed dependency for {id ?? "<unknown mod>"}: {x}") : new DependencyChecker.Dependency(pieces[0], pieces[1]);
-            }).ToArray() ?? Array.Empty<DependencyChecker.Dependency>()
+            parsedDependencies = dependencies?.Select(x =>
+            {
+                string[] pieces = x.Split(':');
+
+                if (pieces.Length != 2)
+                    throw new ArgumentException($"Malformed dependency for {id ?? "<unknown mod>"}: {x}");
+
+                return new DependencyChecker.Dependency(pieces[0], pieces[1]);
+            }).ToArray() ?? new DependencyChecker.Dependency[0]
         };
 
         /// <summary>
@@ -44,7 +52,8 @@ namespace SRML {
         /// <param name="loadBefore">Mods to load before this mod</param>
         /// <param name="dependencies">Mods that this mod depends on, in the format "ID:VERSION"</param>
         public ModInfoAttribute(Type entryType, string id, string name, string author, string version,
-            string description = null, string url = null, string[] loadAfter = null, string[] loadBefore = null, string[] dependencies = null) {
+            string description = null, string url = null, string[] loadAfter = null, string[] loadBefore = null, string[] dependencies = null)
+        {
             this.entryType = entryType;
             this.id = id;
             this.name = name;

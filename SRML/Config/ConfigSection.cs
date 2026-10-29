@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using IniParser;
 using IniParser.Model;
 using UnityEngine;
 
@@ -6,6 +11,7 @@ namespace SRML.Config
 {
     public class ConfigSection
     {
+        
         readonly Dictionary<string, ConfigElement> elementDict = new Dictionary<string, ConfigElement>();
 
         public IEnumerable<ConfigElement> Elements => elementDict.Values;
@@ -24,7 +30,7 @@ namespace SRML.Config
         public void AddElement(ConfigElement element)
         {
             elementDict[element.Options.Name] = element;
-            element.OnValueChanged += val => OnValueChanged?.Invoke(element.Options.Name, val);
+            element.OnValueChanged += (val) => OnValueChanged?.Invoke(element.Options.Name, val);
         }
 
         public ConfigElement this[string index] => elementDict[index];
@@ -58,5 +64,7 @@ namespace SRML.Config
                 if (!keys.AddKey(keyData)) Debug.LogWarning($"Key {element.Key} already present in section!");
             }
         }
+
+       
     }
 }

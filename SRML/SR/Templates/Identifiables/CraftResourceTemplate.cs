@@ -1,4 +1,5 @@
 ﻿using MonomiPark.SlimeRancher.Regions;
+using SRML.SR;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -101,34 +102,34 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create main object
             mainObject.AddComponents(
-                new Create<Identifiable>(ident => ident.id = ID),
-                new Create<Vacuumable>(vac => vac.size = vacSize),
-                new Create<Rigidbody>(body =>
+                new Create<Identifiable>((ident) => ident.id = ID),
+                new Create<Vacuumable>((vac) => vac.size = vacSize),
+                new Create<Rigidbody>((body) =>
                 {
                     body.drag = 0.2f;
                     body.angularDrag = 5f;
                     body.mass = 0.3f;
                     body.useGravity = true;
                 }),
-                new Create<DragFloatReactor>(drag => drag.floatDragMultiplier = 10),
-                new Create<SphereCollider>(col =>
+                new Create<DragFloatReactor>((drag) => drag.floatDragMultiplier = 10),
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = colRadius;
                 }),
                 new Create<CollisionAggregator>(null),
-                new Create<RegionMember>(rg => rg.canHibernate = true)
+                new Create<RegionMember>((rg) => rg.canHibernate = true)
             );
 
             // Create model
             mainObject.AddChild(new GameObjectTemplate("resource_ld",
-                new Create<MeshFilter>(filter => filter.sharedMesh = mesh),
-                new Create<MeshRenderer>(render => render.sharedMaterials = materials)
+                new Create<MeshFilter>((filter) => filter.sharedMesh = mesh),
+                new Create<MeshRenderer>((render) => render.sharedMaterials = materials)
             ).SetTransform(modelTrans));
 
             // Create delaunch
             mainObject.AddChild(new GameObjectTemplate("DelaunchTrigger",
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;

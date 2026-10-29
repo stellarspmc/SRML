@@ -20,8 +20,8 @@ namespace SRML.Patches
             if (EnumPatcher.TryGetRawPatch(enumType, out var patch))
             {
                 var pairs = patch.GetPairs();
-                var newValues = new List<ulong>(oldValues);
-                var newNames = new List<string>(oldNames);
+                List<ulong> newValues = new List<ulong>(oldValues);
+                List<string> newNames = new List<string>(oldNames);
 
                 foreach (var pair in pairs)
                 {

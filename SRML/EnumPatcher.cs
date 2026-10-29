@@ -128,16 +128,16 @@ namespace SRML
                 return true;
             }
 
-            if (value is IConvertible convertible)
+            if (value is IConvertible)
             {
                 if (type.IsEnum)
                 {
-                    result = Enum.ToObject(type, convertible);
+                    result = Enum.ToObject(type, value);
                     return true;
                 }
 
                 var format = NumberFormatInfo.CurrentInfo;
-                result = convertible.ToType(type, format);
+                result = (value as IConvertible).ToType(type, format);
                 return true;
             }
 
@@ -203,9 +203,9 @@ namespace SRML
             => patches.TryGetValue(enumType, out patch);
 
         internal static bool AlreadyHasName(Type enumType, string name)
-            => TryGetRawPatch(enumType, out var patch) && patch.HasName(name);
+            => TryGetRawPatch(enumType, out EnumPatch patch) && patch.HasName(name);
 
-        internal class EnumPatch 
+        internal class EnumPatch
         {
             private readonly Dictionary<ulong, HashSet<string>> values = new Dictionary<ulong, HashSet<string>>();
             internal bool signed;
@@ -216,14 +216,37 @@ namespace SRML
             public void AddAliases(ulong enumValue, IEnumerable<string> aliases)
                 => EnsureSet(enumValue).UnionWith(aliases);
 
-            private HashSet<string> EnsureSet(ulong enumValue) 
+            private HashSet<string> EnsureSet(ulong enumValue)
             {
-                if (!values.TryGetValue(enumValue, out var set)) values[enumValue] = set = new HashSet<string>();
+                if (!values.TryGetValue(enumValue, out var set))
+                    values[enumValue] = set = new HashSet<string>();
+
                 return set;
             }
 
-            public List<KeyValuePair<ulong, string>> GetPairs() => (from pair in values from value in pair.Value select new KeyValuePair<ulong, string>(pair.Key, value)).ToList();
-            public bool HasName(string name) => values.Values.Any(names => names.Contains(name));
+            public List<KeyValuePair<ulong, string>> GetPairs()
+            {
+                List<KeyValuePair<ulong, string>> pairs = new List<KeyValuePair<ulong, string>>();
+
+                foreach (KeyValuePair<ulong, HashSet<string>> pair in values)
+                {
+                    foreach (string value in pair.Value)
+                        pairs.Add(new KeyValuePair<ulong, string>(pair.Key, value));
+                }
+
+                return pairs;
+            }
+
+            public bool HasName(string name)
+            {
+                foreach (var names in values.Values)
+                {
+                    if (names.Contains(name))
+                        return true;
+                }
+
+                return false;
+            }
         }
     }
 }

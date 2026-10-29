@@ -9,8 +9,8 @@ namespace SRML.SR.SaveSystem.Data
     {
         public CompoundDataPiece(string key)
         {
-            typeId = DataType.COMPOUND;
-            data = new HashSet<DataPiece>();
+            this.typeId = DataType.COMPOUND;
+            this.data = new HashSet<DataPiece>();
             this.key = key;
         }
 
@@ -43,7 +43,7 @@ namespace SRML.SR.SaveSystem.Data
         {
             if (!_cache.TryGetValue(key, out var piece)||piece==null)
             {
-                var cachedPiece = DataList.FirstOrDefault(x => key == x.key);
+                var cachedPiece = DataList.FirstOrDefault((x) => key == x.key);
                 if (cachedPiece != null) _cache[key] = piece;
                 return cachedPiece;
             }
@@ -64,6 +64,7 @@ namespace SRML.SR.SaveSystem.Data
             }
         }
 
+        
 
         public DataPiece this[string index]
         {
@@ -135,17 +136,18 @@ namespace SRML.SR.SaveSystem.Data
 
             return build.ToString();
 
+            
         }
         void Stringify(StringBuilder builder, Action<String> adder = null)
         {
 
             if (adder == null)
             {
-                adder = x => builder.AppendLine(x);
+                adder = (x) => builder.AppendLine(x);
             }
 
             adder($"COMPOUND {key} = ");
-            Action<String> newadder = x => adder("    " + x);
+            Action<String> newadder = (x) => adder("    " + x);
             foreach (var dataPiece in DataList)
             {
                 if (dataPiece is CompoundDataPiece compoundDataPiece)

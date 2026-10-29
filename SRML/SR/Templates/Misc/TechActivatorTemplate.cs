@@ -1,4 +1,7 @@
-﻿using SRML.SR.Utils.BaseObjects;
+﻿using System.Collections.Generic;
+using SRML.Console;
+using SRML.SR.Utils.Debug;
+using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
 namespace SRML.SR.Templates.Misc
@@ -28,9 +31,9 @@ namespace SRML.SR.Templates.Misc
         {
             // Create the structure
             mainObject.AddChild(new GameObjectTemplate("techActivator",
-                new Create<MeshFilter>(filter => filter.sharedMesh = RanchObjects.techActivator),
-                new Create<MeshRenderer>(render => render.sharedMaterials = RanchObjects.techActivatorMaterials),
-                new Create<CapsuleCollider>(col =>
+                new Create<MeshFilter>((filter) => filter.sharedMesh = RanchObjects.techActivator),
+                new Create<MeshRenderer>((render) => render.sharedMaterials = RanchObjects.techActivatorMaterials),
+                new Create<CapsuleCollider>((col) =>
                 {
                     col.center = new Vector3(0, 0.8f, 0);
                     col.radius = 0.2767721f;
@@ -41,12 +44,12 @@ namespace SRML.SR.Templates.Misc
 
             // Create the trigger
             mainObject.AddChild(new GameObjectTemplate("triggerActivate",
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.5f;
                 }),
-                new Create<UIActivator>(activ =>
+                new Create<UIActivator>((activ) =>
                 {
                     activ.uiPrefab = prefabUI;
                     activ.blockInExpoPrefab = null;

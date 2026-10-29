@@ -10,7 +10,7 @@ public static class EnumExtensions
         if (SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD)
             context = GameContext.Instance;
         else
-            context = Object.FindObjectOfType<GameContext>();
+            context = GameObject.FindObjectOfType<GameContext>();
         return context;
     }
 
@@ -20,7 +20,7 @@ public static class EnumExtensions
         if (SRModLoader.CurrentLoadingStep > SRModLoader.LoadingStep.PRELOAD)
             context = SceneContext.Instance;
         else
-            context = Object.FindObjectOfType<SceneContext>();
+            context = SceneContext.FindObjectOfType<SceneContext>();
         return context;
     }
 

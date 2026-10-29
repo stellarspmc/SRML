@@ -1,5 +1,8 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SRML.SR.Patches
 {
@@ -9,7 +12,7 @@ namespace SRML.SR.Patches
     {
         public static void Postfix(MailDirector __instance, MailDirector.Mail mail)
         {
-            MailRegistry.ModdedMails.FirstOrDefault(x => mail.key == x.MailKey)?.onReadCallback?.Invoke(__instance, mail);
+            MailRegistry.ModdedMails.FirstOrDefault((x) => mail.key == x.MailKey)?.onReadCallback?.Invoke(__instance, mail);
         }
     }
 }

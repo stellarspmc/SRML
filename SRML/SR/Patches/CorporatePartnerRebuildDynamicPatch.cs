@@ -3,6 +3,7 @@ using SRML.SR.UI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
+using UnityEngine;
 
 namespace SRML.SR.Patches
 {
@@ -11,10 +12,10 @@ namespace SRML.SR.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            var instructions = new List<CodeInstruction>(instr);
+            List<CodeInstruction> instructions = new List<CodeInstruction>(instr);
 
-            var index1 = -1;
-            for (var i = 0; i < instructions.Count; i++)
+            int index1 = -1;
+            for (int i = 0; i < instructions.Count; i++)
             {
                 if (instructions[i].opcode == OpCodes.Ldc_I4_0 && instructions[i + 1].opcode == OpCodes.Stloc_S)
                 {
@@ -22,7 +23,7 @@ namespace SRML.SR.Patches
                     break;
                 }
             }
-            var index2 = instructions.IndexOf(instructions.First(x => x.opcode == OpCodes.Blt_S));
+            int index2 = instructions.IndexOf(instructions.First(x => x.opcode == OpCodes.Blt_S));
 
             if (index1 != -1 && index2 != -2)
             {
@@ -34,18 +35,18 @@ namespace SRML.SR.Patches
                     new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(CorporatePartnerRebuildDynamicPatch), "RefreshRewardsFancily"))
                 });
             }
-
+            
             return instructions;
         }
 
         public static void RefreshRewardsFancily(CorporatePartnerUI instance, int rank)
         {
-            for (var i = 0; i < EnhancedCorporatePartnerHandler.content.childCount; i++)
+            for (int i = 0; i < EnhancedCorporatePartnerHandler.content.childCount; i++)
                 EnhancedCorporatePartnerHandler.content.GetChild(i).gameObject.Destroy();
-            for (var j = 0; j < instance.ranks[rank - 1].rewardIcons.Length; j++)
+            for (int j = 0; j < instance.ranks[rank - 1].rewardIcons.Length; j++)
                 EnhancedCorporatePartnerHandler.CreateRewardEntry(instance, rank, j);
             if (!CorporatePartnerRegistry.rewardsForLevel.ContainsKey(rank)) return;
-            foreach (var entry in CorporatePartnerRegistry.rewardsForLevel[rank])
+            foreach (CorporatePartnerRegistry.RewardEntry entry in CorporatePartnerRegistry.rewardsForLevel[rank])
                 EnhancedCorporatePartnerHandler.CreateRewardEntry(instance, entry);
         }
     }

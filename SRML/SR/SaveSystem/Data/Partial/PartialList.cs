@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using SRML.Utils;
 
 namespace SRML.SR.SaveSystem.Data.Partial
@@ -17,7 +19,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
         public PartialList(Predicate<T> hoistCondition, SerializerPair<T> serializer, Func<T> emptyValueCreator=null)
         {
             this.hoistCondition = hoistCondition;
-            if (emptyValueCreator == null) emptyValueCreator = () => default;
+            if (emptyValueCreator == null) emptyValueCreator = () => default(T);
             this.emptyValueCreator = emptyValueCreator;
             this.serializer = serializer;
         }
@@ -27,7 +29,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
         public override void Pull(IList<T> data)
         {
             hoistedValues.Clear();
-            for (var i = 0; i < data.Count; i++)
+            for (int i = 0; i < data.Count; i++)
             {
                 if (hoistCondition(data[i]))
                 {
@@ -47,7 +49,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public override void Read(BinaryReader reader)
         {
-            BinaryUtils.ReadDictionary(reader,hoistedValues,x=>x.ReadInt32(),x=> (T)serializer.Deserialize(x));
+            BinaryUtils.ReadDictionary(reader,hoistedValues,(x)=>x.ReadInt32(),(x)=> (T)serializer.Deserialize(x));
         }
 
         public override void Write(BinaryWriter writer)

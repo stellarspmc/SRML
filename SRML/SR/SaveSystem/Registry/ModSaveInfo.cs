@@ -21,6 +21,7 @@ namespace SRML.SR.SaveSystem.Registry
 
         public readonly HashSet<DataRegistry> Registries = new HashSet<DataRegistry>();
 
+
         public delegate void ExtendedActorDataLoaded(ActorModel actor, GameObject obj, CompoundDataPiece data);
 
         public ExtendedActorDataLoaded onExtendedActorDataLoaded;
@@ -30,6 +31,7 @@ namespace SRML.SR.SaveSystem.Registry
             onExtendedActorDataLoaded?.Invoke(model, obj, piece);
         }
 
+        
 
         internal WorldDataPreLoadDelegate OnDataPreload;
         internal WorldDataLoadDelegate OnDataLoad;

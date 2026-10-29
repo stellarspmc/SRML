@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace SRML.SR {
-    public static class AchievementRegistry {
+namespace SRML.SR
+{
+    public static class AchievementRegistry
+    {
         internal static Dictionary<AchievementsDirector.Achievement, (AchievementsDirector.Tracker, Tier)> moddedAchievements = new Dictionary<AchievementsDirector.Achievement, (AchievementsDirector.Tracker, Tier)>();
         internal static Dictionary<Tier, Sprite> moddedTiers = new Dictionary<Tier, Sprite>();
         internal static Dictionary<AchievementsDirector.Achievement, Tier> achievementCustomTiers = new Dictionary<AchievementsDirector.Achievement, Tier>();
@@ -13,7 +15,7 @@ namespace SRML.SR {
         /// <param name="ach">The id of the achievement to register.</param>
         /// <param name="track">The tracker to track achievement progress.</param>
         /// <param name="tier">The tier the achievement goes into.</param>
-        public static void RegisterModdedAchievement(AchievementsDirector.Achievement ach, AchievementsDirector.Tracker track, Tier tier) =>
+        public static void RegisterModdedAchievement(AchievementsDirector.Achievement ach, AchievementsDirector.Tracker track, Tier tier) => 
             moddedAchievements.Add(ach, (track, tier));
 
         /// <summary>
@@ -35,7 +37,8 @@ namespace SRML.SR {
         /// <summary>
         /// Tiers for an achievement to be put into.
         /// </summary>
-        public enum Tier {
+        public enum Tier
+        {
             TIER1,
             TIER2,
             TIER3

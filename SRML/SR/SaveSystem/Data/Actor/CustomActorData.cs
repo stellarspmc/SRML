@@ -23,12 +23,12 @@ namespace SRML.SR.SaveSystem.Data.Actor
 
         public sealed override void PushCustomModel(ActorModel model)
         {
-            PushCustomModel((T) model);
+            this.PushCustomModel((T) model);
         }
 
         public sealed override void PullCustomModel(ActorModel model)
         {
-            PullCustomModel((T) model);
+            this.PullCustomModel((T) model);
         }
 
         public sealed override void Load(Stream stream, bool skipPayloadEnd)
@@ -67,7 +67,7 @@ namespace SRML.SR.SaveSystem.Data.Actor
         {
             EnumTranslator.RegisterEnumFixer((EnumTranslator translator, EnumTranslator.TranslationMode mode, VanillaActorData v) =>
             {
-                v.typeId = (int)translator.TranslateEnum(mode, (Identifiable.Id)v.typeId);
+                v.typeId = (int)translator.TranslateEnum(mode, ((Identifiable.Id)v.typeId));
                 translator.FixEnumValues(mode, v.fashions);
                 v.fashions.RemoveAll(x => x == Identifiable.Id.NONE);
                 translator.FixEnumValues(mode, v.emotions.emotionData);
@@ -75,9 +75,9 @@ namespace SRML.SR.SaveSystem.Data.Actor
             CustomChecker.RegisterCustomChecker((VanillaActorData data) =>
             {
                 if (SaveRegistry.IsCustom(data)) return CustomChecker.CustomLevel.FULL;
-                if (data.fashions.Any(x => ModdedIDRegistry.IsModdedID<Identifiable.Id>(x)))
+                if (data.fashions.Any((x) => ModdedIDRegistry.IsModdedID<Identifiable.Id>(x)))
                     return CustomChecker.CustomLevel.PARTIAL;
-                if (data.emotions.emotionData.Any(x => ModdedIDRegistry.IsModdedID(x.Key)))
+                if (data.emotions.emotionData.Any((x) => ModdedIDRegistry.IsModdedID(x.Key)))
                     return CustomChecker.CustomLevel.PARTIAL;
 
                 return CustomChecker.CustomLevel.VANILLA;

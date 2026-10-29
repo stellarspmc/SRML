@@ -1,7 +1,12 @@
-﻿using HarmonyLib;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using HarmonyLib;
 using SRML.SR.SaveSystem.Data.Ammo;
 using UnityEngine;
 using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 namespace SRML.SR.SaveSystem.Patches
 {
@@ -13,7 +18,7 @@ namespace SRML.SR.SaveSystem.Patches
         {
             if (!__result) return;
 
-            if(new StackFrame(2).GetMethod().DeclaringType==typeof(VacColorAnimator)) return;
+            if((new StackFrame(2)).GetMethod().DeclaringType==typeof(VacColorAnimator)) return;
 
             if (AmmoIdentifier.TryGetIdentifier(__instance,out var identifier))
             {

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using MonomiPark.SlimeRancher.Regions;
+using SRML.SR;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -89,14 +91,14 @@ namespace SRML.SR.Templates.Identifiables
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<MeshCollider>(col =>
+                new Create<MeshCollider>((col) =>
                 {
                     col.sharedMesh = BaseObjects.originMesh["slime_gordo_LOD1"];
                     col.convex = true;
                 }),
                 new Create<VacConeDetector>(null),
                 new Create<GordoFaceAnimator>(null),
-                new Create<GordoFaceComponents>(comp =>
+                new Create<GordoFaceComponents>((comp) =>
                 {
                     comp.blinkEyes = BaseObjects.originMaterial["eyeBlink"];
                     comp.strainEyes = BaseObjects.originMaterial["eyeScared"];
@@ -104,7 +106,7 @@ namespace SRML.SR.Templates.Identifiables
                     comp.strainMouth = BaseObjects.originMaterial["mouthStuffed"];
                     comp.happyMouth = BaseObjects.originMaterial["mouthHappy"];
                 }),
-                new Create<GordoEat>(eat =>
+                new Create<GordoEat>((eat) =>
                 {
                     eat.slimeDefinition = definition;
                     eat.targetCount = targetCount;
@@ -117,21 +119,21 @@ namespace SRML.SR.Templates.Identifiables
                     eat.burstCue = EffectObjects.cueGordoBurst;
                     eat.EatFavoriteFX = EffectObjects.fxSlimeFavEat;
                 }),
-                new Create<GordoRewards>(rew =>
+                new Create<GordoRewards>((rew) =>
                 {
                     rew.rewardPrefabs = rewards.ToArray();
                     rew.rewardOverrides = rewardOverrides.ToArray();
                     rew.slimePrefab = GameContext.Instance.LookupDirector.GetPrefab(definition.IdentifiableId);
                     rew.slimeSpawnFXPrefab = EffectObjects.fxSplat;
                 }),
-                new Create<Animator>(anim =>
+                new Create<Animator>((anim) =>
                 {
                     anim.runtimeAnimatorController = BaseObjects.originAnimators["GordoAnimator"];
                     anim.avatar = BaseObjects.originAvatars["model_slime_v3Avatar"];
                 }),
-                new Create<GordoIdentifiable>(gordo => gordo.id = ID),
-                new Create<AttachFashions>(fash => fash.gordoMode = true),
-                new Create<GordoDisplayOnMap>(gordo => gordo.markerPrefab = gordoMarker.GetComponent<MapMarker>())
+                new Create<GordoIdentifiable>((gordo) => gordo.id = ID),
+                new Create<AttachFashions>((fash) => fash.gordoMode = true),
+                new Create<GordoDisplayOnMap>((gordo) => gordo.markerPrefab = gordoMarker.GetComponent<MapMarker>())
             );
 
             mainObject
@@ -141,7 +143,7 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create eat trigger
             mainObject.AddChild(new GameObjectTemplate("EatTrigger",
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.5f;
@@ -152,7 +154,7 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create Slime Gordo
             mainObject.AddChild(new GameObjectTemplate("slime_gordo",
-                new Create<SkinnedMeshRenderer>(render =>
+                new Create<SkinnedMeshRenderer>((render) =>
                 {
                     render.sharedMesh = BaseObjects.originMesh["slime_gordo"];
                     render.sharedMaterials = materials;
@@ -167,7 +169,7 @@ namespace SRML.SR.Templates.Identifiables
         protected void SetValuesAfterBuild(GameObject obj)
         {
             // Adds the bones
-            var bones = boneStructure?.CreatePrefabCopy() ?? BaseObjects.originBones["GordoBones"].CreatePrefabCopy();
+            GameObject bones = boneStructure?.CreatePrefabCopy() ?? BaseObjects.originBones["GordoBones"].CreatePrefabCopy();
             bones.transform.parent = obj.transform;
             bones.transform.localPosition = new Vector3(0, -0.5f, 0);
             bones.SetActive(true);
@@ -181,11 +183,11 @@ namespace SRML.SR.Templates.Identifiables
             obj.GetComponent<GordoEat>().toVibrate = obj.FindChild("Vibrating").transform;
 
             // Add skinned mesh info
-            var render = obj.FindChild("slime_gordo").GetComponent<SkinnedMeshRenderer>();
+            SkinnedMeshRenderer render = obj.FindChild("slime_gordo").GetComponent<SkinnedMeshRenderer>();
             render.rootBone = bones.FindChild("bone_skin_top").transform;
 
-            var addBones = new List<Transform>();
-            foreach (var bone in bones.FindChildrenWithPartialName("bone_"))
+            List<Transform> addBones = new List<Transform>();
+            foreach (GameObject bone in bones.FindChildrenWithPartialName("bone_"))
                 addBones.Add(bone.transform);
 
             render.bones = addBones.ToArray();

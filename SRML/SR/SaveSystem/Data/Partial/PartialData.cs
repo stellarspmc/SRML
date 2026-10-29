@@ -17,18 +17,18 @@ namespace SRML.SR.SaveSystem.Data.Partial
         }
         public override void Pull(T data)
         {
-            partialDatas.ForEach(x=>x.Pull(data));
+            partialDatas.ForEach((x)=>x.Pull(data));
         }
 
         public override void Push(T data)
         {
-            partialDatas.ForEach(x => x.Push(data));
+            partialDatas.ForEach((x) => x.Push(data));
         }
 
         public override void Read(BinaryReader reader)
         {
-            var count = reader.ReadInt32();
-            for (var i = 0; i < count; i++)
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
             {
                 partialDatas[i].Read(reader);
             }
@@ -37,7 +37,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
         public override void Write(BinaryWriter writer)
         {
             writer.Write(partialDatas.Count);
-            partialDatas.ForEach(x=>x.Write(writer));
+            partialDatas.ForEach((x)=>x.Write(writer));
         }
 
     }
@@ -119,7 +119,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public static void RegisterPartialData<T>(PartialDataCreatorGenericDelegate<T> creator)
         {
-            RegisterPartialData(typeof(T),()=>creator());
+            RegisterPartialData(typeof(T),()=>(PartialData)creator());
         }
 
         public static void RegisterPartialData<T>(Type type)
@@ -134,12 +134,12 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public static bool HasPartialData(Type type,bool allowInherited = false)
         {
-            return partialDataCreators.ContainsKey(type)||(allowInherited&&partialDataCreators.Any(x=>x.Key.IsAssignableFrom(type)));
+            return partialDataCreators.ContainsKey(type)||(allowInherited&&partialDataCreators.Any((x)=>x.Key.IsAssignableFrom(type)));
         }
 
         static PartialDataCreatorDelegate GetPartialDataCreator(Type type,bool allowInherited = false)
         {
-            return HasPartialData(type,allowInherited) ? partialDataCreators.First(x=>type == x.Key || x.Key.IsAssignableFrom(type)).Value : null;
+            return HasPartialData(type,allowInherited) ? partialDataCreators.First((x)=>type == x.Key || x.Key.IsAssignableFrom(type)).Value : null;
         }
 
         public static PartialData GetPartialData(Type type,bool allowInherited = false)
@@ -165,7 +165,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public static CompoundPartialData<T> CreateCompoundPartialData<T>()
         {
-            return new CompoundPartialData<T>(partialDataCreators.Where(x=>x.Key.IsAssignableFrom(typeof(T))).Select(x=>x.Value()));
+            return new CompoundPartialData<T>(partialDataCreators.Where((x)=>x.Key.IsAssignableFrom(typeof(T))).Select((x)=>(PartialData)x.Value()));
         }
 
         static PartialData()

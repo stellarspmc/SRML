@@ -15,7 +15,7 @@ namespace SRML.Utils.Enum
 
             foreach (var type in module.GetTypes())
             {
-                var enumHolder = type.GetCustomAttribute<EnumHolderAttribute>();
+                EnumHolderAttribute enumHolder = type.GetCustomAttribute<EnumHolderAttribute>();
 
                 if (enumHolder == null)
                     continue;
@@ -30,7 +30,10 @@ namespace SRML.Utils.Enum
                         EnumPatcher.AddEnumValueWithAlternatives(field.FieldType, newVal, field.Name);
                         field.SetValue(null, newVal);
                     }
-                    else EnumPatcher.AddEnumValueWithAlternatives(field.FieldType, field.GetValue(null), field.Name);
+                    else
+                    {
+                        EnumPatcher.AddEnumValueWithAlternatives(field.FieldType, field.GetValue(null), field.Name);
+                    }
 
                     var formerNames = field.GetCustomAttributes<FormerlySerializedAsAttribute>();
 
@@ -68,7 +71,10 @@ namespace SRML.Utils.Enum
                 if (att != null)
                     categorize(value, rules(att));
             }
-            else doNotCategorizeList.Add(value);
+            else
+            {
+                doNotCategorizeList.Add(value);
+            }
         }
     }
 }

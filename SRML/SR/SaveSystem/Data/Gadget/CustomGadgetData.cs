@@ -1,9 +1,12 @@
 ﻿using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.SaveSystem.Registry;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using SRML.SR.SaveSystem.Data.Partial;
+using UnityEngine;
 using VanillaGadgetData = MonomiPark.SlimeRancher.Persist.PlacedGadgetV08;
 using VanillaDroneData = MonomiPark.SlimeRancher.Persist.DroneGadgetV01;
 namespace SRML.SR.SaveSystem.Data.Gadget
@@ -23,12 +26,12 @@ namespace SRML.SR.SaveSystem.Data.Gadget
 
         public sealed override void PushCustomModel(GadgetModel model)
         {
-            PushCustomModel((T)model);
+            this.PushCustomModel((T)model);
         }
 
         public sealed override void PullCustomModel(GadgetModel model)
         {
-            PullCustomModel((T)model);
+            this.PullCustomModel((T)model);
         }
 
         public sealed override void Load(Stream stream, bool skipPayloadEnd)

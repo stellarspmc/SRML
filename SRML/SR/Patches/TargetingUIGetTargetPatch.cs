@@ -9,14 +9,14 @@ namespace SRML.SR.Patches
     {
         public static bool Prefix(TargetingUI __instance, GameObject gameObject, ref bool __result)
         {
-            var id = Identifiable.GetId(gameObject);
+            Identifiable.Id id = Identifiable.GetId(gameObject);
             if (id == Identifiable.Id.NONE)
             {
                 __result = false;
                 return false;
             }
 
-            foreach (var kvp in TargetingRegistry.customTargetingInfo)
+            foreach ((Predicate<Identifiable.Id>, (Func<Identifiable.Id, MessageBundle, MessageBundle, string>, Func<Identifiable.Id, MessageBundle, MessageBundle, string>)) kvp in TargetingRegistry.customTargetingInfo)
             {
                 if (kvp.Item1.Invoke(id))
                 {

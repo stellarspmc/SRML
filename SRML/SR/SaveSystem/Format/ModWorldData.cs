@@ -1,7 +1,10 @@
-﻿using SRML.Utils;
+﻿using MonomiPark.SlimeRancher.Persist;
+using SRML.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using VanillaWorldData = MonomiPark.SlimeRancher.Persist.WorldV22;
 
 namespace SRML.SR.SaveSystem.Format
@@ -23,7 +26,7 @@ namespace SRML.SR.SaveSystem.Format
 
         public override void ReadData(BinaryReader reader)
         {
-            BinaryUtils.ReadDictionary(reader, econSaturations, x => (Identifiable.Id)x.ReadInt32(), x => x.ReadSingle());
+            BinaryUtils.ReadDictionary(reader, econSaturations, (x) => (Identifiable.Id)x.ReadInt32(), (x) => x.ReadSingle());
             if (Version == 0) return;
             BinaryUtils.ReadList(reader, lastOfferRancherIds,x=>x.ReadString());
             BinaryUtils.ReadList(reader, pendingOfferRancherIds, x => x.ReadString());
@@ -42,8 +45,8 @@ namespace SRML.SR.SaveSystem.Format
             {
                 if (ModdedIDRegistry.ModForID(v.Key)==mod) econSaturations.Add(v.Key, v.Value);
             }
-            pendingOfferRancherIds.AddRange(data.pendingOfferRancherIds.Where(x=>ExchangeOfferRegistry.GetModForID(x)==mod));
-            lastOfferRancherIds.AddRange(data.lastOfferRancherIds.Where(x => ExchangeOfferRegistry.GetModForID(x) == mod));
+            pendingOfferRancherIds.AddRange(data.pendingOfferRancherIds.Where((x)=>ExchangeOfferRegistry.GetModForID(x)==mod));
+            lastOfferRancherIds.AddRange(data.lastOfferRancherIds.Where((x) => ExchangeOfferRegistry.GetModForID(x) == mod));
         }
 
         public void Push(VanillaWorldData data)

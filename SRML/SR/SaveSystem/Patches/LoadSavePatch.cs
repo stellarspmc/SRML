@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using HarmonyLib;
+using SRML.Utils;
+using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Patches
 {
@@ -11,7 +15,7 @@ namespace SRML.SR.SaveSystem.Patches
     internal static class LoadSavePatch
     {
         private static Type targetType = typeof(AutoSaveDirector).GetNestedTypes(BindingFlags.NonPublic)
-            .First(x => x.Name == "<LoadSave_Coroutine>d__68");
+            .First((x) => x.Name == "<LoadSave_Coroutine>d__68");
 
         public static MethodInfo TargetMethod()
         {
@@ -33,7 +37,7 @@ namespace SRML.SR.SaveSystem.Patches
                     yield return new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(targetType, "saveName"));
                     yield return new CodeInstruction(OpCodes.Call,
                         AccessTools.Method(typeof(LoadSavePatch), "LoadModSave"));
-                }
+                }   
                 else
                 {
                     yield return v;

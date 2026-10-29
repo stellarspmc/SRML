@@ -1,8 +1,11 @@
 ﻿using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data.Partial;
 using SRML.Utils;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace SRML.SR.SaveSystem.Data.Gadget
 {
@@ -39,13 +42,13 @@ namespace SRML.SR.SaveSystem.Data.Gadget
             {
                 translator.FixEnumValues(mode, data.fashions);
             });
-
-            CustomChecker.RegisterCustomChecker<GordoV01>(x =>
+                
+            CustomChecker.RegisterCustomChecker<GordoV01>((x) =>
             {
                 if (x.fashions.Any(ModdedIDRegistry.IsModdedID)) return CustomChecker.CustomLevel.PARTIAL;
                 return CustomChecker.CustomLevel.NONE;
             });
-            RegisterPartialData(() => new PartialGordoData());
+            PartialData.RegisterPartialData(() => new PartialGordoData());
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using HarmonyLib;
+using SRML.Utils;
 
 namespace SRML.SR.SaveSystem.Patches
 {

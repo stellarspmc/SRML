@@ -125,7 +125,7 @@ namespace SRML.SR.SaveSystem.Patches
                 Predicate<KeyValuePair<K, V>> cond)
             {
                 var buffer = new Dictionary<K, V>();
-                foreach (var pair in original.Where(x => cond(x)))
+                foreach (var pair in original.Where((x) => cond(x)))
                 {
                     buffer.Add(pair.Key, pair.Value);
                 }
@@ -147,7 +147,7 @@ namespace SRML.SR.SaveSystem.Patches
             public void AddAndRemoveWhere<T>(List<T> original, Predicate<T> cond)
             {
                 var buffer = new List<T>();
-                buffer.AddRange(original.Where(x=>cond(x)));
+                buffer.AddRange(original.Where((x)=>cond(x)));
                 foreach (var v in buffer)
                 {
                     original.Remove(v);
@@ -159,7 +159,7 @@ namespace SRML.SR.SaveSystem.Patches
             public void AddAndRemoveWhereCustom<T>(List<T> original)
             {
                 var buffer = new List<T>();
-                buffer.AddRange(original.Where(x => x.GetType().IsEnum? ModdedIDRegistry.IsModdedID(x):SaveRegistry.IsCustom(x)));
+                buffer.AddRange(original.Where((x) => x.GetType().IsEnum? ModdedIDRegistry.IsModdedID(x):SaveRegistry.IsCustom(x)));
                 foreach (var v in buffer)
                 {
                     original.Remove(v);
@@ -170,7 +170,7 @@ namespace SRML.SR.SaveSystem.Patches
 
             public void AddAllBack()
             {
-                foreach (var action in addBacks)
+                foreach (Action action in addBacks)
                 {
                     action();
                 }

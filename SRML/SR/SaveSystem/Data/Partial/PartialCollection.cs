@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace SRML.SR.SaveSystem.Data.Partial
 {
@@ -17,7 +18,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
         {
             this.hoistCondition = hoistCondition;
             this.serializer = serializer;
-            forbiddenValueTester = valueFilter ?? (x => true);
+            this.forbiddenValueTester = valueFilter ?? (x => true);
         }
 
         public IList InternalList => hoistedValues;
@@ -45,7 +46,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public override void Read(BinaryReader reader)
         {
-            BinaryUtils.ReadList(reader,hoistedValues,x=>(T)serializer.Deserialize(x));
+            BinaryUtils.ReadList(reader,hoistedValues,(x)=>(T)serializer.Deserialize(x));
         }
 
         public override void Write(BinaryWriter writer)

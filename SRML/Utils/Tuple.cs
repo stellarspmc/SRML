@@ -1,4 +1,9 @@
-﻿namespace SRML.Utils
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace SRML.Utils
 {
     public class Tuple<T1,T2>
     {
@@ -27,7 +32,14 @@
             return hashCode;
         }
 
-        public static bool operator ==(Tuple<T1, T2> left, Tuple<T1, T2> right) => left.Equals(right);
-        public static bool operator !=(Tuple<T1, T2> left, Tuple<T1, T2> right) => !(left == right);
+        public static bool operator ==(Tuple<T1, T2> left, Tuple<T1, T2> right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Tuple<T1, T2> left, Tuple<T1, T2> right)
+        {
+            return !(left == right);
+        }
     }
 }

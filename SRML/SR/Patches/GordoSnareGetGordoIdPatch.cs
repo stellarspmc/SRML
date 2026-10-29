@@ -15,27 +15,27 @@ namespace SRML.SR.Patches
 
         public static bool Prefix(GordoSnare __instance, ref Identifiable.Id __result)
         {
-            var dictionary = new Dictionary<Identifiable.Id, float>(Identifiable.idComparer);
-            var normalIds = new List<Identifiable.Id>();
-            var favIds = new List<Identifiable.Id>(); // To handle cases where multiple slimes favour the same id
-            var baitId = __instance.GetPrivateField<SnareModel>("model").baitTypeId;
+            Dictionary<Identifiable.Id, float> dictionary = new Dictionary<Identifiable.Id, float>(Identifiable.idComparer);
+            List<Identifiable.Id> normalIds = new List<Identifiable.Id>();
+            List<Identifiable.Id> favIds = new List<Identifiable.Id>(); // To handle cases where multiple slimes favour the same id
+            Identifiable.Id baitId = __instance.GetPrivateField<SnareModel>("model").baitTypeId;
 
-            foreach (var gordoEntry in GameContext.Instance.LookupDirector.GordoEntries)
+            foreach (GameObject gordoEntry in GameContext.Instance.LookupDirector.GordoEntries)
             {
-                var gordo = gordoEntry.GetComponent<GordoIdentifiable>();
+                GordoIdentifiable gordo = gordoEntry.GetComponent<GordoIdentifiable>();
 
                 if (SnareRegistry.pinkLike.Contains(gordo.id) || !gordo.nativeZones.Any(HasAccessToZone))
                     continue;
 
-                var diet = gordoEntry.GetComponent<GordoEat>().slimeDefinition.Diet;
-                var list2 = new List<SlimeDiet.EatMapEntry>();
+                SlimeDiet diet = gordoEntry.GetComponent<GordoEat>().slimeDefinition.Diet;
+                List<SlimeDiet.EatMapEntry> list2 = new List<SlimeDiet.EatMapEntry>();
                 diet.AddEatMapEntries(baitId, list2);
-                var eatMapEntry = list2.FirstOrDefault();
+                SlimeDiet.EatMapEntry eatMapEntry = list2.FirstOrDefault();
 
                 if (eatMapEntry == null)
                     continue;
 
-                (var message, var ids) = eatMapEntry.isFavorite ? ("Found favorite", favIds) : ("Adding potential", normalIds);
+                (string message, List<Identifiable.Id> ids) = eatMapEntry.isFavorite ? ("Found favorite", favIds) : ("Adding potential", normalIds);
                 Log.Debug(message, "gordo", gordo.id, "hasAccess", true); // Not using flag because the base game never even logs false here
                 ids.Add(gordo.id);
             }
@@ -58,10 +58,10 @@ namespace SRML.SR.Patches
 
             float value2 = __instance.pinkSnareWeight / SnareRegistry.pinkLike.Count;
 
-            foreach (var id in SnareRegistry.pinkLike)
+            foreach (Identifiable.Id id in SnareRegistry.pinkLike)
                 dictionary.Add(id, value2);
 
-            var pink = Randoms.SHARED.Pick(SnareRegistry.pinkLike);
+            Identifiable.Id pink = Randoms.SHARED.Pick(SnareRegistry.pinkLike);
             __result = Randoms.SHARED.Pick(dictionary, pink);
             return false;
         }

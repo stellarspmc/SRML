@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace SRML.SR.Translation
 {
@@ -10,7 +13,7 @@ namespace SRML.SR.Translation
 
         public PediaEntryTranslation(PediaDirector.Id id)
         {
-            Key = id;
+            this.Key = id;
         }
 
         public string TitleKey => TITLE_PREFIX + StringKey;

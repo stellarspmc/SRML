@@ -26,7 +26,7 @@ namespace SRML.SR
         public static void RegisterId(this SlimeEat.FoodGroup foodGroup, Identifiable.Id id)
         {
             if (!SlimeEat.foodGroupIds.ContainsKey(foodGroup))
-                SlimeEat.foodGroupIds.Add(foodGroup, new[] { id });
+                SlimeEat.foodGroupIds.Add(foodGroup, new Identifiable.Id[] { id });
             else
                 SlimeEat.foodGroupIds[foodGroup] = SlimeEat.foodGroupIds[foodGroup].AddToArray(id);
 
@@ -61,7 +61,7 @@ namespace SRML.SR
         /// <param name="idRange">The <see cref="Identifiable.Id"/>s to be added.</param>
         public static void RegisterIdRangeToFoodGroup(this ICollection<Identifiable.Id> idRange)
         {
-            foreach (Identifiable.Id id in idRange)
+            foreach (Identifiable.Id id in idRange) 
                 id.RegisterToFoodGroup();
         }
 
@@ -71,7 +71,7 @@ namespace SRML.SR
         /// <param name="idRange">The <see cref="Identifiable.Id"/>s to be added.</param>
         public static void RegisterIdRangeToFoodGroup(this Identifiable.Id[] idRange)
         {
-            foreach (Identifiable.Id id in idRange)
+            foreach (Identifiable.Id id in idRange) 
                 id.RegisterToFoodGroup();
         }
 
@@ -80,7 +80,7 @@ namespace SRML.SR
         /// </summary>
         /// <param name="foodGroup">The <see cref="SlimeEat.FoodGroup"/> to be removed from.</param>
         /// <param name="id">The <see cref="Identifiable.Id"/> to be removed.</param>
-        public static void UnregisterId(this SlimeEat.FoodGroup foodGroup, Identifiable.Id id) =>
+        public static void UnregisterId(this SlimeEat.FoodGroup foodGroup, Identifiable.Id id) => 
             SlimeEat.foodGroupIds[foodGroup] = SlimeEat.foodGroupIds[foodGroup].Where(x => x != id).ToArray();
 
         /// <summary>

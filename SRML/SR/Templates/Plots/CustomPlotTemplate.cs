@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using SRML.Console;
+using SRML.SR.Utils.Debug;
 using SRML.SR.Templates.Misc;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
@@ -81,12 +83,12 @@ namespace SRML.SR.Templates.Plots
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<LandPlot>(plot => plot.typeId = ID),
+                new Create<LandPlot>((plot) => plot.typeId = ID),
                 new Create<Recolorizer>(null)
             );
 
             // Add Attachments
-            foreach (var attach in attachments)
+            foreach (IModPrefab attach in attachments)
             {
                 if (attach is IPlotUpgradeTemplate upgrade)
                 {
@@ -104,16 +106,16 @@ namespace SRML.SR.Templates.Plots
             mainObject.AddChild(new PlotFrameTemplate("Frame").AsTemplate());
 
             mainObject.AddChild(new GameObjectTemplate("Dirt",
-                new Create<MeshFilter>(filter => filter.sharedMesh = RanchObjects.dirtMesh),
-                new Create<MeshRenderer>(render => render.sharedMaterials = RanchObjects.dirtMaterials)
+                new Create<MeshFilter>((filter) => filter.sharedMesh = RanchObjects.dirtMesh),
+                new Create<MeshRenderer>((render) => render.sharedMaterials = RanchObjects.dirtMaterials)
             ).SetTransform(new Vector3(4.8f, 0, -4.8f), Vector3.zero, Vector3.one)
             .AddChild(new GameObjectTemplate("rocks",
-                new Create<MeshFilter>(filter => filter.sharedMesh = RanchObjects.rocksMesh),
-                new Create<MeshRenderer>(render => render.sharedMaterials = RanchObjects.rocksMaterials)
+                new Create<MeshFilter>((filter) => filter.sharedMesh = RanchObjects.rocksMesh),
+                new Create<MeshRenderer>((render) => render.sharedMaterials = RanchObjects.rocksMaterials)
             ))
             .AddChild(new GameObjectTemplate("plane",
-                new Create<MeshFilter>(filter => filter.sharedMesh = RanchObjects.plotPlane),
-                new Create<MeshRenderer>(render => render.sharedMaterials = RanchObjects.plotPlaneMaterials)
+                new Create<MeshFilter>((filter) => filter.sharedMesh = RanchObjects.plotPlane),
+                new Create<MeshRenderer>((render) => render.sharedMaterials = RanchObjects.plotPlaneMaterials)
             ).SetTransform(new Vector3(-4.8f, 0, 4.8f), Vector3.right * 90, Vector3.one * 9f)
             ));
 

@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using SRML.SR.SaveSystem.Data;
+using SRML.SR.SaveSystem.Data.Ammo;
 using SRML.SR.SaveSystem.Data.Appearances;
 using SRML.SR.SaveSystem.Data.Partial;
+using SRML.Utils;
 using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Format
 {
     class ModdedSaveData
     {
+
         public const int DATA_VERSION = 4;
         public int version;
         internal static int LATEST_READ_VERSION;
@@ -28,6 +32,7 @@ namespace SRML.SR.SaveSystem.Format
         {
             version = reader.ReadInt32();
             LATEST_READ_VERSION = version;
+
         }
 
         public void WriteHeader(BinaryWriter writer)
@@ -46,21 +51,21 @@ namespace SRML.SR.SaveSystem.Format
         {
             ammoDataEntries.Clear();
 
-            var count = reader.ReadInt32();
+            int count = reader.ReadInt32();
 
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 var newEntry = new IdentifiableAmmoData();
                 newEntry.Read(reader);
 
                 ammoDataEntries.Add(newEntry);
             }
-
+            
             segments.Clear();
             count = reader.ReadInt32();
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                var start = reader.BaseStream.Position;
+                long start = reader.BaseStream.Position;
                 var mod = new ModDataSegment();
                 try
                 {
@@ -82,7 +87,7 @@ namespace SRML.SR.SaveSystem.Format
                 {
                     partialData.Clear();
                     count = reader.ReadInt32();
-                    for (var i = 0; i < count; i++)
+                    for (int i = 0; i < count; i++)
                     {
                         var id = DataIdentifier.Read(reader);
                         var dataType = DataIdentifier.IdentifierTypeToData[id.Type];
@@ -96,6 +101,7 @@ namespace SRML.SR.SaveSystem.Format
                     if (version >= 3) appearancesData.Read(reader);
                 }
             }
+          
         }
 
         public void WriteData(BinaryWriter writer)
@@ -139,7 +145,7 @@ namespace SRML.SR.SaveSystem.Format
 
         public ModDataSegment GetSegmentForMod(SRMod mod)
         {
-            if (!(segments.FirstOrDefault(x => x.modid == mod.ModInfo.Id) is ModDataSegment seg))
+            if (!(segments.FirstOrDefault((x) => x.modid == mod.ModInfo.Id) is ModDataSegment seg))
             {
                 var segment = new ModDataSegment();
                 segment.modid = mod.ModInfo.Id;
@@ -173,6 +179,7 @@ namespace SRML.SR.SaveSystem.Format
             {
                 v.FixAllValues(enumTranslator,mode);
             }
+            
         }
     }
 }

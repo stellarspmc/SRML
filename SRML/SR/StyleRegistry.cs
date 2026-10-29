@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SRML.SR
@@ -12,14 +14,14 @@ namespace SRML.SR
         {
             SRCallbacks.OnGameContextReady += () =>
             {
-                GameContext.Instance.DLCDirector.onPackageInstalled += s =>
+                GameContext.Instance.DLCDirector.onPackageInstalled += (s =>
                 {
                     if (s == DLCPackage.Id.SECRET_STYLE)
                     {
-                        foreach (var ss in secretStyles.Keys)
+                        foreach (SecretStyle ss in secretStyles.Keys)
                             ss.SlimeDefinition.RegisterDynamicAppearance(ss.ExoticAppearance);
                     }
-                };
+                });
             };
         }
 
@@ -38,8 +40,8 @@ namespace SRML.SR
         /// <param name="exoticAppearance">Secret style to register</param>
         public static void RegisterSecretStyle(SlimeDefinition definition, SlimeAppearance exoticAppearance)
         {
-            var ss = new SecretStyle(definition, exoticAppearance);
-            var mod = SRMod.GetCurrentMod();
+            SecretStyle ss = new SecretStyle(definition, exoticAppearance);
+            SRMod mod = SRMod.GetCurrentMod();
             if (secretStyles.ContainsKey(ss))
                 throw new Exception($"{definition.IdentifiableId} already has a secret style registered by {secretStyles[ss].ModInfo.Id}");
             secretStyles[ss] = mod;
@@ -66,7 +68,7 @@ namespace SRML.SR
             public override bool Equals(object obj)
             {
                 if (obj is SecretStyle ss)
-                    return Equals(ss);
+                    return this.Equals(ss);
                 return base.Equals(obj);
             }
 
@@ -74,7 +76,7 @@ namespace SRML.SR
 
             public override string ToString()
             {
-                var stringBuilder = new StringBuilder();
+                StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.Append('[');
                 if (SlimeDefinition != null)
                     stringBuilder.Append(SlimeDefinition.ToString());
@@ -87,7 +89,7 @@ namespace SRML.SR
                 return stringBuilder.ToString();
             }
 
-            public bool Equals(SecretStyle ss) => SlimeDefinition == ss.SlimeDefinition;
+            public bool Equals(SecretStyle ss) => this.SlimeDefinition == ss.SlimeDefinition;
 
             public SecretStyle(SlimeDefinition definition, SlimeAppearance exoticAppearance)
             {

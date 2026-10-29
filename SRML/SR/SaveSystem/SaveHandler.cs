@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using MonomiPark.SlimeRancher.DataModel;
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data;
+using SRML.SR.SaveSystem.Data.Actor;
 using SRML.SR.SaveSystem.Data.Ammo;
 using SRML.SR.SaveSystem.Data.Gadget;
 using SRML.SR.SaveSystem.Data.Partial;
 using SRML.SR.SaveSystem.Format;
 using SRML.SR.SaveSystem.Utils;
+using SRML.Utils;
 using UnityEngine;
 using VanillaActorData = MonomiPark.SlimeRancher.Persist.ActorDataV09;
 using VanillaGadgetData = MonomiPark.SlimeRancher.Persist.PlacedGadgetV08;
@@ -53,6 +57,7 @@ namespace SRML.SR.SaveSystem
             {
                 Check(g, (v, partialdata) =>
                     data.partialData.Add(new DataIdentifier() { longID = v.actorId, Type = IdentifierType.ACTOR }, partialdata));
+
             }
 
             foreach (var g in game.world.placedGadgets)
@@ -95,7 +100,7 @@ namespace SRML.SR.SaveSystem
         {
             foreach (var ammo in AmmoDataUtils.GetAllAmmoData(game))
             {
-                var modsInThis = new HashSet<SRMod>(ammo.Select(x => ModdedIDRegistry.IsModdedID(x.id) ? ModdedIDRegistry.ModForID(x.id) : null));
+                var modsInThis = new HashSet<SRMod>(ammo.Select((x) => ModdedIDRegistry.IsModdedID(x.id) ? ModdedIDRegistry.ModForID(x.id) : null));
                 var belongingMod = AmmoIdentifier.TryGetIdentifier(ammo, game, out var id) ? AmmoIdentifier.GetModForIdentifier(id) : null;
                 modsInThis.Add(belongingMod);
                 modsInThis.Remove(null);
@@ -106,7 +111,7 @@ namespace SRML.SR.SaveSystem
                     {
                         var segment = data.GetSegmentForMod(mod);
                         segment.customAmmo[identifier] =
-                            AmmoDataUtils.RipOutWhere(ammo, x => mod==belongingMod?ModdedIDRegistry.ModForID(x.id)==null:ModdedIDRegistry.ModForID(x.id) == mod, false);
+                            AmmoDataUtils.RipOutWhere(ammo, (x) => mod==belongingMod?ModdedIDRegistry.ModForID(x.id)==null:ModdedIDRegistry.ModForID(x.id) == mod, false);
                     }
                     else
                     {
@@ -120,12 +125,13 @@ namespace SRML.SR.SaveSystem
         {
             foreach (var mod in ModPlayerData.FindAllModsWithData(game.player))
             {
+
                 var segment = data.GetSegmentForMod(mod);
 
                 segment.playerData.Pull(game.player, mod);
             }
 
-            var buf = new PediaDataBuffer(game.pedia);
+            PediaDataBuffer buf = new PediaDataBuffer(game.pedia);
             foreach (var mod in ModPediaData.FindAllModsWithData(buf))
             {
                 var segment = data.GetSegmentForMod(mod);
@@ -141,7 +147,7 @@ namespace SRML.SR.SaveSystem
 
         private static void PullFullData(ModdedSaveData data, Game game)
         {
-            foreach (var actor in game.actors.Where(x => SaveRegistry.IsCustom(x)))
+            foreach (var actor in game.actors.Where((x) => SaveRegistry.IsCustom(x)))
             {
                 var segment = data.GetSegmentForMod(SaveRegistry.ModForData(actor));
                 segment.identifiableData.Add(new IdentifiedData()
@@ -150,6 +156,7 @@ namespace SRML.SR.SaveSystem
                     dataID = new DataIdentifier() { longID = actor.actorId, stringID = "", Type = IdentifierType.ACTOR }
                 });
             }
+
 
             foreach(var plot in game.ranch.plots.Where(x => ModdedStringRegistry.IsValidString(x.id) && (SaveRegistry.IsCustom(x) || ModdedStringRegistry.IsModdedString(x.id))))
             {
@@ -174,9 +181,10 @@ namespace SRML.SR.SaveSystem
                 }
             }
 
-            GetStringIndexedModdedData(game.world.placedGadgets, gadget => new DataIdentifier() { longID = 0, stringID = gadget.Key, Type = IdentifierType.GADGET });
-            GetStringIndexedModdedData(game.world.gordos, gordo => new DataIdentifier() { longID = 0, stringID = gordo.Key, Type = IdentifierType.GORDO });
-            GetStringIndexedModdedData(game.world.treasurePods, pod => new DataIdentifier() { longID = 0, stringID = pod.Key, Type = IdentifierType.TREASUREPOD });
+
+            GetStringIndexedModdedData(game.world.placedGadgets, (gadget) => new DataIdentifier() { longID = 0, stringID = gadget.Key, Type = IdentifierType.GADGET }); 
+            GetStringIndexedModdedData(game.world.gordos, (gordo) => new DataIdentifier() { longID = 0, stringID = gordo.Key, Type = IdentifierType.GORDO });
+            GetStringIndexedModdedData(game.world.treasurePods, (pod) => new DataIdentifier() { longID = 0, stringID = pod.Key, Type = IdentifierType.TREASUREPOD });
 
             foreach (var v in game.world.offers.Where(x=>ModdedIDRegistry.IsModdedID(x.Key)||ExchangeOfferRegistry.IsCustom(x.Value)))
             {
@@ -194,8 +202,11 @@ namespace SRML.SR.SaveSystem
         public static void PushAllModdedData(ModdedSaveData data, Game game)
         {
 
+
+            
             ExtendedData.Pull(data);
             PushAllSegmentData(data, game);
+
 
             PersistentAmmoManager.Pull(data);
             PushAllPartialData(data, game);
@@ -268,13 +279,13 @@ namespace SRML.SR.SaveSystem
                 switch (partial.Key.Type)
                 {
                     case IdentifierType.ACTOR:
-                        if(game.actors.FirstOrDefault(x=>x.actorId==partial.Key.longID) is VanillaActorData dat) partial.Value.Push(dat);
+                        if(game.actors.FirstOrDefault((x)=>x.actorId==partial.Key.longID) is VanillaActorData dat) partial.Value.Push(dat);
                         break;
                     case IdentifierType.GADGET:
                         if (game.world.placedGadgets.ContainsKey(partial.Key.stringID)) partial.Value.Push(game.world.placedGadgets[partial.Key.stringID]);
                         break;
-                    case IdentifierType.LANDPLOT:
-                        if(game.ranch.plots.FirstOrDefault(x=>x.id==partial.Key.stringID) is VanillaPlotData plot) partial.Value.Push(plot);
+                    case IdentifierType.LANDPLOT:       
+                        if(game.ranch.plots.FirstOrDefault((x)=>x.id==partial.Key.stringID) is VanillaPlotData plot) partial.Value.Push(plot);
                         break;
                     case IdentifierType.GORDO:
                         if (game.world.gordos.TryGetValue(partial.Key.stringID,out var gordo)) partial.Value.Push(gordo);
@@ -306,7 +317,7 @@ namespace SRML.SR.SaveSystem
         }
 
         public static void LoadModdedSave(AutoSaveDirector director, string savename)
-        {
+        {   
             var storageprovider = director.StorageProvider as FileStorageProvider;
             if (storageprovider == null) return;
             var modpath = GetModdedPath(storageprovider, savename);

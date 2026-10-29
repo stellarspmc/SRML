@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+using System.IO;
 using static SlimeAppearance;
 
 namespace SRML.SR.Utils
@@ -64,9 +66,9 @@ namespace SRML.SR.Utils
 
         public static List<SlimeAppearanceApplicator.BoneMapping> GetMaps(GameObject obj)
         {
-            var maps = new List<SlimeAppearanceApplicator.BoneMapping>();
+            List<SlimeAppearanceApplicator.BoneMapping> maps = new List<SlimeAppearanceApplicator.BoneMapping>();
 
-            foreach (var bone in bones.Keys)
+            foreach (SlimeBone bone in bones.Keys)
             {
                 maps.Add(new SlimeAppearanceApplicator.BoneMapping()
                 {

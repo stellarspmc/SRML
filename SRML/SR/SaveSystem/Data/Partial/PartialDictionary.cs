@@ -2,7 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using SRML.Utils;
+using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Data.Partial
 {
@@ -16,14 +19,15 @@ namespace SRML.SR.SaveSystem.Data.Partial
         private SerializerPair<K> keySerializer;
         private SerializerPair<V> valueSerializer;
 
+  
 
         public PartialDictionary(Predicate<KeyValuePair<K,V>> hoistPredicate,SerializerPair<K> keySerializer,SerializerPair<V> valueSerializer,Func<KeyValuePair<K,V>,KeyValuePair<K,V>?> filler=null)
         {
             this.hoistPredicate = hoistPredicate;
             this.keySerializer = keySerializer;
             this.valueSerializer = valueSerializer;
-            if (filler == null) filler = x => null;
-            hoistFiller = filler;
+            if (filler == null) filler = (x) => null;
+            this.hoistFiller = filler;
         }
 
         public IDictionary InternalDictionary => hoistedValues;
@@ -49,6 +53,7 @@ namespace SRML.SR.SaveSystem.Data.Partial
 
         public override void Push(IDictionary<K, V> data)
         {
+
             foreach(var v in hoistedValues) data[v.Key]=v.Value;
         }
 

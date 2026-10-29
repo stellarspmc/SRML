@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using UnityEngine;
 using System.Text.RegularExpressions;
 
 namespace SRML.Console
@@ -20,12 +21,12 @@ namespace SRML.Console
 			if (!File.Exists(bindFile))
 				return;
 
-			foreach (var line in File.ReadAllLines(bindFile))
+			foreach (string line in File.ReadAllLines(bindFile))
 			{
 				if (!line.Contains(":"))
 					continue;
 
-				var split = line.Split(':');
+				string[] split = line.Split(':');
 				Console.RegisterButton("user." + split[0], new ConsoleButton("U: " + split[1], split[2]));
 			}
 		}
@@ -57,7 +58,7 @@ namespace SRML.Console
 		{
 			if (!Console.cmdButtons.ContainsKey("user." + id))
 				return false;
-
+				
 			Console.cmdButtons.Remove("user." + id);
 			File.WriteAllText(bindFile, Regex.Replace(File.ReadAllText(bindFile), $@"{id}:.+\n", ""));
 			return true;
@@ -68,8 +69,8 @@ namespace SRML.Console
 		/// </summary>
 		public static void RemoveAll()
 		{
-			var lines = File.ReadAllLines(bindFile);
-			foreach (var line in lines)
+			string[] lines = File.ReadAllLines(bindFile);
+			foreach (string line in lines)
 			{
 				if (!line.Contains(":"))
 					continue;
@@ -83,9 +84,9 @@ namespace SRML.Console
 		/// </summary>
 		public static List<string> GetAllBinds()
 		{
-			var result = new List<string>();
+			List<string> result = new List<string>();
 
-			foreach (var line in File.ReadAllLines(bindFile))
+			foreach (string line in File.ReadAllLines(bindFile))
 			{
 				if (!line.Contains(":"))
 					continue;

@@ -13,8 +13,8 @@ namespace SRML.SR.SaveSystem
 
         public PersistentAmmo(AmmoIdentifier identifier, PersistentAmmoModel model)
         {
-            Identifier = identifier;
-            DataModel = model;
+            this.Identifier = identifier;
+            this.DataModel = model;
         }
 
         public void Sync(bool log = false)
@@ -30,7 +30,7 @@ namespace SRML.SR.SaveSystem
                 Sync();
                 return;
             }
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 DataModel.PopDataForSlot(slot);
             }

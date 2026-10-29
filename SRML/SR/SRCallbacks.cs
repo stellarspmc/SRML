@@ -1,10 +1,20 @@
 ﻿using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
-namespace SRML.SR {
-    public static class SRCallbacks {
-        static SRCallbacks() => OnMainMenuLoaded += ModMenuUIHandler.OnMainMenuLoaded;
+namespace SRML.SR
+{
+    public static class SRCallbacks
+    {
+
+        static SRCallbacks()
+        {
+            OnMainMenuLoaded += ModMenuUIHandler.OnMainMenuLoaded;
+        }
 
         public delegate void OnSaveGameLoadedDelegate(SceneContext t);
         public delegate void OnMainMenuLoadedDelegate(MainMenuUI mainMenu);
@@ -22,7 +32,7 @@ namespace SRML.SR {
         public delegate void OnZoneEnteredDelegate(ZoneDirector.Zone zone, PlayerState playerState);
         public delegate void OnCorporateLevelBoughtDelegate(int level);
         internal delegate void OnGameContextReadyDelegate();
-
+            
         public static event OnSaveGameLoadedDelegate OnSaveGameLoaded;
         public static event OnSaveGameLoadedDelegate PreSaveGameLoaded;
         public static event OnSaveGameLoadedDelegate PreSaveGameLoad;

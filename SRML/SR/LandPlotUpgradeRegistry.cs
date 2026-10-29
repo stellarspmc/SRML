@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace SRML.SR
@@ -18,12 +19,12 @@ namespace SRML.SR
             ModdedIDRegistry.RegisterIDRegistry(moddedUpgrades);
             PurchasableUIRegistry.RegisterManipulator((LandPlotUI ui, ref PurchaseUI.Purchasable[] purchasables) =>
             {
-                var list = purchasables.ToList();
-                var purchasable1 = list.FirstOrDefault(match => match.nameKey == DemolishKey);
+                List<PurchaseUI.Purchasable> list = purchasables.ToList();
+                PurchaseUI.Purchasable purchasable1 = list.FirstOrDefault(match => match.nameKey == DemolishKey);
                 if (purchasable1 == null)
                     return;
                 list.Remove(purchasable1);
-                var purchasable2 = list.FirstOrDefault(match => match.nameKey == ClearCropKey);
+                PurchaseUI.Purchasable purchasable2 = list.FirstOrDefault(match => match.nameKey == ClearCropKey);
                 if (purchasable2 != null)
                 {
                     list.Remove(purchasable2);
@@ -57,8 +58,8 @@ namespace SRML.SR
             PurchasableUIRegistry.RegisterPurchasable((PurchasableUIRegistry.PurchasableCreatorDelegateGeneric<T>)(x =>
             new PurchaseUI.Purchasable(entry.NameKey, entry.icon, entry.mainImg, entry.DescKey, entry.cost, entry.landplotPediaId,
                 () => x.Upgrade(entry.upgrade, entry.cost), entry.isUnlocked != null ? () => entry.isUnlocked(x.activator) : (Func<bool>)(() => true),
-                entry.isAvailable != null ? () => entry.isAvailable(x.activator) : (Func<bool>)(() => !x.activator.HasUpgrade(entry.upgrade)),
-                warning: entry.warning ?? null, requireHoldToPurchase: entry.holdtopurchase)));
+                entry.isAvailable != null ? () => entry.isAvailable(x.activator) : (System.Func<bool>)(() => !x.activator.HasUpgrade(entry.upgrade)),
+                warning: (entry.warning ?? null), requireHoldToPurchase: entry.holdtopurchase)));
 
         /// <summary>
         /// Registers a <see cref="PlotUpgrader"/> to a land plot.
@@ -68,7 +69,7 @@ namespace SRML.SR
         /// <exception cref="ArgumentException">Throws if the <see cref="PlotUpgrader"/> is already registered.</exception>
         public static void RegisterPlotUpgrader<T>(LandPlot.Id plot) where T : PlotUpgrader
         {
-            if (moddedUpgraders.Exists(x => x.Item1 == typeof(T) && x.Item2 == plot))
+            if (moddedUpgraders.Exists((x) => x.Item1 == typeof(T) && x.Item2 == plot))
                 throw new ArgumentException($"Type \'{typeof(T).FullName}\' is already registered as a plot upgrader for {plot}");
             moddedUpgraders.Add((typeof(T), plot));
             if (SRModLoader.CurrentLoadingStep == SRModLoader.LoadingStep.PRELOAD)
@@ -91,8 +92,8 @@ namespace SRML.SR
             public Sprite mainImg;
             public int cost;
             public PediaDirector.Id landplotPediaId;
-            public Func<LandPlot, bool> isUnlocked;
-            public Func<LandPlot, bool> isAvailable;
+            public System.Func<LandPlot, bool> isUnlocked;
+            public System.Func<LandPlot, bool> isAvailable;
             public string warning;
             public bool holdtopurchase;
             private string landplotName;

@@ -1,4 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using MonomiPark.SlimeRancher.Persist;
 using SRML.SR.SaveSystem.Data.Partial;
 using SRML.Utils;
 using VanillaDroneData = MonomiPark.SlimeRancher.Persist.DroneGadgetV01;

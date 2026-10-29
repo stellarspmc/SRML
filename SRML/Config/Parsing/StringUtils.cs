@@ -1,11 +1,16 @@
-﻿namespace SRML.Config.Parsing
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace SRML.Config.Parsing
 {
     static class StringUtils
     {
         internal static string ToQuotedString(string str)
         {
             if (str == null) str = "";
-            var newStr = "";
+            string newStr = "";
             newStr += '\"';
             foreach (var ch in str)
             {
@@ -19,9 +24,9 @@
         internal static string FromQuotedString(string str)
         {
             if (str == null) str = "";
-            var newStr = "";
+            string newStr = "";
             str = str.Trim(' ', '\"');
-            var isescaped = false;
+            bool isescaped = false;
             foreach (var v in str)
             {
                 if (!isescaped && v == '\\') isescaped = true;

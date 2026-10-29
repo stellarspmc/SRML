@@ -1,4 +1,6 @@
-﻿using MonomiPark.SlimeRancher.Regions;
+﻿using System.Collections.Generic;
+using MonomiPark.SlimeRancher.Regions;
+using SRML.SR;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -72,23 +74,23 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create main object
             mainObject.AddComponents(
-                new Create<Identifiable>(ident => ident.id = ID),
-                new Create<Vacuumable>(vac => vac.size = vacSize),
-                new Create<Rigidbody>(body =>
+                new Create<Identifiable>((ident) => ident.id = ID),
+                new Create<Vacuumable>((vac) => vac.size = vacSize),
+                new Create<Rigidbody>((body) =>
                 {
                     body.drag = 0.2f;
                     body.angularDrag = 0.05f;
                     body.mass = 1f;
                     body.useGravity = true;
                 }),
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 1f;
                 }),
                 new Create<CollisionAggregator>(null),
-                new Create<RegionMember>(rg => rg.canHibernate = true),
-                new Create<DestroyOnTouching>(dest =>
+                new Create<RegionMember>((rg) => rg.canHibernate = true),
+                new Create<DestroyOnTouching>((dest) =>
                 {
                     dest.hoursOfContactAllowed = 0;
                     dest.wateringRadius = 4;
@@ -103,14 +105,14 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create sphere
             mainObject.AddChild(new GameObjectTemplate("Sphere",
-                new Create<MeshFilter>(filter => filter.sharedMesh = BaseObjects.originMesh["slimeglop"]),
-                new Create<MeshRenderer>(render => render.sharedMaterials = materials)
+                new Create<MeshFilter>((filter) => filter.sharedMesh = BaseObjects.originMesh["slimeglop"]),
+                new Create<MeshRenderer>((render) => render.sharedMaterials = materials)
             ).SetTransform(Vector3.zero, Vector3.zero, Vector3.one * 1.5f)
             .AddAfterChildren(AddEffects));
 
             // Create delaunch
             mainObject.AddChild(new GameObjectTemplate("DelaunchTrigger",
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;
@@ -128,49 +130,49 @@ namespace SRML.SR.Templates.Identifiables
         {
             if (color != Color.clear)
             {
-                var mat = new Material(BaseObjects.originMaterial["Depth Water Ball"]);
-                var tex = new Texture2D(1, 1);
+                Material mat = new Material(BaseObjects.originMaterial["Depth Water Ball"]);
+                Texture2D tex = new Texture2D(1, 1);
                 tex.SetPixel(0, 0, color);
 
                 mat.SetTexture("_ColorRamp", tex);
 
                 materials = mat.Group();
 
-                var inFX = EffectObjects.fxWaterAcquire.CreatePrefabCopy();
+                GameObject inFX = EffectObjects.fxWaterAcquire.CreatePrefabCopy();
                 inFX.name = inFX.name.Replace("(Clone)", "." + mainObject.Name);
-                var part = inFX.GetComponent<ParticleSystem>();
+                ParticleSystem part = inFX.GetComponent<ParticleSystem>();
                 if (part != null)
                 {
-                    var main = part.main;
+                    ParticleSystem.MainModule main = part.main;
                     main.startColor = color;
                 }
 
-                var render = inFX.FindChild("Water Glops").GetComponent<ParticleSystemRenderer>();
+                ParticleSystemRenderer render = inFX.FindChild("Water Glops").GetComponent<ParticleSystemRenderer>();
                 if (render != null)
                 {
                     render.sharedMaterials = materials;
                 }
 
-                foreach (var childPart in inFX.GetComponentsInChildren<ParticleSystem>())
+                foreach (ParticleSystem childPart in inFX.GetComponentsInChildren<ParticleSystem>())
                 {
-                    var main = childPart.main;
+                    ParticleSystem.MainModule main = childPart.main;
                     main.startColor = color;
                 }
 
 
 
-                var vacFailFX = EffectObjects.fxWaterVacFail.CreatePrefabCopy();
+                GameObject vacFailFX = EffectObjects.fxWaterVacFail.CreatePrefabCopy();
                 vacFailFX.name = vacFailFX.name.Replace("(Clone)", "." + mainObject.Name);
                 part = vacFailFX.GetComponent<ParticleSystem>();
                 if (part != null)
                 {
-                    var main = part.main;
+                    ParticleSystem.MainModule main = part.main;
                     main.startColor = color;
                 }
 
-                foreach (var childPart in vacFailFX.GetComponentsInChildren<ParticleSystem>())
+                foreach (ParticleSystem childPart in vacFailFX.GetComponentsInChildren<ParticleSystem>())
                 {
-                    var main = childPart.main;
+                    ParticleSystem.MainModule main = childPart.main;
                     main.startColor = color;
                 }
 
@@ -179,7 +181,7 @@ namespace SRML.SR.Templates.Identifiables
                 part = destroyFX.GetComponent<ParticleSystem>();
                 if (part != null)
                 {
-                    var main = part.main;
+                    ParticleSystem.MainModule main = part.main;
                     main.startColor = color;
                 }
 
@@ -189,9 +191,9 @@ namespace SRML.SR.Templates.Identifiables
                     render.sharedMaterials = materials;
                 }
 
-                foreach (var childPart in destroyFX.GetComponentsInChildren<ParticleSystem>())
+                foreach (ParticleSystem childPart in destroyFX.GetComponentsInChildren<ParticleSystem>())
                 {
-                    var main = childPart.main;
+                    ParticleSystem.MainModule main = childPart.main;
                     main.startColor = color;
                 }
 
@@ -216,8 +218,8 @@ namespace SRML.SR.Templates.Identifiables
 
         protected void AddEffects(GameObject obj)
         {
-            var fx1 = BaseObjects.originFXs["FX Sprinkler 1"].CreatePrefabCopy();
-            var fx2 = BaseObjects.originFXs["FX Water Glops"].CreatePrefabCopy();
+            GameObject fx1 = BaseObjects.originFXs["FX Sprinkler 1"].CreatePrefabCopy();
+            GameObject fx2 = BaseObjects.originFXs["FX Water Glops"].CreatePrefabCopy();
 
             fx1.transform.parent = obj.transform;
             fx2.transform.parent = obj.transform;
@@ -227,35 +229,35 @@ namespace SRML.SR.Templates.Identifiables
 
             if (color != Color.clear)
             {
-                var part = fx1.GetComponent<ParticleSystem>();
+                ParticleSystem part = fx1.GetComponent<ParticleSystem>();
                 if (part != null)
                 {
-                    var main = part.main;
+                    ParticleSystem.MainModule main = part.main;
                     main.startColor = color;
                 }
 
-                foreach (var childPart in fx1.GetComponentsInChildren<ParticleSystem>())
+                foreach (ParticleSystem childPart in fx1.GetComponentsInChildren<ParticleSystem>())
                 {
-                    var main = childPart.main;
+                    ParticleSystem.MainModule main = childPart.main;
                     main.startColor = color;
                 }
 
                 part = fx2.GetComponent<ParticleSystem>();
                 if (part != null)
                 {
-                    var main = part.main;
+                    ParticleSystem.MainModule main = part.main;
                     main.startColor = color;
                 }
 
-                var render = fx2.GetComponent<ParticleSystemRenderer>();
+                ParticleSystemRenderer render = fx2.GetComponent<ParticleSystemRenderer>();
                 if (render != null)
                 {
                     render.sharedMaterials = materials;
                 }
 
-                foreach (var childPart in fx2.GetComponentsInChildren<ParticleSystem>())
+                foreach (ParticleSystem childPart in fx2.GetComponentsInChildren<ParticleSystem>())
                 {
-                    var main = childPart.main;
+                    ParticleSystem.MainModule main = childPart.main;
                     main.startColor = color;
                 }
             }

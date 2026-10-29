@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using UnityEngine;
 using static SRML.SR.PediaRegistry;
 
@@ -19,18 +21,18 @@ namespace SRML.SR.Patches
         public static bool CheckIfHasCustomRenderer(PediaUI ui, PediaDirector.Id id)
         {
             var panel = GetPanel(ui);
-            if (activeRenderer != null)
+            if (PediaRegistry.activeRenderer != null)
             {
-                if (activeRenderer is IReusablePediaRenderer r) r.CurrentID = id;
-                activeRenderer.OnListingDeselected(panel);
-                activeRenderer = null;
+                if (PediaRegistry.activeRenderer is IReusablePediaRenderer r) r.CurrentID = id;
+                PediaRegistry.activeRenderer.OnListingDeselected(panel);
+                PediaRegistry.activeRenderer = null;
             }
 
-            var renderer = GetRenderer(id);
+            var renderer = PediaRegistry.GetRenderer(id);
             if (renderer == null) return false;
             if (renderer is IReusablePediaRenderer R) R.CurrentID = id;
             renderer.OnListingSelected(panel);
-            activeRenderer = renderer;
+            PediaRegistry.activeRenderer = renderer;
             return true;
         }
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
@@ -46,7 +48,7 @@ namespace SRML.SR.Patches
             }
             using (var codes = list.GetEnumerator())
             {
-
+                
                 while (codes.MoveNext())
                 {
                     var current = codes.Current;

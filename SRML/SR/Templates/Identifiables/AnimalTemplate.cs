@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MonomiPark.SlimeRancher.Regions;
+using SRML.SR;
 using SRML.SR.Utils.BaseObjects;
 using UnityEngine;
 
@@ -58,7 +59,7 @@ namespace SRML.SR.Templates.Identifiables
             this.animator = animator;
             this.isChild = isChild;
 
-            moveComponent = new Create<ChickenRandomMove>(move =>
+            moveComponent = new Create<ChickenRandomMove>((move) =>
             {
                 move.maxJump = isChild ? 0.7f : 1f;
                 move.walkForwardForce = isChild ? 2.5f : 3.333f;
@@ -168,24 +169,24 @@ namespace SRML.SR.Templates.Identifiables
         {
             // Create main object
             mainObject.AddComponents(
-                new Create<Identifiable>(ident => ident.id = ID),
-                new Create<Vacuumable>(vac => vac.size = vacSize),
-                new Create<Rigidbody>(body =>
+                new Create<Identifiable>((ident) => ident.id = ID),
+                new Create<Vacuumable>((vac) => vac.size = vacSize),
+                new Create<Rigidbody>((body) =>
                 {
                     body.drag = 0.2f;
                     body.angularDrag = 5f;
                     body.mass = 0.3f;
                     body.useGravity = true;
                 }),
-                new Create<DragFloatReactor>(drag => drag.floatDragMultiplier = 10),
-                new Create<BoxCollider>(col =>
+                new Create<DragFloatReactor>((drag) => drag.floatDragMultiplier = 10),
+                new Create<BoxCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.size = Vector3.one * 0.5f;
                 }),
                 new Create<CollisionAggregator>(null),
-                new Create<RegionMember>(rg => rg.canHibernate = true),
-                new Create<SECTR_PointSource>(source =>
+                new Create<RegionMember>((rg) => rg.canHibernate = true),
+                new Create<SECTR_PointSource>((source) =>
                 {
                     source.Loop = false;
                     source.PlayOnStart = false;
@@ -193,7 +194,7 @@ namespace SRML.SR.Templates.Identifiables
                     source.Volume = 1;
                     source.Pitch = 1;
                 }),
-                new Create<PlaySoundOnHit>(hit =>
+                new Create<PlaySoundOnHit>((hit) =>
                 {
                     hit.hitCue = isChild ? EffectObjects.cueHitChick : EffectObjects.cueHitChicken;
                     hit.minTimeBetween = 0.2f;
@@ -202,26 +203,26 @@ namespace SRML.SR.Templates.Identifiables
                 }),
                 new Create<SlimeSubbehaviourPlexer>(null),
                 moveComponent,
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.5f;
                     col.isTrigger = true;
                 }),
-                new Create<SlimeAudio>(audio => audio.slimeSounds = BaseObjects.originSounds["HenHen"]),
-                new Create<KeepUpright>(keep =>
+                new Create<SlimeAudio>((audio) => audio.slimeSounds = BaseObjects.originSounds["HenHen"]),
+                new Create<KeepUpright>((keep) =>
                 {
                     keep.stability = 0.9f;
                     keep.speed = 2;
                 }),
                 new Create<DestroyOnIgnite>(null),
-                new Create<AttachFashions>(fash => fash.gordoMode = false)
+                new Create<AttachFashions>((fash) => fash.gordoMode = false)
             ).AddAfterChildren(ConfigBones);
 
             if (mate != null)
             {
                 mainObject.AddComponents(
-                    new Create<Reproduce>(rep =>
+                    new Create<Reproduce>((rep) =>
                     {
                         rep.nearMateId = mate;
                         rep.maxDistToMate = 10f;
@@ -239,12 +240,12 @@ namespace SRML.SR.Templates.Identifiables
             if (isChild)
             {
                 mainObject.AddComponents(
-                    new Create<TransformAfterTime>(trans =>
+                    new Create<TransformAfterTime>((trans) =>
                     {
                         trans.delayGameHours = childHours;
                         trans.transformFX = EffectObjects.fxStars;
                     }),
-                    new Create<EggActivator>(egg =>
+                    new Create<EggActivator>((egg) =>
                     {
                         egg.eggPeriod = eggPeriod;
                         egg.activateObj = this.egg;
@@ -254,7 +255,7 @@ namespace SRML.SR.Templates.Identifiables
             else
             {
                 mainObject.AddComponents(
-                    new Create<TransformChanceOnReproduce>(trans =>
+                    new Create<TransformChanceOnReproduce>((trans) =>
                     {
                         trans.transformChance = 0.05f;
                         trans.targetPrefab = elder;
@@ -265,13 +266,13 @@ namespace SRML.SR.Templates.Identifiables
 
             // Create body
             mainObject.AddChild(new GameObjectTemplate("Body",
-                new Create<MeshFilter>(filter => filter.sharedMesh = mesh),
-                new Create<MeshRenderer>(render => render.sharedMaterials = materials)
+                new Create<MeshFilter>((filter) => filter.sharedMesh = mesh),
+                new Create<MeshRenderer>((render) => render.sharedMaterials = materials)
             ).SetTransform(Vector3.zero, Vector3.zero, Vector3.one * 0.5f));
 
             // Create delaunch trigger
             mainObject.AddChild(new GameObjectTemplate("DelaunchTrigger",
-                new Create<SphereCollider>(col =>
+                new Create<SphereCollider>((col) =>
                 {
                     col.center = Vector3.zero;
                     col.radius = 0.1f;
@@ -283,7 +284,7 @@ namespace SRML.SR.Templates.Identifiables
             // Create animal
             mainObject.AddChild(new GameObjectTemplate("Animal",
                 animator,
-                new Create<LODGroup>(lod =>
+                new Create<LODGroup>((lod) =>
                 {
                     lod.localReferencePoint = new Vector3(0, 0.5f, -0.1f);
                     lod.size = 1.893546f;
@@ -298,20 +299,20 @@ namespace SRML.SR.Templates.Identifiables
         protected void ConfigBones(GameObject obj)
         {
             // Setup Bones
-            var sm = skinnedMesh.CreatePrefabCopy();
+            GameObject sm = skinnedMesh.CreatePrefabCopy();
             sm.name = "mesh_body";
             sm.transform.parent = obj.transform.Find("Animal");
 
-            var b = bones.CreatePrefabCopy();
+            GameObject b = bones.CreatePrefabCopy();
             b.name = "root";
             b.transform.parent = obj.transform.Find("Animal");
 
             // Read all bones to the skinned mesh
-            var render = sm.GetComponent<SkinnedMeshRenderer>();
+            SkinnedMeshRenderer render = sm.GetComponent<SkinnedMeshRenderer>();
             render.rootBone = b.FindChild("bone_spine", true).transform;
 
-            var addBones = new List<Transform>();
-            foreach (var bone in b.FindChildrenWithPartialName("bone_"))
+            List<Transform> addBones = new List<Transform>();
+            foreach (GameObject bone in b.FindChildrenWithPartialName("bone_"))
                 addBones.Add(bone.transform);
 
             render.bones = addBones.ToArray();

@@ -1,8 +1,11 @@
 ﻿using HarmonyLib;
+using InControl;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 
 namespace SRML.SR.Patches
 {
@@ -12,11 +15,11 @@ namespace SRML.SR.Patches
     {
         public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instr)
         {
-            var allInstructions = new List<CodeInstruction>(instr);
-            var latestBinding = instr.Last(x => x.opcode == OpCodes.Call && ((MethodInfo)x.operand).Name == "CreateGamepadBindingLine");
-            var index = instr.IndexOfItem(latestBinding) + 1;
+            List<CodeInstruction> allInstructions = new List<CodeInstruction>(instr);
+            CodeInstruction latestBinding = instr.Last(x => x.opcode == OpCodes.Call && ((MethodInfo)x.operand).Name == "CreateGamepadBindingLine");
+            int index = instr.IndexOfItem(latestBinding) + 1;
 
-            var newInstructions = new List<CodeInstruction>()
+            List<CodeInstruction> newInstructions = new List<CodeInstruction>()
             {
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(GamepadPanelSetupBindingsPatch), "Alternate"))

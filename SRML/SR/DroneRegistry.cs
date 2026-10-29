@@ -1,5 +1,8 @@
 ﻿using HarmonyLib;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace SRML.SR
@@ -26,14 +29,14 @@ namespace SRML.SR
             switch (SRModLoader.CurrentLoadingStep)
             {
                 case SRModLoader.LoadingStep.PRELOAD:
-                    context = Object.FindObjectOfType<GameContext>();
+                    context = GameObject.FindObjectOfType<GameContext>();
                     break;
                 default:
                     context = GameContext.Instance;
                     break;
             }
 
-            var metadataCache = new HashSet<DroneMetadata>();
+            HashSet<DroneMetadata> metadataCache = new HashSet<DroneMetadata>();
             foreach(var v in Gadget.DRONE_CLASS)
             {
                 if (!context.LookupDirector.gadgetDefinitionDict.ContainsKey(v)) continue;

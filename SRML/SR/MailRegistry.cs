@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SRML.SR
 {
@@ -25,7 +26,7 @@ namespace SRML.SR
 
             public MailEntry(string mailKey)
             {
-                MailKey = mailKey;
+                this.MailKey = mailKey;
             }
 
             public string FromKey => MAIL_FROM_PREFIX + MailKey;
@@ -108,6 +109,6 @@ namespace SRML.SR
         /// <returns>The registered <see cref="MailEntry"/></returns>
         public static MailEntry RegisterMailEntry(string key) => RegisterMailEntry(new MailEntry(key));
 
-        internal static SRMod GetModForMail(string mailKey) => ModdedMails.FirstOrDefault(x => x.MailKey == mailKey)?.GetMod();
+        internal static SRMod GetModForMail(string mailKey) => ModdedMails.FirstOrDefault((x) => x.MailKey == mailKey)?.GetMod();
     }
 }

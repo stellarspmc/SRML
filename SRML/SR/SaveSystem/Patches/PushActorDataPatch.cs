@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using HarmonyLib;
 using MonomiPark.SlimeRancher;
 using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.SaveSystem.Data.Actor;
+using UnityEngine;
 using VanillaActorData = MonomiPark.SlimeRancher.Persist.ActorDataV09;
 namespace SRML.SR.SaveSystem.Patches
 {

@@ -1,5 +1,7 @@
 ﻿using SRML.Config.Parsing;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace SRML.Config
@@ -60,13 +62,13 @@ namespace SRML.Config
 
             public string EncodeObject(object obj)
             {
-                var range = (Range<TType>)obj;
+                Range<TType> range = (Range<TType>)obj;
                 return ParserRegistry.GetParser(typeof(TType)).EncodeObject(range.Value);
             }
 
             public string GetUsageString()
             {
-                return typeof(TType) + " in range of " + range.Min + " to " + range.Max;
+                return typeof(TType) + " in range of " + range.Min.ToString() + " to " + range.Max.ToString();
             }
 
             public object ParseObject(string str)

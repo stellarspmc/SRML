@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Text;
 using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Patches
@@ -34,7 +36,7 @@ namespace SRML.SR.SaveSystem.Patches
             switch (catcher.type)
             {
                 case SiloCatcher.Type.SILO_DEFAULT:
-                    var result = catcher.storageSilo.GetRelevantAmmo().MaybeAddToSpecificSlot(id, collider.GetComponent<Identifiable>(), catcher.slotIdx, 1, false);
+                    bool result = catcher.storageSilo.GetRelevantAmmo().MaybeAddToSpecificSlot(id, collider.GetComponent<Identifiable>(), catcher.slotIdx, 1, false);
                     catcher.storageSilo.OnAdded();
                     return result;
                 case SiloCatcher.Type.REFINERY:

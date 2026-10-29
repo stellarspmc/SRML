@@ -1,4 +1,5 @@
 ﻿using System;
+using MonomiPark.SlimeRancher.DataModel;
 using SRML.SR.SaveSystem.Data;
 
 namespace SRML.SR.SaveSystem.Utils
@@ -9,7 +10,7 @@ namespace SRML.SR.SaveSystem.Utils
         {
             return SRModLoader.GetModForAssembly(p.GetType().Assembly);
         }
-
+        
         public static SRMod GetModForParticipant(ExtendedData.TransformableParticipant p)
         {
             return SRModLoader.GetModForAssembly(p.GetType().Assembly);

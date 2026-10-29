@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SRML.Console.Commands
 {
@@ -31,9 +32,10 @@ namespace SRML.Console.Commands
                 return false;
             }
 
+
             KeyBindManager.RemoveBinding(key);
             KeyBindManager.SaveBinds();
-
+            
             return true;
         }
 

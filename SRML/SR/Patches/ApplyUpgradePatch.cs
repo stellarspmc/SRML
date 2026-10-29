@@ -1,4 +1,8 @@
 ﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using MonomiPark.SlimeRancher.DataModel;
 
 namespace SRML.SR.Patches

@@ -26,7 +26,7 @@ namespace SRML.SR.SaveSystem.Data.Actor
 
         public override void LoadCustomData(BinaryReader reader)
         {
-            var byteLength = reader.ReadInt32();
+            int byteLength = reader.ReadInt32();
             data = reader.ReadBytes(byteLength);
         }
 

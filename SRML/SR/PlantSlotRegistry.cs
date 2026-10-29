@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SRML.SR
 {
@@ -11,7 +12,7 @@ namespace SRML.SR
         internal static List<GardenPatchDelegate> patchers = new List<GardenPatchDelegate>();
 
         internal static void Patch(GardenCatcher catcher) => patchers.ForEach(x => x(catcher));
-
+        
         /// <summary>
         /// Registers an event to be run when a <see cref="GardenCatcher"/> awakes.
         /// </summary>

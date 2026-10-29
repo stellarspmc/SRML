@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace SRML.SR.SaveSystem.Data.Ammo
@@ -69,6 +71,7 @@ namespace SRML.SR.SaveSystem.Data.Ammo
             {
                 PopBottom();
             }
+
         }
 
         public bool HasNoData()
@@ -79,13 +82,14 @@ namespace SRML.SR.SaveSystem.Data.Ammo
             return true;
         }
 
+
         public void Read(BinaryReader reader)
         {
             data.Clear();
             var count = reader.ReadInt32();
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                var shouldbenull = reader.ReadBoolean();
+                bool shouldbenull = reader.ReadBoolean();
                 if (shouldbenull)
                 {
                     data.Add(null);
@@ -112,5 +116,7 @@ namespace SRML.SR.SaveSystem.Data.Ammo
                 }
             }
         }
+
+        
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
 using MonomiPark.SlimeRancher.Persist;
 
 namespace SRML.SR.SaveSystem.Data
@@ -48,7 +50,7 @@ namespace SRML.SR.SaveSystem.Data
             return new DataIdentifier
             {
                 Type = type,
-                longID = longID,
+                longID = longID,    
                 stringID = stringID
             };
         }
@@ -71,7 +73,7 @@ namespace SRML.SR.SaveSystem.Data
         }
 
         public static bool operator ==(DataIdentifier me, DataIdentifier other) => me.Equals(other);
-        public static bool operator !=(DataIdentifier me, DataIdentifier other) => !me.Equals(other);
+        public static bool operator !=(DataIdentifier me, DataIdentifier other) => !me.Equals(other); 
     }
     public enum IdentifierType
     {

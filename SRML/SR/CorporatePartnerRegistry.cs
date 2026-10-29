@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using HarmonyLib;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace SRML.SR
@@ -26,7 +31,7 @@ namespace SRML.SR
                     rewardBanner = banner
                 };
             }
-            foreach (var entry in rewards) AddToRank(level, entry);
+            foreach (RewardEntry entry in rewards) AddToRank(level, entry);
         }
 
         /// <summary>

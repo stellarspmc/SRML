@@ -1,6 +1,8 @@
 ﻿using MonomiPark.SlimeRancher.Regions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace SRML.SR.Utils
@@ -10,7 +12,7 @@ namespace SRML.SR.Utils
         public static List<Region> GetRegionsFromPosition(Vector3 pos, SceneContext s)
         {
 
-            var regions = new List<Region>();
+            List<Region> regions = new List<Region>();
 
             foreach (var region in s.RegionRegistry.regionsTrees)
             {

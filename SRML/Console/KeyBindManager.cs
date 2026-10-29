@@ -2,9 +2,11 @@
 using MonomiPark.SlimeRancher.Persist;
 using SRML.SR;
 using SRML.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 namespace SRML.Console
@@ -29,13 +31,13 @@ namespace SRML.Console
         {
 
             Actions = new ConsoleActions();
-
+            
             var path = Path.Combine(FileSystem.GetMyConfigPath(), FILENAME);
             if (!File.Exists(path)) return;
             customKeyBinds.Clear();
             using(var file = new BinaryReader(File.Open(path, FileMode.Open)))
             {
-                BinaryUtils.ReadList(file, customKeyBinds, x => KeyBinding.Read(x));
+                BinaryUtils.ReadList(file, customKeyBinds, (x) => KeyBinding.Read(x));
             }
         }
 
@@ -96,7 +98,7 @@ namespace SRML.Console
 
             public static PlayerAction GetEphemeralPlayerAction()
             {
-                var action = new PlayerAction(PREFIX+latestID++, Actions);
+                var action = new PlayerAction(PREFIX+latestID++, KeyBindManager.Actions);
                 BindingRegistry.ephemeralActions.Add(action);
                 return action;
             }
@@ -105,7 +107,7 @@ namespace SRML.Console
             {
                 var binding = new BindingV01();
                 binding.Load(reader.BaseStream);
-                var action = new PlayerAction(binding.action, Actions);
+                var action = new PlayerAction(binding.action, KeyBindManager.Actions);
                 BindingRegistry.ephemeralActions.Add(action);
                 if (int.TryParse(binding.action.Substring(PREFIX.Length), out var val) && val >= latestID) latestID = val+1;
                 SRInput.AddOrReplaceBinding(action, binding);

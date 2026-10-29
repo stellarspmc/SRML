@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using UnityEngine;
 
 namespace SRML.Config
 {
@@ -38,13 +40,13 @@ namespace SRML.Config
             };
         }
 
-        public FieldBackedConfigElement(FieldInfo field) : base(GenerateAttributesOptions(field))
+        public FieldBackedConfigElement(FieldInfo field) : base(GenerateAttributesOptions(field)) 
         {
             this.field = field;
             Options.DefaultValue = Value;
             if (Value is IStringParserProvider val) Options.Parser = val.GetParser();
             if (Options.Parser == null) throw new Exception(field.FieldType.ToString());
-            if (GetAttributeOfType<ConfigCallbackAttribute>(field,out var attribute)) OnValueChanged += x => AccessTools.Method(field.DeclaringType, attribute.methodName).Invoke(null, new[] { Value, x }); ;
+            if (GetAttributeOfType<ConfigCallbackAttribute>(field,out var attribute)) OnValueChanged += x => AccessTools.Method(field.DeclaringType, attribute.methodName).Invoke(null, new object[] { Value, x }); ;
         }
     }
     public class ConfigElement<T> : ConfigElement
@@ -77,8 +79,8 @@ namespace SRML.Config
 
         public ConfigElement(ConfigElementOptions options)
         {
-            Options = options;
-
+            this.Options = options;
+            
         }
 
         public void SetValue<T>(T value)

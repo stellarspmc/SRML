@@ -1,22 +1,27 @@
 ﻿using System;
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using UnityEngine;
-using Object = UnityEngine.Object;
-
 namespace SRML.Utils
 {
     public static class GameObjectUtils
     {
         public static object GameContext { get; internal set; }
 
-        public static string PrintObjectTree(GameObject obj)
+        public static String PrintObjectTree(GameObject obj)
         {
-            while (obj.transform.parent != null) obj = obj.transform.parent.gameObject;
+            while (obj.transform.parent != null)
+            {
+                obj = obj.transform.parent.gameObject;
+            }
 
-            var builder = new StringBuilder();
-            PrintObjectTreeInternal(obj, "", builder);
+            string currentIndent = "";
+            StringBuilder builder = new StringBuilder();
+            PrintObjectTreeInternal(obj, currentIndent, builder);
             return builder.ToString();
         }
 
@@ -25,16 +30,16 @@ namespace SRML.Utils
             builder.AppendLine(indent+"GameObject: " + obj.name);
             indent = indent + "    ";
             builder.AppendLine(indent + "components:");
-            var indent2 = indent + "    ";
+            string indent2 = indent + "    ";
             var h = obj.GetComponents<Component>().ToList();
             var c = StringComparer.Create(CultureInfo.CurrentCulture, true);
             h.Sort((component, component1) => c.Compare(component.GetType().Name, component1.GetType().Name));
             foreach (var v in h)
             {
-                var rend = v as MeshRenderer;
-                var rend2 = v as SkinnedMeshRenderer;
+                MeshRenderer rend = v as MeshRenderer;
+                SkinnedMeshRenderer rend2 = v as SkinnedMeshRenderer;
 
-                var form = v as Transform;
+                Transform form = v as Transform;
                 if (form)
                 {
                     builder.AppendLine(indent2 + v.GetType().Name + " " + form.localPosition+", "+form.localRotation+" "+form.localScale);
@@ -54,15 +59,21 @@ namespace SRML.Utils
             }
 
             builder.AppendLine(indent + "children: ");
-
-            for (var i = 0; i < obj.transform.childCount; i++) 
+           
+            for (int i = 0; i < obj.transform.childCount; i++)
+            {
                 PrintObjectTreeInternal(obj.transform.GetChild(i).gameObject, indent2, builder);
+            }
         }
 
-        public static void Prefabitize(GameObject obj) => obj.transform.SetParent(Main.prefabParent, false);
+        public static void Prefabitize(GameObject obj)
+        {
+            obj.transform.SetParent(Main.prefabParent, false);
+        }
+
         public static GameObject InstantiateInactive(GameObject original)
         {
-            var newObj = Object.Instantiate(original, Main.prefabParent, true);
+            GameObject newObj = GameObject.Instantiate(original, Main.prefabParent, true);
             newObj.SetActive(false);
             newObj.transform.SetParent(null, false);
             return newObj;
@@ -70,42 +81,42 @@ namespace SRML.Utils
 
         public static GameObject InstantiateInactive(GameObject original, bool keepOriginalName = false)
         {
-            var newObj = InstantiateInactive(original);
+            GameObject newObj = InstantiateInactive(original);
             if (keepOriginalName) newObj.name = original.name;
             return newObj;
         }
 
         public static GameObject InstantiateInactive(GameObject original, Transform parent, bool keepOriginalName = false)
         {
-            var newObj = InstantiateInactive(original, keepOriginalName);
+            GameObject newObj = InstantiateInactive(original, keepOriginalName);
             newObj.transform.SetParent(parent);
             return newObj;
         }
 
         public static GameObject InstantiateInactive(GameObject original, Transform parent, bool worldPositionStays, bool keepOriginalName = false)
         {
-            var newObj = InstantiateInactive(original, keepOriginalName);
+            GameObject newObj = InstantiateInactive(original, keepOriginalName);
             newObj.transform.SetParent(parent, worldPositionStays);
             return newObj;
         }
 
         public static GameObject InstantiateInactive(GameObject original, Vector3 position, Quaternion rotation, bool keepOriginalName = false)
         {
-            var newObj = InstantiateInactive(original, keepOriginalName);
+            GameObject newObj = InstantiateInactive(original, keepOriginalName);
             newObj.transform.SetPositionAndRotation(position, rotation);
             return newObj;
         }
 
         public static GameObject InstantiateInactive(GameObject original, Vector3 position, Quaternion rotation, Transform parent, bool keepOriginalName = false)
         {
-            var newObj = InstantiateInactive(original, parent, keepOriginalName);
+            GameObject newObj = InstantiateInactive(original, parent, keepOriginalName);
             newObj.transform.SetPositionAndRotation(position, rotation);
             return newObj;
         }
 
         public static GameObject InstantiateInactive(GameObject original, Vector3 position, Quaternion rotation, Transform parent, bool worldPositionStays, bool keepOriginalName = false)
         {
-            var newObj = InstantiateInactive(original, parent, worldPositionStays, keepOriginalName);
+            GameObject newObj = InstantiateInactive(original, parent, worldPositionStays, keepOriginalName);
             newObj.transform.SetPositionAndRotation(position, rotation);
             return newObj;
         }

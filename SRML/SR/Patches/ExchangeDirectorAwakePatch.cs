@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 
 namespace SRML.SR.Patches
@@ -8,22 +10,22 @@ namespace SRML.SR.Patches
     {
         public static void Prefix(ExchangeDirector __instance)
         {
-            foreach (var progressOffer in ExchangeOfferRegistry.customProgressOffers.Keys)
+            foreach (ExchangeDirector.ProgressOfferEntry progressOffer in ExchangeOfferRegistry.customProgressOffers.Keys)
                 __instance.progressOffers = __instance.progressOffers.AddToArray(progressOffer);
-            foreach (var rancher in ExchangeOfferRegistry.customRanchers.Keys)
+            foreach (ExchangeDirector.Rancher rancher in ExchangeOfferRegistry.customRanchers.Keys)
             {
-                var modified = rancher;
+                ExchangeDirector.Rancher modified = rancher;
                 modified.chatBackground = modified.chatBackground ?? __instance.ranchers[0].chatBackground;
                 __instance.ranchers = __instance.ranchers.AddToArray(modified);
             }
-            foreach (var cat in ExchangeOfferRegistry.customCategories.Keys)
+            foreach ((ExchangeDirector.Category, Identifiable.Id[]) cat in ExchangeOfferRegistry.customCategories.Keys)
                 __instance.catDict.Add(cat.Item1, cat.Item2);
-            foreach (var list in ExchangeOfferRegistry.customUnlocks.Values)
+            foreach (ExchangeDirector.UnlockList list in ExchangeOfferRegistry.customUnlocks.Values)
             {
                 if (list.unlock == ProgressDirector.ProgressType.NONE) __instance.initUnlocked = __instance.initUnlocked.AddRangeToArray(list.ids);
                 else __instance.unlockLists = __instance.unlockLists.AddToArray(list);
             }
-            foreach (var d in ExchangeOfferRegistry.customUnlockValues)
+            foreach (KeyValuePair<Identifiable.Id, float> d in ExchangeOfferRegistry.customUnlockValues)
                 __instance.valueDict[d.Key] = d.Value;
         }
     }
