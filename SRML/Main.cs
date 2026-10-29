@@ -38,7 +38,7 @@ namespace SRML
             if (isInitialized || !__instance.pastFirstFrame || __instance.isLoading)
                 return moveForwardAfterInit;
 
-            Main.Initialize();
+            Initialize();
             return false;
         }
 
@@ -57,7 +57,7 @@ namespace SRML
             {
                 sentrySdk.Dsn = string.Empty;
                 var field = sentrySdk.GetType().GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic);
-                if (field != null) field.SetValue(null, null);
+                field?.SetValue(null, null);
                 sentrySdk.StopAllCoroutines();
                 Application.logMessageReceived -= sentrySdk.OnLogMessageReceived;
                 UnityEngine.Object.Destroy(sentrySdk, 1f);
@@ -80,7 +80,7 @@ namespace SRML
             config = ConfigFile.GenerateConfig(typeof(SRMLConfig));
             config.TryLoadFromFile();
 
-            uiBundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(Main), "srml"));
+            uiBundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("srml"));
 
             ErrorGUI.errorUI = uiBundle.LoadAsset<GameObject>("SRMLErrorUI");
             var ui = ErrorGUI.errorUI.GetComponent<ErrorGUI>();
@@ -98,7 +98,7 @@ namespace SRML
             foreach (var text in ui2.errorInfo.GetComponentsInChildren<TMP_Text>(true))
                 text.alignment = TextAlignmentOptions.MidlineLeft;
 
-            foreach (var c in ui2.GetComponentsInChildren(typeof(Component)))
+            foreach (var c in ui2.GetComponentsInChildren<Component>())
             {
                 if (c.GetType().Name.Contains("Styler"))
                     UnityEngine.Object.DestroyImmediate(c);
@@ -143,7 +143,7 @@ namespace SRML
         /// <summary>
         /// Called before GameContext.Awake()
         /// </summary>
-        static void PreLoad()
+        public static void PreLoad()
         {
             if (isPreLoaded) return;
             isPreLoaded = true;
@@ -157,7 +157,7 @@ namespace SRML
         /// <summary>
         /// Called before GameContext.Start()
         /// </summary>
-        internal static void Load()
+        public static void Load()
         {
             if (isLoaded)
                 return;
@@ -178,7 +178,7 @@ namespace SRML
         /// <summary>
         /// Called after Load
         /// </summary>
-        internal static void PostLoad()
+        public static void PostLoad()
         {
             if (isPostLoaded)
                 return;
@@ -187,7 +187,7 @@ namespace SRML
             SRModLoader.PostLoadMods();
         }
 
-        internal static void Reload()
+        public static void Reload()
         {
             try
             {

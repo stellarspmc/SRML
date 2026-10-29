@@ -24,8 +24,6 @@ namespace SRML.SR.UI
         private bool continueAfterClose = false;
         internal bool fallback;
 
-
-
         internal static bool TryCreateExtendedError(MainMenuUI ui, GameObject uiToUse, IEnumerable<SRMod> erroring, bool createBasicOnFail = true)
         {
             /*if (SRMLConfig.FORCE_BASIC_ERROR_HANDLER)
@@ -35,15 +33,13 @@ namespace SRML.SR.UI
             }*/
 
             GameObject gui = null;
+            var srMods = erroring.ToList();
             try
             {
-                if (ui)
-                    gui = ui.InstantiateAndWaitForDestroy(uiToUse);
-                else
-                    gui = Instantiate(uiToUse);
+                gui = ui ? ui.InstantiateAndWaitForDestroy(uiToUse) : Instantiate(uiToUse);
                 var eg = gui.GetComponent<ErrorGUI>();
 
-                foreach (var exception in erroring)
+                foreach (var exception in srMods)
                     Instantiate(eg.errorInfo, eg.errorContainer).GetComponent<IndividualExceptionUI>().GenerateMessage(exception);
 
                 return true;
@@ -56,11 +52,11 @@ namespace SRML.SR.UI
 
                 UnityEngine.Debug.LogError(e);
                 UnityEngine.Debug.LogError("Fatal error encountered, unable to display extended error information. Displaying basic information ...");
-                UnityEngine.Debug.LogError(erroring.First().exception);
+                UnityEngine.Debug.LogError(srMods[0].exception);
 
                 try
                 {
-                    CreateBasicError(erroring.First().exception.ToString(), ui);
+                    CreateBasicError(srMods[0].exception.ToString(), ui);
                 }
                 catch { Application.Quit(); }
 
@@ -68,19 +64,17 @@ namespace SRML.SR.UI
             }
         }
 
-        internal static void CreateBasicError(string error, MainMenuUI menu, bool doAbort = true)
+        internal static void CreateBasicError(string error, MainMenuUI mainMenu, bool doAbort = true)
         {
-            GameObject mainmen;
-            if (GameContext.Instance?.MessageDirector != null)
-                mainmen = MainMenuUtils.DisplayBlankPanelWithTranslation<ErrorGUI>(menu, "ErrorUI", "t.srml_error", () => Application.Quit());
-            else
-                mainmen = MainMenuUtils.DisplayBlankPanel<ErrorGUI>(menu, "SRML ERROR", () => Application.Quit());
+            var menu = GameContext.Instance?.MessageDirector != null
+                ? MainMenuUtils.DisplayBlankPanelWithTranslation<ErrorGUI>(mainMenu, "ErrorUI", "t.srml_error", Application.Quit)
+                : MainMenuUtils.DisplayBlankPanel<ErrorGUI>(mainMenu, "SRML ERROR", Application.Quit);
 
-            var panel = mainmen.transform.GetChild(0);
+            var panel = menu.transform.GetChild(0);
             var title = panel.Find("Title").gameObject;
-            var g = Instantiate(title);
+            var g = Instantiate(title, panel, false);
             g.name = "ErrorText";
-            MonoBehaviour.Destroy(g.GetComponent<XlateText>());
+            Destroy(g.GetComponent<XlateText>());
             g.GetComponent<TMP_Text>().text = error;
             g.GetComponent<TMP_Text>().alignment = TextAlignmentOptions.Top;
             g.GetComponent<TMP_Text>().fontSize *= .8f;
@@ -88,7 +82,7 @@ namespace SRML.SR.UI
 
             if (doAbort)
             {
-                var h = GameObject.Instantiate(title);
+                var h = Instantiate(title, panel, false);
                 h.name = "AbortText";
 
                 h.GetComponent<XlateText>().SetKey("t.srml_error.abort");
@@ -102,7 +96,6 @@ namespace SRML.SR.UI
                 h.GetComponent<TMP_Text>().enableWordWrapping = true;
                 h.GetComponent<TMP_Text>().alignment = TextAlignmentOptions.Bottom;
 
-                h.transform.SetParent(panel, false);
                 var rect2 = h.GetComponent<RectTransform>();
                 rect2.anchorMin = new Vector2(0, 0);
                 rect2.anchorMax = new Vector2(1, 1);
@@ -110,7 +103,6 @@ namespace SRML.SR.UI
                 rect2.offsetMin = new Vector2(50, 30);
             }
 
-            g.transform.SetParent(panel, false);
             var rect = g.GetComponent<RectTransform>();
             rect.anchorMin = new Vector2(0, 0);
             rect.anchorMax = new Vector2(1, 1);
@@ -120,10 +112,7 @@ namespace SRML.SR.UI
 
         internal static void CreateBasicErrorOnMenu(string error, bool doAbort = true)
         {
-            SRCallbacks.OnMainMenuLoaded += (u) =>
-            {
-                CreateBasicError(error, u, doAbort);
-            };
+            SRCallbacks.OnMainMenuLoaded += u => CreateBasicError(error, u, doAbort);
         }
 
         public void OpenModsFolder() => Process.Start(Path.GetFullPath(FileSystem.ModPath));
@@ -170,7 +159,8 @@ namespace SRML.SR.UI
         {
             /*title.text = GameContext.Instance.MessageDirector.GetBundle("ui").Xlate(MessageUtil.Compose("e.srml_error_title_base", MessageUtil.Taint(generateFrom.ModInfo.Id ?? "<unknown>"),
                 $"e.{generateFrom.ModInfo.LoadState.ToString().ToLowerInvariant()}"));*/
-            title.text = string.Format("{0} during {1}", generateFrom.ModInfo.Id ?? "<unknown>", generateFrom.ModInfo.LoadState.ToString().ToLowerInvariant().Replace("_error", ""));
+            title.text =
+                $"{generateFrom.ModInfo.Id ?? "<unknown>"} during {generateFrom.ModInfo.LoadState.ToString().ToLowerInvariant().Replace("_error", "")}";
             extended.SetText(generateFrom.exception.ToString());
         }
 

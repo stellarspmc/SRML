@@ -51,11 +51,7 @@ namespace SRML
         /// The mod info of the mod whose code is currently running.
         /// </summary>
         /// <returns>The found mod if referenced in a mod assembly, otherwise null.</returns>
-        public static SRModInfo GetCurrentInfo()
-        {
-            var assembly = ReflectionUtils.GetRelevantAssembly();
-            return SRModLoader.GetModForAssembly(assembly)?.ModInfo;
-        }
+        public static SRModInfo GetCurrentInfo() => SRModLoader.GetModForAssembly(ReflectionUtils.GetRelevantAssembly())?.ModInfo;
 
         /// <summary>
         /// Data structure to simplify versioning and the comparing of versions
@@ -73,10 +69,7 @@ namespace SRML
                 Revision = revision;
             }
 
-            public override string ToString()
-            {
-                return $"{Major}.{Minor}.{Revision}";
-            }
+            public override string ToString() => $"{Major}.{Minor}.{Revision}";
 
             /// <summary>
             /// Parses a mod version string of the format "Major.Minor" or "Major.Minor.Revision"
@@ -88,9 +81,9 @@ namespace SRML
             {
                 var splits = s.Split('.');
                 if (splits.Length < 2 || splits.Length > 3) goto uhoh;
-                if (!Int32.TryParse(splits[0], out var major)|| !Int32.TryParse(splits[1], out var minor)) goto uhoh;
+                if (!int.TryParse(splits[0], out var major)|| !int.TryParse(splits[1], out var minor)) goto uhoh;
                 var revision = 0;
-                if (splits.Length == 3 && !Int32.TryParse(splits[2], out revision)) goto uhoh;
+                if (splits.Length == 3 && !int.TryParse(splits[2], out revision)) goto uhoh;
 
                 return new ModVersion(major, minor, revision);
 
@@ -110,8 +103,7 @@ namespace SRML
                 if (Minor > other.Minor) return -1;
                 if (Minor < other.Minor) return 1;
                 if (Revision > other.Revision) return -1;
-                if (Revision < other.Revision) return 1;
-                return 0;
+                return Revision < other.Revision ? 1 : 0;
             }
         }
 
@@ -161,14 +153,14 @@ namespace SRML
             /// <summary>
             /// Error during mod's <see cref="IModEntryPoint.PostLoad"/>
             /// </summary>
-            POSTLOAD_ERROR = 904,
+            POSTLOAD_ERROR = 904
         }
     }
 
     /// <summary>
     /// Actual internal implementation of a mod
     /// </summary>
-    internal class SRMod 
+    internal class SRMod
     {
         /// <summary>
         /// Mods associated SRModInfo object
@@ -185,7 +177,7 @@ namespace SRML
 
         private IModEntryPoint entryPoint;
         private ModEntryPoint entryPoint2;
-        private bool useNewEntry = false;
+        private bool useNewEntry;
 
         private static SRMod forcedContext;
 
@@ -195,11 +187,7 @@ namespace SRML
         /// Gets the current executing mod as an SRMod instance 
         /// </summary>
         /// <returns>The current executing mod</returns>
-        public static SRMod GetCurrentMod()
-        {
-            if (forcedContext != null) return forcedContext;
-            return SRModLoader.GetModForAssembly(ReflectionUtils.GetRelevantAssembly());
-        }
+        public static SRMod GetCurrentMod() => forcedContext ?? SRModLoader.GetModForAssembly(ReflectionUtils.GetRelevantAssembly());
 
         /// <summary>
         /// Forces a certain mod to be returned from <see cref="SRMod.GetCurrentMod"/> 
@@ -223,22 +211,20 @@ namespace SRML
         }
 
         public void CreateHarmonyInstance(string name) => HarmonyInstance = new Harmony(name);
-        public string GetDefaultHarmonyName() => $"net.{(ModInfo.Author == null || ModInfo.Author.Length == 0 ? "srml" : Regex.Replace(ModInfo.Author, @"\s+", ""))}.{ModInfo.Id}";
+        public string GetDefaultHarmonyName() => $"net.{(string.IsNullOrEmpty(ModInfo.Author) ? "srml" : Regex.Replace(ModInfo.Author, @"\s+", ""))}.{ModInfo.Id}";
 
         public SRMod(SRModInfo info, IModEntryPoint entryPoint)
         {
             ModInfo = info;
 
-            if (entryPoint != null)
+            if (entryPoint == null) return;
+            EntryType = entryPoint.GetType();
+            if (entryPoint is ModEntryPoint point)
             {
-                EntryType = entryPoint.GetType();
-                if (entryPoint is ModEntryPoint)
-                {
-                    entryPoint2 = (ModEntryPoint)entryPoint;
-                    useNewEntry = true;
-                }
-                this.entryPoint = entryPoint;
+                entryPoint2 = point;
+                useNewEntry = true;
             }
+            this.entryPoint = entryPoint;
         }
 
         public SRMod(SRModInfo info, IModEntryPoint entryPoint, string path) : this(info, entryPoint) => Path = path;

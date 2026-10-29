@@ -21,7 +21,8 @@ namespace SRML.SR.UI
         {
             var reward = Object.Instantiate(rewardEntry, content, false);
             Console.Console.Instance.Log((reward.GetComponentInChildren<TMP_Text>() == null).ToString());
-            reward.GetComponentInChildren<TMP_Text>().text = ui.uiBundle.Get(string.Format("m.partner_rank.{0}.reward.{1}", rank, index + 1));
+            reward.GetComponentInChildren<TMP_Text>().text = ui.uiBundle.Get(
+                $"m.partner_rank.{rank}.reward.{index + 1}");
             reward.GetChild(0).GetComponent<Image>().sprite = ui.ranks[rank - 1].rewardIcons[index];
             return reward;
         }

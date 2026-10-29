@@ -10,21 +10,11 @@ namespace SRML.SR.UI.Utils
             foreach (var v in h.GetComponentsInChildren<Component>())
             {
                 if (v.GetComponent<Scrollbar>())
-                {
-                    v.gameObject.AddComponent<ScrollbarStyler>().styleName =
-                "Default";
-
-                }
+                    v.gameObject.AddComponent<ScrollbarStyler>().styleName = "Default";
                 else if (v.GetComponent<Text>())
-                {
                     v.gameObject.AddComponent<TextStyler>().styleName = "Default";
-                }
                 else if (v.GetComponent<Image>() && !v.GetComponent<Button>())
-                {
                     v.gameObject.AddComponent<PanelStyler>().styleName = "Default";
-                }
-
-
             }
 
         }
